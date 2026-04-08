@@ -1,5 +1,5 @@
 package sistema.enums;
 
-public class Parentesco {
-  
+public enum Parentesco {
+
 }

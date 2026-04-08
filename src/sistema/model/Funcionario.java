@@ -1,5 +1,6 @@
 package sistema.model;
 
-public class Funcionario {
+public class Funcionario extends Pessoa {
+  
   
 }
