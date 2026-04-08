@@ -75,6 +75,7 @@ git clone https://github.com/Phonedison/folha_pagamento.git
 
 # Acesse a pasta do projeto
 cd folha_pagamento
+
 # Compile o projeto
 javac Main.java
 
