@@ -2,7 +2,7 @@ package sistema.model;
 
 public class Pessoa {
   
-  private  String nome;
+  protected String nome;
   private String cpf;
   private String dataNacimento;
 
