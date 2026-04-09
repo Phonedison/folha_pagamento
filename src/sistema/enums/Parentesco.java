@@ -8,6 +8,7 @@ public enum Parentesco {
 
     // Atributo privado que guarda o valor numérico de cada constante
     private final int valor;
+
    
     // Construtor do enum (é chamado automaticamente para cada constante)
     Parentesco(int valorOpcao){
@@ -16,8 +17,7 @@ public enum Parentesco {
      
     // Método público para acessar o valor associado ao enum
     public int getValor(){
-        return this.valor;
+    return this.valor;
     }
-
 }
         

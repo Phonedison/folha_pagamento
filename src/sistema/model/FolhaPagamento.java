@@ -1,53 +1,73 @@
 package sistema.model;
 
+import java.time.LocalDate;
+
 public class FolhaPagamento {
 
-    private String codigo;
-    private Funcionario funcionario;
-    private LocalDate dataPagamento
-    private double descontoINSS;
-    private double descontoIR;
-    private double salarioLiquido;
+  private int codigo; 
+  private Funcionario funcionario;
+  private LocalDate dataPagamento;
+  private double descontoInss;
+  private double descontoIR;
+  private double SalarioLiquido;
 
-
-
-      // CONSUTRUTOR //
-    public  FolhaPagamento(String codigo, Funcionario funcionario, Localdate dataPagamento){
+/* CONSUTRUTOR */
+    public FolhaPagamento(int codigo, Funcionario funcionario, LocalDate dataPagamento, double descontoInss, double descontoIR, double SalarioLiquido) {
         this.codigo = codigo;
         this.funcionario = funcionario;
         this.dataPagamento = dataPagamento;
+        this.descontoInss = descontoInss;
+        this.descontoIR = descontoIR;
+        this.SalarioLiquido = SalarioLiquido;
     }
 
-
-
-      //  GET   //
-
-    public String getCodigo(){ return codigo; }
-
-    public Funcionario getFuncionario() { return funcionario; }
-
-    public LocalDate getDataPagamento(){ return dataPagamento; }
-
-    public double getDescontoINSS() { return descontoINSS; }
-
-    public double getSalarioLiquido() { return salarioLiquido; }
-
-
-    //  SET   //
-
-    public void setDescontoINSS(double descontoINSS) { this.descontoINSS(double descontoINSS) {
+    /* GET */
+    public int getCodigo() {
+        return codigo;
     }
 
-    public void setDescontoIR(double descontoIR) { this.descontoIR = descontoIR {
+    public LocalDate getDataPagamento() {
+        return dataPagamento;
     }
 
-    public void setSalarioLiquido(double salarioLiquido) { this.salarioLiquido = salarioLiquido; {
-
+    public double getDescontoInss() {
+        return descontoInss;
     }
 
+    public double getDescontoIR() {
+        return descontoIR;
+    }
 
+    public double getSalarioLiquido() {
+        return SalarioLiquido;
+    }
 
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    /* SET */
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public void setDataPagamento(LocalDate dataPagamento) {
+        this.dataPagamento = dataPagamento;
+    }
+
+    public void setDescontoInss(double descontoInss) {
+        this.descontoInss = descontoInss;
+    }
+
+    public void setDescontoIR(double descontoIR) {
+        this.descontoIR = descontoIR;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
+
+    public void setSalarioLiquido(double SalarioLiquido) {
+        this.SalarioLiquido = SalarioLiquido;
+    }
 }
-
-}
-
