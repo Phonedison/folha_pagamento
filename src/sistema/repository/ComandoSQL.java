@@ -5,6 +5,7 @@ public class ComandoSQL {
 
   public String comandoSQL (String tipo, String select, String tabela, String parametro_pesquisa) {
     
+    //teste
     switch (tipo) {
 
         case "select" -> {
