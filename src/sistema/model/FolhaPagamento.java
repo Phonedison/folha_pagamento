@@ -35,29 +35,29 @@ public class FolhaPagamento {
   }
 
     /* SET */
-  public void setCodigo(int codigo) {
-      this.codigo = codigo;
-  }
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
 
-  public void setDataPagamento(String dataPagamento) {
-      this.dataPagamento = dataPagamento;
-  }
+    public void setDataPagamento(String dataPagamento) {
+        this.dataPagamento = dataPagamento;
+    }
 
-  public void setDescontoInss(double descontoInss) {
-      this.descontoInss = descontoInss;
-  }
+    public void setDescontoInss(double descontoInss) {
+        this.descontoInss = descontoInss;
+    }
 
-  public void setDescontoIR(double descontoIR) {
-      this.descontoIR = descontoIR;
-  }
+    public void setDescontoIR(double descontoIR) {
+        this.descontoIR = descontoIR;
+    }
 
-  public void setFuncionario(Funcionario funcionario) {
-      this.funcionario = funcionario;
-  }
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
 
-  public void setSalarioLiquido(double SalarioLiquido) {
-      this.SalarioLiquido = SalarioLiquido;
-  }
+    public void setSalarioLiquido(double SalarioLiquido) {
+        this.SalarioLiquido = SalarioLiquido;
+    }
 
   
   
