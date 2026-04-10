@@ -1,32 +1,32 @@
--- create database folha_pagamento
+-- CREATE database folha_pagamento
 -- create schema pagamentos
-create type parentesco as enum('FILHO', 'SOBRINHO', 'OUTROS');
+CREATE TYPE parentesco AS enum('FILHO', 'SOBRINHO', 'OUTROS');
 
-create table funcionarios (
+CREATE TABLE funcionario (
 
-id_funcionario serial primary key,
-nome varchar(100)not null,
-cpf varchar(14)unique not null,
-data_nascimento date not null,
-salario_bruto numeric(10,2) not null
+id_funcionario SERIAL PRIMARY KEY,
+nome VARCHAR(100)NOT NULL,
+cpf VARCHAR(14)UNIQUE NOT NULL,
+data_nascimento DATE NOT NULL,
+salario_bruto DOUBLE NOT NULL
 );
 
-create table dependente(
+CREATE TABLE dependente (
 
-id_dependente serial primary key,
-nome varchar(100)not null,
-cpf varchar(14)unique not null,
-data_nascimento date not null,
-parentesco parentesco not null,
-id_funcionario int references funcionarios(id_funcionario)
+id_dependente SERIAL PRIMARY KEY,
+nome VARCHAR(100)NOT NULL,
+cpf VARCHAR(14)UNIQUE NOT NULL,
+data_nascimento DATE NOT NULL,
+parentesco parentesco NOT NULL,
+id_funcionario INT REFERENCES funcionarios(id_funcionario)
 );
 
-create table folhade_pagamento(
+CREATE TABLE folha_pagamento (
 
-id_folha serial primary key,
-data_pagamento date not null,
-desconto_inss numeric(10,2),
-desconto_ir	numeric	(10,2),
-salario_liquido numeric (10,2),
-id_funcionario int references funcionarios(id_funcionario)
+id_folha SERIAL PRIMARY KEY,
+data_pagamento DATE NOT NULL,
+desconto_inss DOUBLE,
+desconto_ir	DOUBLE,
+salario_liquido DOUBLE,
+id_funcionario INT REFERENCES funcionarios(id_funcionario)
 );	
