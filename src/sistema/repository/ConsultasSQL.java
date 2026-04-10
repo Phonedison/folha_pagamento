@@ -1,8 +1,8 @@
 package sistema.repository;
 
-public class ComandoSQL {
+public class ConsultasSQL {
 
-
+/* ver métodologia utilizando DAO -> OBSOLETO PORÉM assunto da matéria */
   public String comandoSQL (String tipo, String select, String tabela, String parametro_pesquisa) {
     
     //teste
@@ -44,7 +44,6 @@ public class ComandoSQL {
   }
 
   public String sqlInsert(String select, String tabela, String parametro_pesquisa) {
-
     String comando;
     
     if(parametro_pesquisa == null){
@@ -56,6 +55,7 @@ public class ComandoSQL {
 
     return comando;
   }
+ 
   public String sqlUpdate(String select, String tabela, String parametro_pesquisa) {
 
     String comando;
@@ -70,6 +70,7 @@ public class ComandoSQL {
 
     return comando;
   }
+ 
   public String sqlDelete(String select, String tabela, String parametro_pesquisa) {
 
     String comando;

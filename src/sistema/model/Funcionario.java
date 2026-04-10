@@ -1,13 +1,15 @@
 package sistema.model;
 
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Funcionario extends Pessoa {
   
+  private int id_funcionario;
   private double salarioBruto;
-  private double descontoInss;
-  private double descontoIR;
+  // private double descontoInss;
+  // private double descontoIR;
   private Set<Dependente> dependentes = new HashSet<>();
   /* 
   
@@ -17,17 +19,29 @@ public class Funcionario extends Pessoa {
 
   */
 
+  
+
   /* GET */
   public double getSalarioBruto(){
     return this.salarioBruto;
   }
 
-  public double getDescontoInss() {
-    return this.descontoInss;
+  public int getId_funcionario(){
+    return this.id_funcionario;
   }
+  // public double getDescontoInss() {
+  //   return this.descontoInss;
+  // }
 
-  public double getDescontoIR() {
-    return this. descontoIR;
+  // public double getDescontoIR() {
+  //   return this. descontoIR;
+  // }
+
+  public Funcionario(String nome, String cpf, Date dataNacimento, double salarioBruto, Set<Dependente> dependentes) {
+    super(nome, cpf, dataNacimento);
+    this.salarioBruto = salarioBruto;
+    this.dependentes = dependentes;
+
   }
 
   public Set<Dependente> getDependentes() {
@@ -39,13 +53,13 @@ public class Funcionario extends Pessoa {
     this.salarioBruto = salarioBruto;
   }
 
-  public void setDescontoInss(double descontoInss) {
-    this.descontoInss = descontoInss;
-  }
+  // public void setDescontoInss(double descontoInss) {
+  //   this.descontoInss = descontoInss;
+  // }
 
-  public void setDescontoIR(double descontoIR) {
-    this.descontoIR = descontoIR;
-  }
+  // public void setDescontoIR(double descontoIR) {
+  //   this.descontoIR = descontoIR;
+  // }
 
   public void setDependentes (Set<Dependente> dependentes) {
     this.dependentes = dependentes;
