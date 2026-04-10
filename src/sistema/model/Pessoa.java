@@ -1,6 +1,6 @@
 package sistema.model;
 
-public class Pessoa {
+public abstract class Pessoa {
   
   protected String nome;
   private String cpf;
