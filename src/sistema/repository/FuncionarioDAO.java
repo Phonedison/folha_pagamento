@@ -13,6 +13,7 @@ public class FuncionarioDAO {
     this.conexao = conexao;
   }
 
+  // INSET INTO
   public void salvarFuncionario (Funcionario funcionario) {
     String comandoSQL = "INSERT INTO funcionario (nome, cpf, data_nascimento, salario_bruto) VALUES (?, ?, ?, ?, ?)";
 
@@ -35,6 +36,7 @@ public class FuncionarioDAO {
     }
   }
 
+  // UPDATE
   public void atualizarFuncionario (Funcionario funcionario, int opcao) {
       String parteSQL;
 
@@ -54,11 +56,11 @@ public class FuncionarioDAO {
       ) {
 
         switch (opcao) {
-            case 1 ->   stmt.setString(1, funcionario.getNome());
-            case 2 ->   stmt.setString(1, funcionario.getCpf());
-            case 3 ->   stmt.setDate(1, funcionario.getDataNacimento());
-            case 4 ->   stmt.setDouble(1, funcionario.getSalarioBruto());
-            default ->  throw new AssertionError("Opção inválida! -> stmt");
+          case 1 ->   stmt.setDouble(1, funcionario.getId_funcionario());
+          case 2 ->   stmt.setString(1, funcionario.getNome());
+          case 3 ->   stmt.setString(1, funcionario.getCpf());
+          case 4 ->   stmt.setDate(1, funcionario.getDataNacimento());
+          default ->  throw new AssertionError("Opção inválida! -> stmt");
         }
 
         stmt.setInt(2,funcionario.getId_funcionario());
@@ -69,6 +71,31 @@ public class FuncionarioDAO {
       }
   }
 
+  // DELETE
+  public void excluirFuncionario (int id_funcionario) {
+    String comandoSQL = "DELETE FROM funcionario WHERE id_funcionario = ?";
 
+    try (
+      Connection con = conexao.conectarDB();
+      PreparedStatement stmt = con.prepareStatement(comandoSQL);
+    ) {
+
+      /*
+      Ver se é possível adicionar um método de confirmação.
+      */
+      
+      stmt.setInt(1, id_funcionario);
+      stmt.executeLargeUpdate();
+      System.out.println("Funcionário removido!");
+
+      } catch (Exception error) {
+        throw new RuntimeException("Erro ao deleter ao usuario: " + error.getMessage());
+    }
+  }
+
+  // SELECT
+  public void selecionarFuncionario () {
+
+  }
 
 }
