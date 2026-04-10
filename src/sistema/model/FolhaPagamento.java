@@ -71,4 +71,41 @@ public class FolhaPagamento {
     public void setSalarioLiquido(double SalarioLiquido) {
         this.SalarioLiquido = SalarioLiquido;
     }
+
+    public void calcularINSS() {
+        double salario = funcionario.getSalarioBruto();
+
+        if (salario <= 1518.00) {
+            descontoINSS = salario * 0.075;
+        } else if (salario > 1518.00 && salario <= 2793.88) {
+            descontoINSS = salario * 0.09;
+        } else if (salario > 2793.88 && salario <= 4190.83) {
+            descontoINSS = salario * 0.12;
+        } else {
+            descontoINSS = salario * 0.14;
+        }
+    }
+    public void calcularIR() {
+        double base = funcionario.getSalarioBruto()
+                - descontoINSS
+                - (funcionario.getDependentes().size() * 189.59);
+
+        if (base <= 2259.00) {
+            descontoIR = 0;
+        } else if (base > 2259.00 && base <= 2826.65) {
+            descontoIR = base * 0.075 - 169.44;
+        } else if (base > 2826.65 && base <= 3751.05) {
+            descontoIR = base * 0.15 - 381.44;
+        } else if (base > 3751.05 && base <= 4664.68) {
+            descontoIR = base * 0.225 - 662.77;
+        } else {
+            descontoIR = base * 0.275 - 896.00;
+        }
+    }
+
+    public void calcularSalarioLiquido() {
+        salarioLiquido = funcionario.getSalarioBruto()
+                - descontoINSS
+                - descontoIR;
+    }
 }
