@@ -30,3 +30,4 @@ desconto_ir	DOUBLE,
 salario_liquido DOUBLE,
 id_funcionario INT REFERENCES funcionarios(id_funcionario)
 );	
+

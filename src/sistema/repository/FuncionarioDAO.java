@@ -7,7 +7,7 @@ import sistema.model.Funcionario;
 
 public class FuncionarioDAO {
 
-  private  ConexaoDB conexao;
+  private ConexaoDB conexao;
 
   public FuncionarioDAO(ConexaoDB conexao) {
     this.conexao = conexao;
