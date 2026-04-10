@@ -5,11 +5,11 @@ import java.sql.SQLException; // classe que permite fornecer informações sobre
 
 public class ConexaoDB {
 
-  private int porta;
-  private String meuDb;
-  private String usuario;
-  private String senha;
-  private String stringConexao;
+  protected int porta;
+  protected String meuDb;
+  protected String usuario;
+  protected String senha;
+  protected String stringConexao;
 
   public ConexaoDB (int porta, String meuDb, String usuario, String senha) {
     this.porta = porta;

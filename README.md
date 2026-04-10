@@ -39,23 +39,27 @@ O projeto está organizado seguindo padrões de separação de responsabilidades
 ```
 Folha_pagamento
 ├── 📁 sql
-│   └── 📄 script.sql                           # Definição das tabelas (DDL) para Funcionário, Dependente e Folha
-├── 📁 src
-│   └── 📁 sistema
-│       ├── 📁 app
-│       │   └── ☕ Main.java                    # Ponto de entrada; gerencia o fluxo de execução e console
-│       ├── 📁 enums
-│       │   └── ☕ Parentesco.java              # Tipos constantes permitidos (FILHO, SOBRINHO, OUTROS)
-│       ├── 📁 exception
-│       │   ├── ☕ CpfDuplicado.java            # Erro lançado se houver conflito de CPF no Banco/Arquivo
-│       │   └── ☕ DependenteException.java     # Erro para regras de idade (< 18) e parentesco
-│       └── 📁 model
-│           ├── ☕ Dependente.java
-│           ├── ☕ FolhaPagamento.java
-│           ├── ☕ Funcionario.java             # Classe concreta; herda de Pessoa; possui lista de dependentes
-│           └── ☕ Pessoa.java                  # Classe Abstrata (mãe); atributos comuns: Nome, CPF e DataNasc
-├── ⚙️ .gitignore                               # Lista de arquivos ignorados pelo Git (ex: .class, .vscode)
-└── 📝 README.md                                # Documentação e nomes dos alunos
+│   └── 📄 script.sql                     # Criação de tabelas, restrições e relacionamentos
+├── 📁 src/sistema
+│   ├── 📁 app
+│   │   └── ☕ Main.java                  # Inicialização da aplicação e interface via console
+│   ├── 📁 enums
+│   │   └── ☕ Parentesco.java            # Definições de tipos enumerados para validação de dependentes
+│   ├── 📁 exception
+│   │   ├── ☕ CpfDuplicado.java          # Exceção customizada para violações de integridade de CPF
+│   │   └── ☕ DependenteException.java   # Tratamento de regras de negócio (idade e parentesco)
+│   ├── 📁 model
+│   │   ├── ☕ Pessoa.java                # Superclasse abstrata com atributos base (Nome, CPF, Nascimento)
+│   │   ├── ☕ Funcionario.java           # Entidade principal
+│   │   ├── ☕ Dependente.java            # Entidade vinculada ao funcionário
+│   │   └── ☕ FolhaPagamento.java        # Modelo para processamento e cálculo de vencimentos
+│   └── 📁 repository
+│       ├── ☕ ConexaoDB.java             # Gerenciamento da conexão
+│       ├── ☕ FuncionarioDAO.java        # Operações CRUD no Banco de Dados
+│       ├── ☕ ConsultasSQL.java          # Constantes com queries SQL para centralização do código
+│       └── ☕ DadosConexao.java          # DTO para armazenamento de credenciais de acesso
+├── ⚙️ .gitignore                         # Arquivos ignorados pelo controle de versão
+└── 📝 README.md                          # Documentação técnica e equipe de desenvolvimento
 ```
 
 ---
