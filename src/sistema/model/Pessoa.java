@@ -1,5 +1,4 @@
 package sistema.model;
-
 import java.sql.Date;
 
 public abstract class Pessoa {
