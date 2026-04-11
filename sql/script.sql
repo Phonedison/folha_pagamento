@@ -23,7 +23,7 @@ id_funcionario INT REFERENCES funcionarios(id_funcionario)
 
 CREATE TABLE folha_pagamento (
 
-id_folha SERIAL PRIMARY KEY,
+codigo SERIAL PRIMARY KEY,
 data_pagamento DATE NOT NULL,
 desconto_inss DOUBLE,
 desconto_ir	DOUBLE,

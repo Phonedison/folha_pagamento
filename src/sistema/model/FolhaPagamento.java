@@ -4,15 +4,16 @@ import java.time.LocalDate;
 
 public class FolhaPagamento {
 
-  private int codigo; 
-  private Funcionario funcionario;
-  private LocalDate dataPagamento;
-  private double descontoInss;
-  private double descontoIR;
-  private double SalarioLiquido;
+    private int codigo;
+    private Funcionario funcionario;
+    private LocalDate dataPagamento;
+    private double descontoInss;
+    private double descontoIR;
+    private double SalarioLiquido;
 
-/* CONSUTRUTOR */
-    public FolhaPagamento(int codigo, Funcionario funcionario, LocalDate dataPagamento, double descontoInss, double descontoIR, double SalarioLiquido) {
+    /* CONSUTRUTOR */
+    public FolhaPagamento(int codigo, Funcionario funcionario, LocalDate dataPagamento, double descontoInss,
+            double descontoIR, double SalarioLiquido) {
         this.codigo = codigo;
         this.funcionario = funcionario;
         this.dataPagamento = dataPagamento;

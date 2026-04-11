@@ -19,7 +19,11 @@ public class Funcionario extends Pessoa {
 
   */
 
-  
+   public Funcionario(String nome, String cpf, Date dataNacimento, double salarioBruto, Set<Dependente> dependentes) {
+    super(nome, cpf, dataNacimento);
+    this.salarioBruto = salarioBruto;
+    this.dependentes = dependentes;
+  }
 
   /* GET */
   public double getSalarioBruto(){
@@ -28,20 +32,6 @@ public class Funcionario extends Pessoa {
 
   public int getId_funcionario(){
     return this.id_funcionario;
-  }
-  // public double getDescontoInss() {
-  //   return this.descontoInss;
-  // }
-
-  // public double getDescontoIR() {
-  //   return this. descontoIR;
-  // }
-
-  public Funcionario(String nome, String cpf, Date dataNacimento, double salarioBruto, Set<Dependente> dependentes) {
-    super(nome, cpf, dataNacimento);
-    this.salarioBruto = salarioBruto;
-    this.dependentes = dependentes;
-
   }
 
   public Set<Dependente> getDependentes() {
@@ -52,14 +42,6 @@ public class Funcionario extends Pessoa {
   public void setSalarioBruto(double salarioBruto){ 
     this.salarioBruto = salarioBruto;
   }
-
-  // public void setDescontoInss(double descontoInss) {
-  //   this.descontoInss = descontoInss;
-  // }
-
-  // public void setDescontoIR(double descontoIR) {
-  //   this.descontoIR = descontoIR;
-  // }
 
   public void setDependentes (Set<Dependente> dependentes) {
     this.dependentes = dependentes;
