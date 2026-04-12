@@ -41,14 +41,14 @@ public class FuncionarioDAO {
     String parteSQL;
 
     switch (opcao) {
-      case 1 -> parteSQL = " nome = ? "; // nome
-      case 2 -> parteSQL = " cpf = ? "; // cpf
-      case 3 -> parteSQL = " data_nascimento = ? "; // data nascimento
-      case 4 -> parteSQL = " salario_bruto = ?";
+      case 1 -> parteSQL = "nome = ?"; // nome
+      case 2 -> parteSQL = "cpf = ?"; // cpf
+      case 3 -> parteSQL = "data_nascimento = ?"; // data nascimento
+      case 4 -> parteSQL = "salario_bruto = ?";
       default -> throw new AssertionError("Opção inválida! -> parteSQL");
     }
 
-    String comandoSQL = "UPDATE funcionario SET" + parteSQL + " WHERE id_funcionario = ?;";
+    String comandoSQL = "UPDATE funcionario SET " + parteSQL + " WHERE id_funcionario = ?; ";
 
     try (
         Connection con = conexao.conectarDB();
@@ -102,13 +102,13 @@ public class FuncionarioDAO {
       String parametroSQL;
       switch (opcao) {
         case 0 -> parametroSQL = ""; // tudo
-        case 1 -> parametroSQL = " nome "; // nome
-        case 2 -> parametroSQL = " cpf "; // cpf
-        case 3 -> parametroSQL = " data_nascimento "; // data nascimento
-        case 4 -> parametroSQL = " salario_bruto "; // data nascimento
+        case 1 -> parametroSQL = "nome"; // nome
+        case 2 -> parametroSQL = "cpf"; // cpf
+        case 3 -> parametroSQL = "data_nascimento"; // data nascimento
+        case 4 -> parametroSQL = "salario_bruto"; // data nascimento
         default -> throw new AssertionError("Opção inválida! -> opcaoSQL");
       }
-      comandoSQL = "SELECT * FROM funcionario" + parametroSQL + " " + condicao + " ? ORDER BY id_funcionario DESC;";
+      comandoSQL = "SELECT * FROM funcionario " + parametroSQL + " " + condicao + " ? ORDER BY id_funcionario DESC;";
       /* selecionarFuncionario ( funcionario, 2, "") */
     }
 
@@ -140,10 +140,10 @@ public class FuncionarioDAO {
         while (resultado.next()) {
 
           System.out.println(resultado.getInt("id_funcionario") + " | "
-              + resultado.getNString("nome") + " | "
-              + resultado.getNString("cpf") + " | "
-              + resultado.getNString("data_nascimento") + " | "
-              + resultado.getNString("salario_bruto"));
+              + resultado.getString("nome") + " | "
+              + resultado.getString("cpf") + " | "
+              + resultado.getString("data_nascimento") + " | "
+              + resultado.getString("salario_bruto"));
         }
       }
 
