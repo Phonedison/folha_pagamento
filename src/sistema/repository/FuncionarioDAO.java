@@ -6,12 +6,35 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import sistema.model.Funcionario;
 
-public class FuncionarioDAO {
+public class FuncionarioDAO implements CriacaoTabela {
 
-  private ConexaoDB conexao;
+  private final ConexaoDB conexao;
 
   public FuncionarioDAO(ConexaoDB conexao) {
     this.conexao = conexao;
+  }
+
+  @Override
+  public void criarTabela() {
+    String comandoSQL = "CREATE TABLE IF NOT EXISTS funcionario ("
+        + " id_funcionario SERIAL PRIMARY KEY,"
+        + " nome VARCHAR(100) NOT NULL,"
+        + " cpf VARCHAR(14) UNIQUE NOT NULL,"
+        + " data_nascimento DATE NOT NULL,"
+        + " salario_bruto NUMERIC(15,2) NOT NULL" // Corrigido para NUMERIC
+        + " );";
+
+    try (
+        Connection con = conexao.conectarDB();
+        PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
+
+      stmt.execute();
+
+    } catch (Exception error) {
+      throw new RuntimeException("Erro ao inicializar tabela Funcionario: " + error.getMessage(),
+          error);
+    }
+
   }
 
   // INSET INTO
@@ -30,8 +53,7 @@ public class FuncionarioDAO {
 
     } catch (Exception error) {
 
-      System.out.println("Error de inserção: \n" + error.getMessage());
-      error.printStackTrace();
+      throw new RuntimeException("Erro ao atualizar: " + error.getMessage());
 
     }
   }
