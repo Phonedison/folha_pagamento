@@ -6,12 +6,35 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import sistema.model.FolhaPagamento;
 
-public class FolhaPagamentoDAO {
+public class FolhaPagamentoDAO implements CriacaoTabela {
 
-  private ConexaoDB conexao;
+  private final ConexaoDB conexao;
 
   public FolhaPagamentoDAO(ConexaoDB conexao) {
     this.conexao = conexao;
+  }
+
+  @Override
+  public final void criarTabela() { // -> Comando para executar a criação da tabela
+
+    String comandoSQL = "CREATE TABLE IF NOT EXISTS folha_pagamento ( "
+        + " codigo SERIAL PRIMARY KEY,"
+        + " data_pagamento DATE NOT NULL,"
+        + " desconto_inss NUMBER (15,2),"
+        + " desconto_ir NUMBER (15,2),"
+        + " salario_liquido NUMBER (15,2),"
+        + " id_funcionario INT REFERENCES funcionarios(id_funcionario) NOT NULL"
+        + " );";
+
+    try (
+        Connection con = conexao.conectarDB();
+        PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
+      stmt.execute();
+
+    } catch (Exception error) {
+      throw new RuntimeException("Erro ao inicializar tabela Folha_pagamento: " + error.getMessage(),
+          error);
+    }
   }
 
   // INSET INTO
@@ -33,8 +56,7 @@ public class FolhaPagamentoDAO {
 
     } catch (Exception error) {
 
-      System.out.println("Error de inserção: \n" + error.getMessage());
-      error.printStackTrace();
+      throw new RuntimeException("Erro na inserção: " + error.getMessage());
 
     }
   }
@@ -112,6 +134,7 @@ public class FolhaPagamentoDAO {
         System.out.println("CÓDIGO | DATA PAGAMENTO | DESCONTO INSS | DESCONTO IR | SALARIO LIQUIDO | ID FUNCIONARIO");
         System.out.println(" ------------------ ");
         /*
+         * APENAS UM TESTE
          * Imprime os dados após a busca utilizando o select armazenado na variavel
          * resultado, enquanto for passado com valor
          */

@@ -5,29 +5,63 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import sistema.model.Dependente;
 
-public class DependenteDAO {
+public class DependenteDAO implements CriacaoTabela {
 
-  private ConexaoDB conexao;
+  private final ConexaoDB conexao;
 
+  // constructo para receber a conexao do banco
   public DependenteDAO(ConexaoDB conexao) {
     this.conexao = conexao;
   }
 
+  @Override
+  // Comando para criar tabela, informando os atributos e propriedades delas
+  public void criarTabela() {
+
+    String comandoSQL = "CREATE TABLE IF NOT EXISTS dependente ( "
+        + " id_dependente SERIAL PRIMARY KEY,"
+        + " nome VARCHAR(100) NOT NULL,"
+        + " cpf VARCHAR(14) UNIQUE NOT NULL,"
+        + " data_nascimento DATE NOT NULL,"
+        + " parentesco parentesco NOT NULL,"
+        + " id_funcionario INT REFERENCES funcionarios(id_funcionario) NOT NULL"
+        + " );";
+
+    try (
+
+        Connection con = conexao.conectarDB(); // tenta executar a conexao do banco
+        PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
+      /* ^^ cria um molde do comando sql que foi passado utilizando comandoSQL */
+      stmt.execute(); // < exectua o comando molde
+
+    } catch (Exception error) { // caso ocorra um erro
+      throw new RuntimeException("Erro ao inicializar tabela Dependente: " + error.getMessage(),
+          error); // executa uma mensagem informando o erro e mostrando o erro, facilitando a
+                  // correção do erro
+    }
+
+  }
+
   // INSET INTO
   public void salvarDependente(Dependente dependente) {
+    // comando sql para inserir valores, ? representa os valores passados pelo get
+    // das outras classes / objetos
     String comandoSQL = "INSERT INTO dependente (nome, cpf, data_nascimento, parentesco, id_funcionario) VALUES (?, ?, ?, ?, ?);";
 
     try (
-        Connection con = conexao.conectarDB();
-        PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
+        Connection con = conexao.conectarDB(); // cria a conexao
+        PreparedStatement stmt = con.prepareStatement(comandoSQL);) { // prepara o comando
       stmt.setObject(1, dependente.getNome());
+      // prepara o parametro com base no tipo de valor necessário para o sql
+      // utilizando setObject que converte para o padrão de configuração
+      // esperado
       stmt.setObject(2, dependente.getCpf());
       stmt.setObject(3, dependente.getDataNacimento());
       stmt.setObject(4, dependente.getParentesco());
       stmt.setObject(5, dependente.getFuncionario());
 
-    } catch (Exception e) {
-      // TODO: handle exception
+    } catch (Exception error) {
+      throw new RuntimeException("Erro na inserção: " + error.getMessage());
     }
   }
 
