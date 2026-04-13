@@ -24,7 +24,8 @@ public class Main {
 
         InicializarDB.inicializar(conexao.menuConexao());
 
-
+        Menus opcao = new Menus();
+        opcao.menuOpcoes();
 
         // ------------------------------------------------------------------------//
 
