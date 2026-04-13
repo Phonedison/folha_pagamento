@@ -4,12 +4,12 @@ import java.sql.Date;
 import sistema.enums.Parentesco;
 
 public class Dependente extends Pessoa {
-  private Integer funcionario;
+  private Integer id_funcionario;
   private Parentesco parentesco;
 
-  public Dependente(String nome, String cpf, Date dataNacimento, Funcionario funcionario) {
+  public Dependente(String nome, String cpf, Date dataNacimento, Integer id_funcionario) {
     super(nome, cpf, dataNacimento);
-    this.funcionario = funcionario.getId_funcionario();
+    this.id_funcionario = id_funcionario;
   }
 
   public Parentesco getParentesco() {
