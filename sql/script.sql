@@ -1,4 +1,4 @@
--- create database folha_pagamento
+-- CREATE database folha_pagamento
 -- create schema pagamentos
 CREATE TYPE parentesco AS enum('FILHO', 'SOBRINHO', 'OUTROS');
 
@@ -8,10 +8,10 @@ id_funcionario SERIAL PRIMARY KEY,
 nome VARCHAR(100)NOT NULL,
 cpf VARCHAR(14)UNIQUE NOT NULL,
 data_nascimento DATE NOT NULL,
-salario_bruto DECIMAL(10,2) NOT NULL
+salario_bruto DOUBLE NOT NULL
 );
 
-CREATE TABLE dependente(
+CREATE TABLE dependente (
 
 id_dependente SERIAL PRIMARY KEY,
 nome VARCHAR(100)NOT NULL,
@@ -21,15 +21,15 @@ parentesco parentesco NOT NULL,
 id_funcionario INT REFERENCES funcionarios(id_funcionario)
 );
 
-CREATE TABLE folhade_pagamento(
+CREATE TABLE folha_pagamento (
 
 id_folha SERIAL PRIMARY KEY,
 data_pagamento DATE NOT NULL,
-desconto_inss DECIMAL(10,2),
-desconto_ir	DECIMAL	(10,2),
-salario_liquido DECIMAL (10,2),
+desconto_inss DOUBLE,
+desconto_ir	DOUBLE,
+salario_liquido DOUBLE,
 id_funcionario INT REFERENCES funcionarios(id_funcionario)
-);
+);	
 
 UPDATE -- Define a Tabela que será Modificada.
 SET -- Indica a Coluna a ser Alterada e o Novo Valor.

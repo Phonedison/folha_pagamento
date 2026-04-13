@@ -1,8 +1,13 @@
 package sistema.model;
 
+import java.sql.Date;
 import sistema.enums.Parentesco;
 
 public class Dependente extends Pessoa {
+
+  public Dependente(String nome, String cpf, Date dataNacimento) {
+    super(nome, cpf, dataNacimento);
+  }
 
   private Parentesco parentesco;
 
