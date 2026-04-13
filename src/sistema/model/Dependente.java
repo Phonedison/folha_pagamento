@@ -1,17 +1,20 @@
 package sistema.model;
 
 import java.sql.Date;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+
 import sistema.enums.Parentesco;
 
 public class Dependente extends Pessoa {
 
-  public Dependente(String nome, String cpf, Date dataNacimento) {
-
   private Integer funcionario;
   private Parentesco parentesco;
 
-  public Dependente(String nome, String cpf, Date dataNacimento, Funcionario funcionario) {
-    super(nome, cpf, dataNacimento);
+  public Dependente(String nome, String cpf, Date dataNascimento, Funcionario funcionario) {
+    super(nome, cpf, dataNascimento);
     this.funcionario = funcionario.getId_funcionario();
   }
 
@@ -59,4 +62,5 @@ public class Dependente extends Pessoa {
   public void setFuncionario(Integer funcionario) {
     this.funcionario = funcionario;
   }
+
 }
