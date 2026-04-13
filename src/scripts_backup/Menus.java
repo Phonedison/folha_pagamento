@@ -99,6 +99,7 @@ public class Menus {
                     break;
 
                 case 3:
+                    removerFuncionario();
                     break;
 
                 case 4:
@@ -174,6 +175,12 @@ public class Menus {
             Funcionario funcionario = new Funcionario(nome, cpf, data, salario);
             return funcionario;
         }
+
+    public void removerFuncionario(){
+        System.out.println("Digite o ID do funcionário que deseja remover: ");
+        int id = sc.nextInt();
+
     }
+}
 
 
