@@ -6,6 +6,12 @@ import sistema.repository.ConexaoDB;
 
 
 
+import java.sql.Date;
+import java.time.LocalDate;
+
+import scripts_backup.CalculoTesteData;
+import sistema.model.Dependente;
+
 public class Main {
     /**
      * @param args
@@ -42,5 +48,9 @@ public class Main {
         // FuncionarioDAO funcionarioDao = new FuncionarioDAO(conexao);
         // funcionarioDao.salvarFuncionario(funcionario);
 
+        // CalculoTesteData data = new CalculoTesteData();
+        // System.out.println(data.diferencaAno(("2000-04-13")));
+
     }
+
 }
