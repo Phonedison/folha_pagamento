@@ -8,7 +8,7 @@ bin/
 .project
 .vscode/
 *.iml
-
+.idea
 # Arquivos de sistema e temporários
 thumbs.db
 .DS_Store
