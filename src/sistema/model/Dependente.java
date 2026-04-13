@@ -6,10 +6,14 @@ import sistema.enums.Parentesco;
 public class Dependente extends Pessoa {
 
   public Dependente(String nome, String cpf, Date dataNacimento) {
-    super(nome, cpf, dataNacimento);
-  }
 
+  private Integer funcionario;
   private Parentesco parentesco;
+
+  public Dependente(String nome, String cpf, Date dataNacimento, Funcionario funcionario) {
+    super(nome, cpf, dataNacimento);
+    this.funcionario = funcionario.getId_funcionario();
+  }
 
   public Parentesco getParentesco() {
     return this.parentesco;
@@ -48,4 +52,11 @@ public class Dependente extends Pessoa {
 
   }
 
+  public Integer getFuncionario() {
+    return this.funcionario;
+  }
+
+  public void setFuncionario(Integer funcionario) {
+    this.funcionario = funcionario;
+  }
 }

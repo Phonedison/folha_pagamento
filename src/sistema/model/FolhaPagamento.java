@@ -4,42 +4,43 @@ import java.time.LocalDate;
 
 public class FolhaPagamento {
 
-  private int codigo; 
-  private Funcionario funcionario;
-  private LocalDate dataPagamento;
-  private double descontoInss;
-  private double descontoIR;
-  private double SalarioLiquido;
+    private int codigo;
+    private Funcionario funcionario;
+    private LocalDate dataPagamento;
+    private double descontoInss;
+    private double descontoIR;
+    private double salarioLiquido;
 
-/* CONSUTRUTOR */
-    public FolhaPagamento(int codigo, Funcionario funcionario, LocalDate dataPagamento, double descontoInss, double descontoIR, double SalarioLiquido) {
+    /* CONSUTRUTOR */
+    public FolhaPagamento(int codigo, Funcionario funcionario, LocalDate dataPagamento, double descontoInss,
+            double descontoIR, double salarioLiquido) {
         this.codigo = codigo;
         this.funcionario = funcionario;
         this.dataPagamento = dataPagamento;
         this.descontoInss = descontoInss;
         this.descontoIR = descontoIR;
-        this.SalarioLiquido = SalarioLiquido;
+        this.salarioLiquido = salarioLiquido;
     }
 
     /* GET */
     public int getCodigo() {
-        return codigo;
+        return this.codigo;
     }
 
     public LocalDate getDataPagamento() {
-        return dataPagamento;
+        return this.dataPagamento;
     }
 
     public double getDescontoInss() {
-        return descontoInss;
+        return this.descontoInss;
     }
 
     public double getDescontoIR() {
-        return descontoIR;
+        return this.descontoIR;
     }
 
     public double getSalarioLiquido() {
-        return SalarioLiquido;
+        return this.salarioLiquido;
     }
 
     public Funcionario getFuncionario() {
@@ -67,7 +68,49 @@ public class FolhaPagamento {
         this.funcionario = funcionario;
     }
 
-    public void setSalarioLiquido(double SalarioLiquido) {
-        this.SalarioLiquido = SalarioLiquido;
+    public void setSalarioLiquido(double salarioLiquido) {
+        this.salarioLiquido = salarioLiquido;
+    }
+
+    public void calcularINSS() {
+        double salario = funcionario.getSalarioBruto();
+
+        if (salario <= 1518.00) {
+            this.descontoInss = salario * 0.075;
+
+        } else if (salario > 1518.00 && salario <= 2793.88) {
+            this.descontoInss = salario * 0.09;
+
+        } else if (salario > 2793.88 && salario <= 4190.83) {
+            this.descontoInss = salario * 0.12;
+
+        } else {
+            this.descontoInss = salario * 0.14;
+        }
+    }
+
+    public void calcularIR() {
+        double base = funcionario.getSalarioBruto() - this.descontoInss
+                - (funcionario.getDependentes().size() * 189.59);
+
+        if (base <= 2259.00) {
+            this.descontoIR = 0;
+
+        } else if (base > 2259.00 && base <= 2826.65) {
+            this.descontoIR = (base * 0.075) - 169.44;
+
+        } else if (base > 2826.65 && base <= 3751.05) {
+            this.descontoIR = (base * 0.15) - 381.44;
+
+        } else if (base > 3751.05 && base <= 4664.68) {
+            this.descontoIR = (base * 0.225) - 662.77;
+
+        } else {
+            this.descontoIR = (base * 0.275) - 896.00;
+        }
+    }
+
+    public void calcularSalarioLiquido() {
+        salarioLiquido = funcionario.getSalarioBruto() - this.descontoInss - this.descontoIR;
     }
 }
