@@ -35,10 +35,16 @@ UPDATE -- Define a Tabela que será Modificada.
 SET -- Indica a Coluna a ser Alterada e o Novo Valor.
 WHERE -- Filtra quais Linhas Serão Atualizadas.Se Omitido, Todos os Registros da Tabela Serão Alterados.  
 
+--UPDATE funcionario SET nome = "Lucas" WHERE id_funcionario = 1
+
 DELETE FROM --nome_tabela 
 WHERE --condição 
+
+-- DELETE funcionario WHERE id_funcionario = 1 
 
 SELECT --qual_coluna 
 FROM  --qual_tabela  
 WHERE --candição  
 ORDER BY  --qual_ordem 
+
+--SELECT nome FROM funcionario WHERE nome = "Lucas" ORDER BY id_funcionario
