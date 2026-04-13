@@ -1,18 +1,10 @@
 package sistema.model;
-import java.sql.Date;
 
-public abstract class Pessoa {
+public class Pessoa {
   
-  protected String nome;
-  protected String cpf;
-  protected Date dataNacimento;
-
-
-  public Pessoa(String nome, String cpf, Date dataNacimento) {
-    this.nome = nome;
-    this.cpf = cpf;
-    this.dataNacimento = dataNacimento;
-  }
+  private  String nome;
+  private String cpf;
+  private String dataNacimento;
 
   /* GET */
   public String getNome (){
@@ -23,7 +15,7 @@ public abstract class Pessoa {
     return this.cpf;
   }
 
-  public Date getDataNacimento(){
+  public String getDataNacimento(){
     return this.dataNacimento;
   }
   
@@ -53,9 +45,8 @@ public abstract class Pessoa {
    
   }
 
-  public void setDataNacimento(Date dataNacimento){
+  public void setDataNacimento(String dataNacimento){
      this.dataNacimento = dataNacimento;
   }
 }
-
-// alooo
+//Koeee lindões
