@@ -1,4 +1,16 @@
 package sistema.app;
+import scripts_backup.Menus;
+import sistema.repository.InicializarDB;
+
+import sistema.repository.ConexaoDB;
+
+
+
+import java.sql.Date;
+import java.time.LocalDate;
+
+import scripts_backup.CalculoTesteData;
+import sistema.model.Dependente;
 
 public class Main {
     /**
@@ -6,19 +18,20 @@ public class Main {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
 
         /* Conexao DB */
 
-        // Método para gerar a conexao do Banco
-        // ConexaoDB conexao = new ConexaoDB (
-        // (int porta), // porta que configurou
-        // (String meuDb), // nome do DB que deu
-        // (String usuario), // usuario que definiu para mexer no DB
-        // (String senha)) // a senha de acesso ao DB
+    // Método para gerar a conexao do Banco
 
-        // comando para executar verificacao e criação das tabelas
-        // InicializarDB.inicializar(conexao);
+        Menus conexao = new Menus();
+        conexao.menuConexao();
+
+    // Comando para executar verificacao e criação das tabelas
+
+        InicializarDB.inicializar(conexao.menuConexao());
+
+        Menus opcao = new Menus();
+        opcao.menuOpcoes();
 
         // ------------------------------------------------------------------------//
 
@@ -35,5 +48,9 @@ public class Main {
         // FuncionarioDAO funcionarioDao = new FuncionarioDAO(conexao);
         // funcionarioDao.salvarFuncionario(funcionario);
 
+        // CalculoTesteData data = new CalculoTesteData();
+        // System.out.println(data.diferencaAno(("2000-04-13")));
+
     }
+
 }

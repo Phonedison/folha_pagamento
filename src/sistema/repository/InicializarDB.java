@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InicializarDB {
-  public static void inicilizar(ConexaoDB conexao) {
+  public static void inicializar(ConexaoDB conexao) {
     try {
       // Criação da lista para todos os nossos DAOs que precisam de uma 'tabela'
       List<CriacaoTabela> listaDAOs = new ArrayList<>();
