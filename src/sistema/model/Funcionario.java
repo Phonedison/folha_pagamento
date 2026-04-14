@@ -21,6 +21,10 @@ public class Funcionario extends Pessoa {
    * 
    */
 
+  public Funcionario() {
+    super();
+  }
+
   public Funcionario(String nome, String cpf, LocalDate dataNacimento, double salarioBruto,
       Set<Dependente> dependentes) {
     super(nome, cpf, dataNacimento);

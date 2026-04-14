@@ -8,6 +8,9 @@ public abstract class Pessoa {
   protected String cpf;
   protected LocalDate dataNascimento;
 
+  public Pessoa() {
+  }
+
   public Pessoa(String nome, String cpf, LocalDate dataNascimento) {
     this.nome = nome;
     this.cpf = cpf;

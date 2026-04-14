@@ -101,7 +101,7 @@ public class DependenteDAO implements CriacaoTabela {
   }
 
   // DELETE
-  public void excluirDependente(int id_dependente, int opcao) {
+  public void excluirDependente(int id_dependente) {
     String comandoSQL = "DELETE FROM dependente WHERE id_dependente = ?";
 
     try (
