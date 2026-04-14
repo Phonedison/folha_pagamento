@@ -1,17 +1,14 @@
 package sistema.app.menu;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-import sistema.model.Dependente;
-import sistema.model.FolhaPagamento;
-import sistema.model.Funcionario;
-import sistema.repository.ConexaoDB;
-import sistema.repository.DependenteDAO;
-import sistema.repository.FolhaPagamentoDAO;
-import sistema.repository.FuncionarioDAO;
+import sistema.exception.DependenteException;
+import sistema.model.*;
+import sistema.repository.*;
 
 public class Menus {
-  private Scanner sc = new Scanner(System.in);
+  private final Scanner sc = new Scanner(System.in);
   private ConexaoDB conexao;
 
   public void execute() {
@@ -28,18 +25,20 @@ public class Menus {
     titulo("Conexão com o DB");
 
     do {
+
       System.out.println("Informe os dados para conexão com o Banco de Dados: ");
       System.out.print("Nº da Porta: ");
       porta = sc.nextInt();
+      sc.nextLine();
 
       System.out.print("Nome do DB: ");
-      nomeDB = sc.next();
+      nomeDB = sc.nextLine();
 
       System.out.print("Usuario / Login: ");
-      usuario = sc.next();
+      usuario = sc.nextLine();
 
       System.out.print("Senha : ");
-      senha = sc.next();
+      senha = sc.nextLine();
 
       if (nomeDB.isEmpty() && usuario.isEmpty() && senha.isEmpty() && porta == null) {
         System.out.println("Valores inválidos!");
@@ -62,7 +61,7 @@ public class Menus {
         }
       }
 
-    } while (nomeDB.isEmpty() && usuario.isEmpty() && senha.isEmpty() && porta == null);
+    } while (nomeDB.isEmpty() || usuario.isEmpty() || senha.isEmpty() || porta == null);
 
     ConexaoDB conexao = new ConexaoDB(porta, nomeDB, usuario, senha);
 
@@ -73,7 +72,8 @@ public class Menus {
     int opcao;
     do {
       titulo("Menu Principal");
-      System.out.println("1 - Conectar ao Banco de Dados");
+      System.out
+          .println((conexao == null) ? "1 - Conectar ao Banco de Dados" : "Conexão Com banco de dados estabelecida!");
       System.out.println("2 - Importa / Exportar arquivo .CSV");
       System.out.println("3 - Gerenciar Funcionário");
       System.out.println("4 - Gerenciar Dependente");
@@ -88,8 +88,12 @@ public class Menus {
           System.out.println("Conexão realizada com sucesso!");
         }
         // case 2 -> Importar / Exportar arquivo .CSV;
-        case 3 -> menu_modelDAO("FUNCIONARIO");
-        case 4 -> menu_modelDAO("DEPENDENTE");
+        case 3 -> menu_modelDAO("FUNCIONARIO"); // acessa o menu de funcionário, passando o nome da entidade como
+                                                // parâmetro para
+                                                // identificar qual menu acessar
+        case 4 -> menu_modelDAO("DEPENDENTE");// acessa o menu de dependente, passando o nome da entidade como parâmetro
+                                              // para
+                                              // identificar qual menu acessar
         case 5 -> menu_modelDAO("FOLHA DE PAGAMENTO");
         case 0 -> System.out.println("Finalizando atendimento...");
         default -> System.out.println("Número inválido!");
@@ -97,23 +101,25 @@ public class Menus {
     } while (opcao != 0);
   }
 
+  // método para acessar os menus de cada entidade
   private void menu_modelDAO(String entidade) {
 
     if (conexao == null) { // verifica se foi feito a conexão com o banco de dados
       titulo("E R R O");
       System.out.println("Conexão com o Banco de Dados não estabelecida!");
-      System.out.println("Você precisa se conetar ao banco (Opção 1) para acessar os recursos de " + entidade + ".");
+      System.out.println("Você precisa se conetar ao banco (Opção 1) para acessar os recursos de " + ".");
       return;
     }
 
     int opcao;
-
+    // loop para manter o menu da entidade ativo até que o usuário escolha voltar
+    // para o menu principal
     do {
       titulo("GESTÃO DE " + entidade.toUpperCase());
-      System.out.println("1 - Cadastrar " + entidade);
-      System.out.println("2 - Listar " + entidade);
-      System.out.println("3 - Atualizar " + entidade);
-      System.out.println("4 - Excluir " + entidade);
+      System.out.println("1 - Cadastrar ");
+      System.out.println("2 - Listar ");
+      System.out.println("3 - Atualizar ");
+      System.out.println("4 - Excluir ");
       System.out.println("0 - Voltar ao Menu Principal");
       System.out.print("Escolha: ");
 
@@ -131,20 +137,21 @@ public class Menus {
     } while (opcao != 0);
   }
 
-  private void titulo(String titulo) {
-    System.out.println("\n==========================================");
-    System.out.printf("   %s%n", titulo);
-    System.out.println("==========================================");
-  }
+  //
 
   private int lerOpcao() {
+
     try {
-      int valor = Integer.parseInt(sc.nextLine());
+      int valor = Integer.parseInt(sc.next());
+      sc.nextLine();
       return valor;
+
     } catch (NumberFormatException error) {
+      sc.nextLine();
       System.out.println("Valor inválido! Digite um número inteiro.");
       return 0;
     }
+
   }
 
   private void cadastrar(String entidade) {
@@ -152,9 +159,15 @@ public class Menus {
 
       case "FUNCIONARIO" -> {
 
+        // criando o objeto do tipo FuncionarioDAO para acessar os métodos de CRUD do
+        // funcionário
         FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
+        // criando o objeto do tipo Funcionario para acessar os atributos e métodos da
+        // classe Funcionario, e posteriormente passar como parâmetro para os métodos de
+        // CRUD
         Funcionario f = new Funcionario();
 
+        // Inserção de valores referente a funcionário
         titulo("Cadastrar Funcionário");
 
         System.out.print("Nome: ");
@@ -163,17 +176,23 @@ public class Menus {
         System.out.print("CPF: ");
         f.setCpf(sc.nextLine());
 
-        System.out.print("Data de Nascimento: (AAAA-MM-DD) ");
-        f.setDataNacimento(LocalDate.parse(sc.nextLine()));
+        System.out.print("Data de Nascimento: ");
+        f.setDataNacimento(converterData(sc.nextLine()));
 
         System.out.print("Salário Bruto: ");
         f.setSalarioBruto(Double.parseDouble(sc.nextLine()));
 
         try {
+          // validando os dados do funcionário utilizando o método validarFuncionario da
+          // classe Funcionario, caso haja algum erro de validação, será lançado uma
+          // exceção com a mensagem de erro correspondente
           funDAO.salvarFuncionario(f);
-          System.out.println("Funcionário cadastrado com sucesso!");
+          // System.out.println("Funcionário cadastrado com sucesso!");
 
         } catch (Exception e) {
+          // caso ocorra um erro durante a validação ou inserção do funcionário, será
+          // capturada a exceção e exibida uma mensagem de erro informando o motivo do
+          // erro, facilitando a correção do mesmo
           System.out.println("Erro ao cadastrar funcionário: " + e.getMessage());
         }
       }
@@ -191,7 +210,7 @@ public class Menus {
         d.setCpf(sc.nextLine());
 
         System.out.print("Data de Nascimento: ");
-        d.setDataNacimento(LocalDate.parse(sc.nextLine()));
+        d.setDataNacimento(converterData(sc.nextLine()));
 
         System.out.println("ID do funcionário responsável: ");
         int idFuncionario = lerOpcao();
@@ -207,10 +226,13 @@ public class Menus {
         d.escolherParentesco(opcaoParentesco);
 
         try {
+          d.validarDependente();
           depDAO.salvarDependente(d);
           System.out.println("Dependente cadastrado com sucesso!");
 
-        } catch (Exception error) {
+          // caso ocorra um erro durante a validação ou inserção do dependente, será
+          // capturada a exceção e exibida uma mensagem de erro informando o motivo
+        } catch (DependenteException error) {
           System.out.println("Erro ao cadastrar dependente: " + error.getMessage());
         }
 
@@ -227,17 +249,21 @@ public class Menus {
   private void listar(String entidade) {
     switch (entidade) {
       case "FUNCIONARIO" -> {
-
+        titulo("RELATORIO - " + entidade);
         FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
+        // utilizando o método selecionarFuncionario da classe FuncionarioDAO para
+        // listar os funcionários cadastrados
         funDAO.selecionarFuncionario(new Funcionario(), 0, "");
         // select padrão para listar todos os funcionários, sem filtro
 
       }
       case "DEPENDENTE" -> {
+        titulo("RELATORIO - " + entidade);
         DependenteDAO depDAO = new DependenteDAO(conexao);
         depDAO.selecionarDependente(new Dependente(), 0, "");
       }
       case "FOLHA DE PAGAMENTO" -> {
+        titulo("RELATORIO - " + entidade);
         FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
         folhaDAO.selecionarFolha(new FolhaPagamento(), 0, "");
       }
@@ -253,13 +279,31 @@ public class Menus {
     switch (entidade) {
 
       case "FUNCIONARIO" -> {
+        // criando o objeto do tipo FuncionarioDAO para acessar os métodos de CRUD do
+        // funcionário
         FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
-        funDAO.excluirFuncionario(id);
+        // valida
+        System.out.println("Tem certeza que deseja excluir o funcionário de ID " + id + "? (S/N)");
+        String confirmacao = sc.nextLine().toUpperCase();
+        if (confirmacao.equals("S")) {
+          // se sim, executa o método excluir funcionario
+          funDAO.excluirFuncionario(id);
+        } else {
+          System.out.println("Exclusão cancelada.");
+        }
       }
 
       case "DEPENDENTE" -> {
         DependenteDAO depDAO = new DependenteDAO(conexao);
-        depDAO.excluirDependente(id);
+
+        System.out.println("Tem certeza que deseja excluir o dependente de ID " + id + "? (S/N)");
+        String confirmacao = sc.nextLine().toUpperCase();
+        if (confirmacao.equals("S")) {
+          depDAO.excluirDependente(id);
+
+        } else {
+          System.out.println("Exclusão cancelada.");
+        }
       }
     }
   }
@@ -274,7 +318,8 @@ public class Menus {
 
         System.out.println("Digite o ID do funcionário a ser atualizado: ");
         int id = lerOpcao();
-
+        // informa os dados atuais do funcionário para facilitar a escolha do que
+        // atualizar
         System.out.println("O que deseja atualizar? ");
         System.out.println("1 - Nome");
         System.out.println("2 - CPF");
@@ -283,6 +328,7 @@ public class Menus {
         System.out.print("Opção: ");
         int opcao = lerOpcao();
 
+        // escolhe o parametro que vai ser atualizado
         switch (opcao) {
           case 1 -> {
             System.out.print("Novo nome: ");
@@ -295,10 +341,10 @@ public class Menus {
           }
 
           case 3 -> {
-            System.out.print("Nova data de nascimento: ");
-            // Criar método de tratativa da data de nascimento para evitar erros de
+            System.out.print("Nova data de aniversário: ");
+            // Criar método de tratativa da data de aniversário para evitar erros de
             // formatação
-            f.setDataNacimento(LocalDate.parse(sc.nextLine()));
+            f.setDataNacimento(converterData(sc.nextLine()));
           }
 
           case 4 -> {
@@ -350,7 +396,7 @@ public class Menus {
             System.out.print("Nova data de nascimento: ");
             // Criar método de tratativa da data de nascimento para evitar erros de
             // formatação
-            d.setDataNacimento(LocalDate.parse(sc.nextLine()));
+            d.setDataNacimento(converterData(sc.nextLine()));
           }
 
           case 4 -> {
@@ -386,5 +432,20 @@ public class Menus {
       }
       default -> System.out.println("Entidade inválida para atualização!");
     }
+  }
+
+  // método para converter a data de nascimento e data de aniversário, utilizando
+  // o padrão dd/MM/yyyy, para evitar erros de formatação
+  public LocalDate converterData(String valor) {
+    DateTimeFormatter formatar = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    return LocalDate.parse(valor, formatar);
+  }
+
+  // metodo para imprimir o título dos menus, deixando a interface mais organizada
+  // e fácil de ler
+  private void titulo(String titulo) {
+    System.out.println("\n==========================================");
+    System.out.printf("   %s%n", titulo);
+    System.out.println("==========================================");
   }
 }

@@ -24,7 +24,7 @@ public class DependenteDAO implements CriacaoTabela {
         + " cpf VARCHAR(14) UNIQUE NOT NULL,"
         + " data_nascimento DATE NOT NULL,"
         + " parentesco parentesco NOT NULL,"
-        + " id_funcionario INT REFERENCES funcionarios(id_funcionario) NOT NULL"
+        + " id_funcionario INT REFERENCES funcionario(id_funcionario) NOT NULL"
         + " );";
 
     try (
@@ -46,7 +46,7 @@ public class DependenteDAO implements CriacaoTabela {
   public void salvarDependente(Dependente dependente) {
     // comando sql para inserir valores, ? representa os valores passados pelo get
     // das outras classes / objetos
-    String comandoSQL = "INSERT INTO dependente (nome, cpf, data_nascimento, parentesco, id_funcionario) VALUES (?, ?, ?, ?, ?);";
+    String comandoSQL = "INSERT INTO dependente (nome, cpf, data_nascimento, parentesco, id_funcionario) VALUES (?, ?, ?, ?::parentesco, ?);";
 
     try (
         Connection con = conexao.conectarDB(); // cria a conexao
@@ -57,8 +57,10 @@ public class DependenteDAO implements CriacaoTabela {
       // esperado
       stmt.setObject(2, dependente.getCpf());
       stmt.setObject(3, dependente.getDataNacimento());
-      stmt.setObject(4, dependente.getParentesco());
+      stmt.setObject(4, dependente.getParentesco().name()); // converte o enum para string utilizando o name();
       stmt.setObject(5, dependente.getFuncionario());
+
+      stmt.executeUpdate();
 
     } catch (Exception error) {
       throw new RuntimeException("Erro na inserção: " + error.getMessage());
@@ -93,7 +95,7 @@ public class DependenteDAO implements CriacaoTabela {
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
 
-      stmt.setObject(2, dependente.getId_dependente() == id_dependente);
+      stmt.setObject(2, id_dependente);
       stmt.executeUpdate();
 
     } catch (Exception error) {
@@ -110,7 +112,13 @@ public class DependenteDAO implements CriacaoTabela {
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
 
       stmt.setObject(1, id_dependente);
-      stmt.executeLargeUpdate();
+      int linhas = stmt.executeUpdate();
+
+      if (linhas > 0) {
+        System.out.println("Dependente removido!");
+      } else {
+        System.out.println("Dependente não encontrado!");
+      }
 
     } catch (Exception error) {
       throw new RuntimeException("Erro ao deletar dependente: " + error.getMessage());

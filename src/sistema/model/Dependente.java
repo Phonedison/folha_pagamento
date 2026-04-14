@@ -1,7 +1,9 @@
 package sistema.model;
 
 import java.time.LocalDate;
+import java.time.Period;
 import sistema.enums.Parentesco;
+import sistema.exception.DependenteException;
 
 public class Dependente extends Pessoa {
 
@@ -48,6 +50,13 @@ public class Dependente extends Pessoa {
 
   public void setFuncionario(Integer funcionario) {
     this.funcionario = funcionario;
+  }
+
+  public void validarDependente() throws DependenteException {
+    int idade = Period.between(getDataNacimento(), LocalDate.now()).getYears();
+    if (idade > 18) {
+      throw new DependenteException("Dependente deve ter menos de 18 anos.");
+    }
   }
 
 }

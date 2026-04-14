@@ -86,7 +86,7 @@ public class FuncionarioDAO implements CriacaoTabela {
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
 
-      stmt.setObject(2, funcionario.getId_funcionario() == id_funcionario);
+      stmt.setObject(2, id_funcionario);
       stmt.executeUpdate();
 
     } catch (SQLException error) {
@@ -102,13 +102,14 @@ public class FuncionarioDAO implements CriacaoTabela {
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
 
-      /*
-       * Ver se é possível adicionar um método de confirmação.
-       */
-
       stmt.setObject(1, id_funcionario);
-      stmt.executeLargeUpdate();
-      System.out.println("Funcionário removido!");
+      int linhas = stmt.executeUpdate();
+
+      if (linhas > 0) {
+        System.out.println("Funcionário removido!");
+      } else {
+        System.out.println("Funcionário não encontrado!");
+      }
 
     } catch (Exception error) {
       throw new RuntimeException("Erro ao deleter ao usuario: " + error.getMessage());
@@ -151,10 +152,9 @@ public class FuncionarioDAO implements CriacaoTabela {
       }
 
       try (ResultSet resultado = stmt.executeQuery()) {
-        System.out.println("--- Relatório ---");
-        System.out.println(" ");
-        System.out.println("CÓDIGO | NOME | CPF | NASCIMENTO | SALARIO");
-        System.out.println(" ------------------ ");
+
+        String formato = "| %-5s | %-25s | %-15s | %-12s | %-12s |%n";
+        System.out.printf(formato, "COD", "NOME", "CPF", "NASC.", "SALARIO");
 
         /*
          * Imprime os dados após a busca utilizando o select armazenado na variavel

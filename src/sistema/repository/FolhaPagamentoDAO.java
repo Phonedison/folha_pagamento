@@ -20,9 +20,9 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
     String comandoSQL = "CREATE TABLE IF NOT EXISTS folha_pagamento ( "
         + " codigo SERIAL PRIMARY KEY,"
         + " data_pagamento DATE NOT NULL,"
-        + " desconto_inss NUMBER (15,2),"
-        + " desconto_ir NUMBER (15,2),"
-        + " salario_liquido NUMBER (15,2),"
+        + " desconto_inss NUMERIC(15,2),"
+        + " desconto_ir NUMERIC(15,2),"
+        + " salario_liquido NUMERIC(15,2),"
         + " id_funcionario INT REFERENCES funcionarios(id_funcionario) NOT NULL"
         + " );";
 
@@ -49,7 +49,7 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
       stmt.setObject(2, folhaPagamento.getDescontoInss());
       stmt.setObject(3, folhaPagamento.getDescontoIR());
       stmt.setObject(4, folhaPagamento.getSalarioLiquido());
-      stmt.setObject(5, (folhaPagamento.getFuncionario()).getDependentes());
+      stmt.setObject(5, folhaPagamento.getFuncionario().getId_funcionario());
 
       stmt.executeUpdate();
       System.out.println("Folha de pagamento registrado XD");
