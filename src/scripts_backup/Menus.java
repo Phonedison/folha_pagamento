@@ -13,7 +13,7 @@ public class Menus {
 
     Scanner sc = new Scanner(System.in);
 
-    public ConexaoDB menuConexao(){
+    public ConexaoDB menuConexao() {
 
         String nomeDB;
         String usuario;
@@ -60,12 +60,12 @@ public class Menus {
 
         } while (nomeDB.isEmpty() && usuario.isEmpty() && senha.isEmpty() && porta == null);
 
-        ConexaoDB conexao = new ConexaoDB(porta, nomeDB, usuario, senha);
+        // ConexaoDB conexao = new ConexaoDB(porta, nomeDB, usuario, senha);
 
         return conexao;
     }
 
-    public void menuOpcoes(){
+    public void menuOpcoes() {
 
         Integer opcao;
 
@@ -90,7 +90,7 @@ public class Menus {
                 case 1:
                     try {
                         criarFuncionario();
-                    } catch (ParseException e){
+                    } catch (ParseException e) {
                         throw new RuntimeException(e);
                     }
                     break;
@@ -114,73 +114,69 @@ public class Menus {
                     break;
             }
 
-        }while(opcao != 0);
+        } while (opcao != 0);
     }
 
-    public Funcionario criarFuncionario() throws ParseException{
-            String nome;
-            String cpf;
-            String dataNascimento;
-//          Dependente dependete;
-            Double salario;
+    public Funcionario criarFuncionario() throws ParseException {
+        String nome;
+        String cpf;
+        String dataNascimento;
+        // Dependente dependete;
+        Double salario;
 
-            System.out.println("===== CADASTRO DE FUNCIONÁRIO =====");
+        System.out.println("===== CADASTRO DE FUNCIONÁRIO =====");
 
-            do {
-                System.out.println("Informe o Nome do Funcionário: ");
-                nome = sc.next();
+        do {
+            System.out.println("Informe o Nome do Funcionário: ");
+            nome = sc.next();
 
-                System.out.println("Informe o CPF do Funcionário: ");
-                cpf = sc.next();
+            System.out.println("Informe o CPF do Funcionário: ");
+            cpf = sc.next();
 
-                System.out.println("Informe a Data de Nascimento do Funcionário (xx/xx/xxxx): ");
-                dataNascimento = sc.nextLine();
+            System.out.println("Informe a Data de Nascimento do Funcionário (xx/xx/xxxx): ");
+            dataNascimento = sc.nextLine();
 
-                System.out.println("Informe o Salario Bruto do Funcionário: ");
-                salario = sc.nextDouble();
+            System.out.println("Informe o Salario Bruto do Funcionário: ");
+            salario = sc.nextDouble();
 
-//                System.out.println("Informe o nome do dependente se houver: ");
-//                dependentes = sc.next();
+            // System.out.println("Informe o nome do dependente se houver: ");
+            // dependentes = sc.next();
 
+            if (nome.isEmpty() && cpf.isEmpty() && dataNascimento.isEmpty()) {
+                System.out.println("Valores inválidos!");
 
-                if (nome.isEmpty() && cpf.isEmpty() && dataNascimento.isEmpty()){
-                    System.out.println("Valores inválidos!");
-
-                } else {
-                    if (nome.isEmpty()) {
-                        System.out.println("Nome inválido!");
-                    }
-
-                    if (cpf.isEmpty()) {
-                        System.out.println("CPF inválido!");
-                    }
-
-                    if (dataNascimento.isEmpty()) {
-                        System.out.println("Data inválida!");
-                    }
-
-                    if (salario <= 0) {
-                        System.out.println("Salário inválido!");
-                    }
+            } else {
+                if (nome.isEmpty()) {
+                    System.out.println("Nome inválido!");
                 }
 
-            } while (nome.isEmpty() || cpf.isEmpty() || dataNascimento.isEmpty());
+                if (cpf.isEmpty()) {
+                    System.out.println("CPF inválido!");
+                }
 
+                if (dataNascimento.isEmpty()) {
+                    System.out.println("Data inválida!");
+                }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            java.util.Date utilDate = sdf.parse(dataNascimento);
+                if (salario <= 0) {
+                    System.out.println("Salário inválido!");
+                }
+            }
 
-            Date data = new Date(utilDate.getTime());
+        } while (nome.isEmpty() || cpf.isEmpty() || dataNascimento.isEmpty());
 
-            Funcionario funcionario = new Funcionario(nome, cpf, data, salario);
-            return funcionario;
-        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        java.util.Date utilDate = sdf.parse(dataNascimento);
 
-    public void removerFuncionario(){
+        Date data = new Date(utilDate.getTime());
+
+        Funcionario funcionario = new Funcionario(nome, cpf, data, salario);
+        return funcionario;
+    }
+
+    public void removerFuncionario() {
         System.out.println("Digite o ID do funcionário que deseja remover: ");
         int id = sc.nextInt();
 
     }
 }
-
-
