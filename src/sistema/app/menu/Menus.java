@@ -122,7 +122,7 @@ public class Menus {
       switch (opcao) {
         case 1 -> cadastrar(entidade);
         case 2 -> listar(entidade);
-        // case 3 -> atualizar(entidade);
+        case 3 -> atualizar(entidade);
         case 4 -> excluir(entidade);
         case 0 -> System.out.println("Voltando...");
         default -> System.out.println("Número inválido!");
@@ -144,24 +144,6 @@ public class Menus {
     } catch (NumberFormatException error) {
       System.out.println("Valor inválido! Digite um número inteiro.");
       return 0;
-    }
-  }
-
-  private void executarDAO(String entidade) {
-    switch (entidade) {
-      case "FUNCIONARIO" -> {
-        FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
-        funDAO.selecionarFuncionario(new Funcionario(), 0, "");
-      }
-      case "DEPENDENTE" -> {
-        DependenteDAO depDAO = new DependenteDAO(conexao);
-        depDAO.selecionarDependente(new Dependente(), 0, "");
-      }
-      case "FOLHA DE PAGAMENTO" -> {
-        FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
-        folhaDAO.selecionarFolha(new FolhaPagamento(), 0, "");
-      }
-      default -> System.out.println("Entidade inválida!");
     }
   }
 
@@ -211,6 +193,10 @@ public class Menus {
         System.out.print("Data de Nascimento: ");
         d.setDataNacimento(LocalDate.parse(sc.nextLine()));
 
+        System.out.println("ID do funcionário responsável: ");
+        int idFuncionario = lerOpcao();
+        d.setFuncionario(idFuncionario);
+
         System.out.println("Escolha o parentesco: ");
         System.out.println("1 - Filho(a)");
         System.err.println("2 - Sobrinho(a)");
@@ -229,6 +215,11 @@ public class Menus {
         }
 
       }
+
+      case "FOLHA DE PAGAMENTO" -> {
+        System.out.println("Em desenvolvimento...");
+      }
+
       default -> System.out.println("Entidade inválida para cadastro!");
     }
   }
@@ -239,6 +230,7 @@ public class Menus {
 
         FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
         funDAO.selecionarFuncionario(new Funcionario(), 0, "");
+        // select padrão para listar todos os funcionários, sem filtro
 
       }
       case "DEPENDENTE" -> {
@@ -269,6 +261,130 @@ public class Menus {
         DependenteDAO depDAO = new DependenteDAO(conexao);
         depDAO.excluirDependente(id);
       }
+    }
+  }
+
+  private void atualizar(String entidade) {
+
+    switch (entidade) {
+
+      case "FUNCIONARIO" -> {
+        FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
+        Funcionario f = new Funcionario();
+
+        System.out.println("Digite o ID do funcionário a ser atualizado: ");
+        int id = lerOpcao();
+
+        System.out.println("O que deseja atualizar? ");
+        System.out.println("1 - Nome");
+        System.out.println("2 - CPF");
+        System.out.println("3 - Data de Nascimento");
+        System.out.println("4 - Salário Bruto");
+        System.out.print("Opção: ");
+        int opcao = lerOpcao();
+
+        switch (opcao) {
+          case 1 -> {
+            System.out.print("Novo nome: ");
+            f.setNome(sc.nextLine());
+          }
+
+          case 2 -> {
+            System.out.print("Novo CPF: ");
+            f.setCpf(sc.nextLine());
+          }
+
+          case 3 -> {
+            System.out.print("Nova data de nascimento: ");
+            // Criar método de tratativa da data de nascimento para evitar erros de
+            // formatação
+            f.setDataNacimento(LocalDate.parse(sc.nextLine()));
+          }
+
+          case 4 -> {
+            System.out.print("Novo salário bruto: ");
+            f.setSalarioBruto(Double.parseDouble(sc.nextLine()));
+          }
+
+          default -> System.out.println("Opção inválida!");
+        }
+
+        try {
+          funDAO.atualizarFuncionario(f, opcao, id);
+          System.out.println("Funcionário atualizado com sucesso!");
+
+        } catch (Exception error) {
+          System.out.println("Erro ao atualizar funcionário: " + error.getMessage());
+        }
+
+      }
+
+      case "DEPENDENTE" -> {
+        DependenteDAO depDAO = new DependenteDAO(conexao);
+        Dependente d = new Dependente();
+
+        System.out.println("Digite o ID do Dependente a ser atualizado: ");
+        int id = lerOpcao();
+
+        System.out.println("O que deseja atualizar? ");
+        System.out.println("1 - Nome");
+        System.out.println("2 - CPF");
+        System.out.println("3 - Data de Nascimento");
+        System.out.println("4 - Parentesco");
+        System.out.println("5 - ID Funcionário");
+        System.out.print("Opção: ");
+        int opcao = lerOpcao();
+
+        switch (opcao) {
+          case 1 -> {
+            System.out.print("Novo nome: ");
+            d.setNome(sc.nextLine());
+          }
+
+          case 2 -> {
+            System.out.print("Novo CPF: ");
+            d.setCpf(sc.nextLine());
+          }
+
+          case 3 -> {
+            System.out.print("Nova data de nascimento: ");
+            // Criar método de tratativa da data de nascimento para evitar erros de
+            // formatação
+            d.setDataNacimento(LocalDate.parse(sc.nextLine()));
+          }
+
+          case 4 -> {
+            System.out.print("Novo parentesco, Escolha: ");
+            System.out.println("1 - Filho(a)");
+            System.err.println("2 - Sobrinho(a)");
+            System.out.println("3 - Outros");
+            System.out.print("Opção: ");
+            int opcaoParentesco = lerOpcao();
+
+            d.escolherParentesco(opcaoParentesco);
+          }
+
+          case 5 -> {
+            System.out.print("Novo ID do funcionário: ");
+            d.setFuncionario(Integer.valueOf(sc.nextLine()));
+          }
+
+          default -> System.out.println("Opção inválida!");
+        }
+        try {
+          depDAO.atualizarDependente(d, opcao, id);
+          System.out.println("Dependente atualizado com sucesso!");
+
+        } catch (Exception error) {
+          System.out.println("Erro ao atualizar dependente: " + error.getMessage());
+        }
+
+      }
+
+      case "FOLHA DE PAGAMENTO" -> {
+        System.out.println("Em atualização...");
+      }
+      default -> System.out.println("Entidade inválida para atualização!");
     }
   }
 }

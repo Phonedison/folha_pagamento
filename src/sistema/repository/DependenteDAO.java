@@ -66,7 +66,7 @@ public class DependenteDAO implements CriacaoTabela {
   }
 
   // UPDATE
-  public void atualizarDependente(Dependente dependente, int opcao) {
+  public void atualizarDependente(Dependente dependente, int opcao, int id_dependente) {
     String parteSQL;
 
     switch (opcao) {
@@ -93,6 +93,7 @@ public class DependenteDAO implements CriacaoTabela {
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
 
+      stmt.setObject(2, dependente.getId_dependente() == id_dependente);
       stmt.executeUpdate();
 
     } catch (Exception error) {

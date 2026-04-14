@@ -59,7 +59,7 @@ public class FuncionarioDAO implements CriacaoTabela {
   }
 
   // UPDATE
-  public void atualizarFuncionario(Funcionario funcionario, int opcao) {
+  public void atualizarFuncionario(Funcionario funcionario, int opcao, int id_funcionario) {
     String parteSQL;
 
     switch (opcao) {
@@ -85,7 +85,8 @@ public class FuncionarioDAO implements CriacaoTabela {
 
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
-      stmt.setInt(2, funcionario.getId_funcionario());
+
+      stmt.setObject(2, funcionario.getId_funcionario() == id_funcionario);
       stmt.executeUpdate();
 
     } catch (SQLException error) {

@@ -7,6 +7,7 @@ public class Dependente extends Pessoa {
 
   private Integer funcionario;
   private Parentesco parentesco;
+  private Integer id_dependente;
 
   public Dependente() {
     super();
@@ -19,6 +20,10 @@ public class Dependente extends Pessoa {
 
   public Parentesco getParentesco() {
     return this.parentesco;
+  }
+
+  public Integer getId_dependente() {
+    return this.id_dependente;
   }
 
   public void setParentesco(Parentesco parente) {
