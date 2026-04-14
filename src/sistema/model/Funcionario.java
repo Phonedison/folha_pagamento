@@ -1,6 +1,6 @@
 package sistema.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +21,8 @@ public class Funcionario extends Pessoa {
    * 
    */
 
-  public Funcionario(String nome, String cpf, Date dataNacimento, double salarioBruto, Set<Dependente> dependentes) {
+  public Funcionario(String nome, String cpf, LocalDate dataNacimento, double salarioBruto,
+      Set<Dependente> dependentes) {
     super(nome, cpf, dataNacimento);
     this.salarioBruto = salarioBruto;
   }

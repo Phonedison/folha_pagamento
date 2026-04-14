@@ -1,7 +1,15 @@
 package sistema.app.menu;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Scanner;
+import sistema.model.Dependente;
+import sistema.model.FolhaPagamento;
+import sistema.model.Funcionario;
 import sistema.repository.ConexaoDB;
+import sistema.repository.DependenteDAO;
+import sistema.repository.FolhaPagamentoDAO;
+import sistema.repository.FuncionarioDAO;
 
 public class Menus {
   private Scanner sc = new Scanner(System.in);
@@ -79,25 +87,18 @@ public class Menus {
         case 1 -> {
           conexao = conexao_db();
           System.out.println("Conexão realizada com sucesso!");
-          break;
         }
-        // case 2 -> "menuConexao()"; --> método de Importação / Exportação de arquivos
-        // .CSV
-        // case 3 -> "menuConexao()"; --> Repasse para o menu de Gerenciamento de
-        // Funcionário
-        // case 4 -> "menuConexao()"; --> Repasse para o menu de Gerenciamento de
-        // Funcionário
-        // case 5 -> "menuConexao()"; --> Método de Folha de Pagamento
-        case 0 -> {
-          System.out.println("Finalizando atendimento...");
-          break;
-        }
+        // case 2 -> Importar / Exportar arquivo .CSV;
+        case 3 -> menu_modelDAO("FUNCIONARIO");
+        case 4 -> menu_modelDAO("DEPENDENTE");
+        case 5 -> menu_modelDAO("FOLHA DE PAGAMENTO");
+        case 0 -> System.out.println("Finalizando atendimento...");
         default -> System.out.println("Número inválido!");
       }
     } while (opcao != 0);
   }
 
-  private void menu_model(String entidade) {
+  private void menu_modelDAO(String entidade) {
 
     if (conexao == null) { // verifica se foi feito a conexão com o banco de dados
       titulo("E R R O");
@@ -115,16 +116,16 @@ public class Menus {
       System.out.println("3 - Atualizar " + entidade);
       System.out.println("4 - Excluir " + entidade);
       System.out.println("0 - Voltar ao Menu Principal");
-      System.out.print("Digite a opção desejada: ");
+      System.out.print("Escolha: ");
 
       opcao = lerOpcao();
 
       switch (opcao) {
-        case 1 -> System.out.println("Opção de cadastro de " + entidade + " selecionada.");
-        case 2 -> System.out.println("Opção de listagem de " + entidade + " selecionada.");
-        case 3 -> System.out.println("Opção de atualização de " + entidade + " selecionada.");
-        case 4 -> System.out.println("Opção de exclusão de " + entidade + " selecionada.");
-        case 0 -> System.out.println("Voltando ao Menu Principal...");
+        case 1 -> cadastrar(entidade);
+        case 2 -> listar(entidade);
+        // case 3 -> System.out.println("Opção de atualização em construção.");
+        case 4 -> excluir(entidade);
+        case 0 -> System.out.println("Voltando...");
         default -> System.out.println("Número inválido!");
       }
 
@@ -146,4 +147,64 @@ public class Menus {
       return 0;
     }
   }
+
+  private void executarDAO(String entidade) {
+    switch (entidade) {
+      case "FUNCIONARIO" -> {
+        FuncionarioDAO funDAO = new Funcionario(conexao);
+        funDAO.selecionarFuncionario(new Funcionario(), 0, "");
+      }
+      case "DEPENDENTE" -> {
+        DependenteDAO depDAO = new Dependente(conexao);
+        depDAO.selecionarDependente(new Dependente(), 0, "");
+      }
+      case "FOLHA DE PAGAMENTO" -> {
+        FolhaPagamentoDAO folhaDAO = new FolhaPagamento(conexao);
+        folhaDAO.selecionarFolha(new FolhaPagamento(), 0, "");
+      }
+      default -> System.out.println("Entidade inválida!");
+    }
+  }
+
+  private void cadastrar(String entidade) {
+    if (entidade.equals("FUNCIONARIO")) {
+      FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
+      Funcionario f = new Funcionario();
+
+      titulo("Cadastrar Funcionário");
+
+      System.out.print("Nome: ");
+      f.setNome(sc.nextLine());
+
+      System.out.print("CPF: ");
+
+      f.setCpf(sc.nextLine());
+
+      System.out.print("Data de Nascimento: (AAAA-MM-DD) ");
+      f.setDataNacimento(LocalDate.parse(sc.nextLine()));
+
+      System.out.print("Salário Bruto: ");
+      f.setSalarioBruto(Double.parseDouble(sc.nextLine()));
+
+      funDAO.salvarFuncionario(f);
+
+    } else if (entidade.equals("DEPENDENTE")) {
+      DependenteDAO depDAO = new Dependente(conexao);
+      Dependente dependente = new Dependente();
+
+      titulo("Cadastrar Dependente");
+
+      System.out.print("Nome: ");
+      dependente.setNome(sc.nextLine());
+
+      System.out.print("CPF: ");
+      dependente.setCpf(sc.nextLine());
+
+      System.out.print("Data de Nascimento: ");
+      dependente.setDataNacimento(LocalDate.parse(sc.nextLine()));
+    } else {
+      System.out.println("Entidade inválida para cadastro!");
+    }
+  }
+
 }

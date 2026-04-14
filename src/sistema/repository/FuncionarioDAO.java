@@ -161,11 +161,12 @@ public class FuncionarioDAO implements CriacaoTabela {
          */
         while (resultado.next()) {
 
-          System.out.println(resultado.getInt("id_funcionario") + " | "
-              + resultado.getString("nome") + " | "
-              + resultado.getString("cpf") + " | "
-              + resultado.getString("data_nascimento") + " | "
-              + resultado.getString("salario_bruto"));
+          System.out.printf("| %-5d | %-25s | %-15s | %-12s | R$ %-10.2f |%n",
+              resultado.getInt("id_funcionario"),
+              resultado.getString("nome"),
+              resultado.getString("cpf"),
+              resultado.getString("data_nascimento"),
+              resultado.getDouble("salario_bruto"));
         }
       }
 

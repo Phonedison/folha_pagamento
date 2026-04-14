@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class FolhaPagamento {
 
     private int codigo;
-    private Funcionario funcionario;
+    private final Funcionario funcionario;
     private LocalDate dataPagamento;
     private double descontoInss;
     private double descontoIR;
@@ -64,9 +64,9 @@ public class FolhaPagamento {
         this.descontoIR = descontoIR;
     }
 
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
+    // public void setFuncionario(int funcionario) {
+    // this.funcionario.setId_funcionario(funcionario);
+    // }
 
     public void setSalarioLiquido(double salarioLiquido) {
         this.salarioLiquido = salarioLiquido;
