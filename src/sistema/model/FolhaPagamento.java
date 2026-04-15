@@ -124,4 +124,8 @@ public class FolhaPagamento {
                 - this.descontoInss
                 - this.descontoIR;
     }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
 }

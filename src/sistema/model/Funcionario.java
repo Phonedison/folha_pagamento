@@ -53,9 +53,7 @@ public class Funcionario extends Pessoa {
     this.dependentes = dependentes;
   }
 
+  public void setId_funcionario(int id_funcionario) {
+    this.id_funcionario = id_funcionario;
+  }
 }
-// public void setDependentes (Set<Dependente> dependentes) {
-// this.dependentes = dependentes;
-// }
-
-// }

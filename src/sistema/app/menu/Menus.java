@@ -240,7 +240,27 @@ public class Menus {
       }
 
       case "FOLHA DE PAGAMENTO" -> {
-        System.out.println("Em desenvolvimento...");
+        FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
+
+        System.out.print("Digite o ID do funcionário: ");
+        int idFuncionario = lerOpcao();
+
+        FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
+        Funcionario f = new Funcionario();
+        f.setId_funcionario(idFuncionario);
+
+        FolhaPagamento folha = new FolhaPagamento();
+        folha.setFuncionario(f);
+        folha.setDataPagamento(LocalDate.now());
+
+        folha.calcularINSS();
+        folha.calcularIR();
+        folha.calcularSalarioLiquido();
+
+        // Salva os dados no DB
+        folhaDAO.salvarFolha(folha);
+
+        System.out.println("Folha gerada com sucesso!");
       }
 
       default -> System.out.println("Entidade inválida para cadastro!");
