@@ -33,6 +33,18 @@ public class Dependente extends Pessoa {
     this.parentesco = parente;
   }
 
+  public void escolherParentesco(String opcao) {
+
+    switch (opcao) {
+
+      case "FILHO" -> setParentesco(Parentesco.FILHO);
+      case "SOBRINHO" -> setParentesco(Parentesco.SOBRINHO);
+      case "OUTROS" -> setParentesco(Parentesco.OUTROS);
+      default -> System.out.println("ERRO");
+
+    }
+  }
+
   public void escolherParentesco(int opcao) {
 
     switch (opcao) {

@@ -6,6 +6,7 @@ import java.util.Scanner;
 import sistema.exception.DependenteException;
 import sistema.model.*;
 import sistema.repository.*;
+import sistema.service.CsvService;
 
 public class Menus {
   private final Scanner sc = new Scanner(System.in);
@@ -87,7 +88,7 @@ public class Menus {
           conexao = conexao_db();
           System.out.println("Conexão realizada com sucesso!");
         }
-        // case 2 -> Importar / Exportar arquivo .CSV;
+        case 2 -> menu_csv();
         case 3 -> menu_modelDAO("FUNCIONARIO"); // acessa o menu de funcionário, passando o nome da entidade como
                                                 // parâmetro para
                                                 // identificar qual menu acessar
@@ -214,7 +215,7 @@ public class Menus {
 
         System.out.println("ID do funcionário responsável: ");
         int idFuncionario = lerOpcao();
-        d.setFuncionario(idFuncionario);
+        d.setFuncionario(idFuncionario); // Integer
 
         System.out.println("Escolha o parentesco: ");
         System.out.println("1 - Filho(a)");
@@ -453,6 +454,32 @@ public class Menus {
       }
       default -> System.out.println("Entidade inválida para atualização!");
     }
+  }
+
+  // menu para leitura / exportação do arquivo CSV
+  private void menu_csv() {
+    titulo("MENU CSV");
+    System.out.println("1 - Importar CSV (Funcionario + Dependentes)");
+    System.out.println("2 - Exportar Folha de Pagamento");
+    System.out.print("Opção: ");
+    int opcao = lerOpcao();
+
+    System.out.print("Informe o caminho do arquivo: ");
+    String caminho = sc.nextLine();
+
+    FuncionarioDAO funcionarioDAO = new FuncionarioDAO(conexao);
+    DependenteDAO dependenteDAO = new DependenteDAO(conexao);
+    FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
+
+    CsvService csvService = new CsvService(funcionarioDAO, dependenteDAO, folhaDAO, conexao);
+
+    switch (opcao) {
+      case 1 -> csvService.importar(caminho);
+      case 2 -> csvService.exportarFolha(caminho);
+      default -> System.out.println("Opção invalida!");
+
+    }
+
   }
 
   // método para converter a data de nascimento e data de aniversário, utilizando

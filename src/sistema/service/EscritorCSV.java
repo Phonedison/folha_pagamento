@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import sistema.repository.ConexaoDB;
 
 public class EscritorCSV {
@@ -15,7 +14,7 @@ public class EscritorCSV {
     this.conexao = conexao;
   }
 
-  public void escreverFolhaPagamentoCSV(String caminho) throws SQLException {
+  public void escreverFolhaPagamentoCSV(String caminho) {
     String comandoSQL = """
         SELECT f.nome,
                f.cpf,
@@ -43,7 +42,7 @@ public class EscritorCSV {
       }
 
     } catch (Exception e) {
-      // TODO: handle exception
+      throw new RuntimeException("Erro ao exportar FOLHA: " + e.getMessage());
     }
   }
 
