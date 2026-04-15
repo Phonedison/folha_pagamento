@@ -25,11 +25,14 @@ public class LeitorCSV {
   public List<Funcionario> lerArquivo(String caminhoArquivo) {
     List<Funcionario> funcionarios = new ArrayList<>();
 
+    // faz a leitura do arquivo e garante que seja lido de forma concisa
     try (BufferedReader br = new BufferedReader(
         new InputStreamReader(new FileInputStream(caminhoArquivo), StandardCharsets.UTF_8))) {
 
       String linha;
       Funcionario funcionarioAtual = null;
+
+      // Passa em cada linha do arquivo
       while ((linha = br.readLine()) != null) {
 
         linha = linha.trim();
@@ -42,7 +45,9 @@ public class LeitorCSV {
         // separa as linhas por ';'
         String[] dados = linha.split(";");
 
+        // verifica se a linha que está possui 4 colunas
         if (dados.length == 4) {
+          // se possuir, preenche nomem cpf, data e salário
           funcionarioAtual = new Funcionario();
           funcionarioAtual.setNome(dados[0]);
           funcionarioAtual.setCpf(dados[1]);
@@ -61,11 +66,13 @@ public class LeitorCSV {
           funcionarios.add(funcionarioAtual);
         }
 
+        // forma de adicionar o dependente do funcionario listado acima
         else if (dados.length == 4 && funcionarioAtual != null) {
           Dependente dependente = new Dependente();
           dependente.setNome((dados[0]));
           dependente.setCpf(dados[1]);
           dependente.setDataNacimento(formatarData(dados[2]));
+          dependente.escolherParentesco(mapearParentesco(dados[3]));
           dependente.setFuncionario(funcionarioAtual.getId_funcionario());
 
           try {
@@ -75,7 +82,6 @@ public class LeitorCSV {
             System.out.println("Error" + error.getMessage());
             throw new CpfDuplicado("CPF de dependente duplicado: " + dados[1]);
           }
-
         }
       }
 
@@ -86,6 +92,16 @@ public class LeitorCSV {
     return funcionarios;
   }
 
+  // checar se insere numero ou texto (acho que é texto)
+  private int mapearParentesco(String valor) {
+    return switch (valor.toUpperCase()) {
+      case "FILHO" -> 1;
+      case "SOBRINHO" -> 2;
+      default -> 3;
+    };
+  }
+
+  // transforma data String em LocalDate
   private LocalDate formatarData(String data) {
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     return LocalDate.parse(data, fmt);
