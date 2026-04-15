@@ -8,78 +8,87 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import sistema.exception.CpfDuplicado;
 import sistema.model.Dependente;
 import sistema.model.Funcionario;
+import sistema.repository.*;
 
 public class LeitorCSV {
+  private final FuncionarioDAO funcionarioDAO;
+  private final DependenteDAO dependenteDAO;
+
+  public LeitorCSV(FuncionarioDAO funcionarioDAO, DependenteDAO dependenteDAO) {
+    this.funcionarioDAO = funcionarioDAO;
+    this.dependenteDAO = dependenteDAO;
+  }
 
   public List<Funcionario> lerArquivo(String caminhoArquivo) {
     List<Funcionario> funcionarios = new ArrayList<>();
 
     try (BufferedReader br = new BufferedReader(
-        new InputStreamReader(
-            new FileInputStream(caminhoArquivo),
-            StandardCharsets.UTF_8));) {
+        new InputStreamReader(new FileInputStream(caminhoArquivo), StandardCharsets.UTF_8))) {
 
       String linha;
       Funcionario funcionarioAtual = null;
-
       while ((linha = br.readLine()) != null) {
 
         linha = linha.trim();
 
-        // ignora linhas vazias
-        if (linha.isEmpty() || linha.equals(",,,")) {
+        if (linha.isEmpty()) {
           funcionarioAtual = null;
           continue;
         }
 
-        linha = linha.replace("\"", "");
+        // separa as linhas por ';'
+        String[] dados = linha.split(";");
 
-        String[] dados = linha.split("[;,]");
-        //
-        // if (dados.length != 4) {
-        // System.out.println(linha);
-        // continue;
-        // }
-
-        if (isSalario(dados[3])) {
+        if (dados.length == 4) {
           funcionarioAtual = new Funcionario();
           funcionarioAtual.setNome(dados[0]);
           funcionarioAtual.setCpf(dados[1]);
           funcionarioAtual.setDataNacimento(formatarData(dados[2]));
-          funcionarioAtual.setSalarioBruto(Double.parseDouble(dados[3].replace(",", ".")));
-          funcionarios.add(funcionarioAtual);
+          funcionarioAtual.setSalarioBruto(Double.parseDouble(dados[3]));
 
-        } else if (funcionarioAtual != null) {
           try {
+            // força o comando sql para inserir a lista dos funcionários
+            funcionarioDAO.salvarFuncionario(funcionarioAtual);
 
-            Dependente dependente = new Dependente();
-            dependente.setNome(dados[0]);
-            dependente.setCpf(dados[1]);
-            dependente.setDataNacimento(formatarData(dados[2]));
-            funcionarioAtual.getDependentes().add(dependente);
-
-          } catch (Exception er) {
-            System.out.println("Erro ao processar dependente: " + linha);
-            System.out.println("Erro : " + er.getMessage());
+          } catch (Exception error) {
+            System.out.println("Error" + error.getMessage());
+            throw new CpfDuplicado("Cpf de funcionário já cadastrado: " + dados[1]);
           }
+
+          funcionarios.add(funcionarioAtual);
+        }
+
+        else if (dados.length == 4 && funcionarioAtual != null) {
+          Dependente dependente = new Dependente();
+          dependente.setNome((dados[0]));
+          dependente.setCpf(dados[1]);
+          dependente.setDataNacimento(formatarData(dados[2]));
+          dependente.setFuncionario(funcionarioAtual.getId_funcionario());
+
+          try {
+            dependenteDAO.salvarDependente(dependente);
+            funcionarioAtual.getDependentes().add(dependente);
+          } catch (Exception error) {
+            System.out.println("Error" + error.getMessage());
+            throw new CpfDuplicado("CPF de dependente duplicado: " + dados[1]);
+          }
+
         }
       }
 
-    } catch (Exception error) {
-      throw new RuntimeException("Erro ao ler arquivo: " + error.getMessage());
-
+    } catch (Exception erou) {
+      throw new RuntimeException("Erro ao ler CSV: " + erou.getMessage(), erou);
     }
+
     return funcionarios;
   }
 
   private LocalDate formatarData(String data) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    return LocalDate.parse(data, formatter);
+    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    return LocalDate.parse(data, fmt);
   }
 
-  private boolean isSalario(String salario) {
-    return salario.matches("\\d+[\\.,]?\\d*");
-  }
 }
