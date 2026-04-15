@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import sistema.exception.CpfDuplicado;
 import sistema.model.Dependente;
 import sistema.model.Funcionario;
 import sistema.repository.*;
@@ -25,7 +24,7 @@ public class LeitorCSV {
   public List<Funcionario> lerArquivo(String caminhoArquivo) {
     List<Funcionario> funcionarios = new ArrayList<>();
 
-    boolean validacao = true;
+    boolean proximaLinhaEhFuncionario = true;
     // faz a leitura do arquivo e garante que seja lido de forma concisa
     try (BufferedReader br = new BufferedReader(
         new InputStreamReader(new FileInputStream(caminhoArquivo), StandardCharsets.UTF_8))) {
@@ -34,44 +33,56 @@ public class LeitorCSV {
       Funcionario funcionarioAtual = null;
 
       // Passa em cada linha do arquivo
-      while ((br.readLine()) != null) {
 
-        linha = br.readLine().trim();
+      while ((linha = br.readLine()) != null) { // valida se alinha atual que está é diferente de nulo
+
+        // retorna os valores da linha sem espaço
+        linha = linha.trim();
 
         if (linha.isBlank()) {
           funcionarioAtual = null;
-          validacao = true;
+          proximaLinhaEhFuncionario = true;
           continue;
         }
 
         // separa as linhas por ';'
         String[] dados = linha.split(";");
 
-        // verifica se a linha que está possui 4 colunas
-
-        if (validacao) {
+        if (proximaLinhaEhFuncionario) {
           // se possuir, preenche nomem cpf, data e salário
+          String cpf = dados[1];
+          Funcionario funcionarioExistente = funcionarioDAO.buscarPorCpf(cpf);
+
+          if (funcionarioExistente != null) {
+            System.out.println("Pulando! Funcionário " + funcionarioExistente.getNome() + " já está no banco.");
+            funcionarioAtual = funcionarioExistente;
+            proximaLinhaEhFuncionario = false;
+            continue;
+          }
+
           funcionarioAtual = new Funcionario();
           funcionarioAtual.setNome(dados[0]);
           funcionarioAtual.setCpf(dados[1]);
           funcionarioAtual.setDataNacimento(formatarData(dados[2]));
           funcionarioAtual.setSalarioBruto(Double.parseDouble(dados[3]));
-          validacao = false;
 
           try {
             // força o comando sql para inserir a lista dos funcionários
             funcionarioDAO.salvarFuncionario(funcionarioAtual);
+            funcionarios.add(funcionarioAtual);
 
           } catch (Exception error) {
-            System.out.println("Error" + error.getMessage());
-            throw new CpfDuplicado("Cpf de funcionário já cadastrado: " + dados[1]);
+            System.out.println("Error ao salvar funcionário: " + error.getMessage());
+            continue;
           }
 
-          funcionarios.add(funcionarioAtual);
-        }
+          proximaLinhaEhFuncionario = false;
 
-        // forma de adicionar o dependente do funcionario listado acima
-        else {
+        } else { // forma de adicionar o dependente do funcionario listado acima
+
+          if (funcionarioAtual == null)
+            continue;
+
           Dependente dependente = new Dependente();
           dependente.setNome((dados[0]));
           dependente.setCpf(dados[1]);
@@ -83,16 +94,17 @@ public class LeitorCSV {
           try {
             dependenteDAO.salvarDependente(dependente);
             funcionarioAtual.getDependentes().add(dependente);
+
           } catch (Exception error) {
-            System.out.println("Error" + error.getMessage());
-            throw new CpfDuplicado("CPF de dependente duplicado: " + dados[1]);
+            System.out.println("Aviso: Dependente " + dados[0] + " já cadastrado ou erro na inserção. Pulandoooo...");
           }
         }
       }
 
       System.out.print("Funcionários e Dependentes registrados!");
+
     } catch (Exception erou) {
-      throw new RuntimeException("Erro ao ler CSV: " + erou.getMessage(), erou);
+      throw new RuntimeException("Erro cirítico ao ler CSV: " + erou.getMessage(), erou);
     }
 
     return funcionarios;

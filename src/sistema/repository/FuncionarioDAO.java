@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import sistema.exception.CpfDuplicado;
 import sistema.model.Funcionario;
 
@@ -24,7 +25,6 @@ public class FuncionarioDAO implements CriacaoTabela {
         + " data_nascimento DATE NOT NULL,"
         + " salario_bruto NUMERIC(15,2) NOT NULL" // Corrigido para NUMERIC
         + " );";
-
     try (
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
@@ -35,7 +35,6 @@ public class FuncionarioDAO implements CriacaoTabela {
       throw new RuntimeException("Erro ao inicializar tabela Funcionario: " + error.getMessage(),
           error);
     }
-
   }
 
   // INSET INTO
@@ -44,7 +43,7 @@ public class FuncionarioDAO implements CriacaoTabela {
 
     try (
         Connection con = conexao.conectarDB();
-        PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
+        PreparedStatement stmt = con.prepareStatement(comandoSQL, Statement.RETURN_GENERATED_KEYS);) {
       stmt.setObject(1, funcionario.getNome());
       stmt.setObject(2, funcionario.getCpf());
       stmt.setObject(3, funcionario.getDataNacimento());
@@ -52,10 +51,14 @@ public class FuncionarioDAO implements CriacaoTabela {
       stmt.executeUpdate();
       System.out.println("Funcionário cadastrado no jiraiya XD");
 
+      try (ResultSet rs = stmt.getGeneratedKeys()) {
+        if (rs.next()) {
+          funcionario.setId_funcionario((rs.getInt(1))); // setar para 0 com o intuito
+        }
+      }
+
     } catch (Exception error) {
-
       throw new RuntimeException("Erro ao atualizar: " + error.getMessage());
-
     }
   }
 
@@ -158,8 +161,10 @@ public class FuncionarioDAO implements CriacaoTabela {
 
       try (ResultSet resultado = stmt.executeQuery()) {
 
-        String formato = "| %-5s | %-25s | %-15s | %-12s | %-12s |%n";
+        String formato = "| %-5s | %-30s | %-15s | %-12s | %-13s |%n";
         System.out.printf(formato, "COD", "NOME", "CPF", "NASC.", "SALARIO");
+        System.out
+            .println("------------------------------------------------------------------------------------------");
 
         /*
          * Imprime os dados após a busca utilizando o select armazenado na variavel
@@ -167,7 +172,7 @@ public class FuncionarioDAO implements CriacaoTabela {
          */
         while (resultado.next()) {
 
-          System.out.printf("| %-5d | %-25s | %-15s | %-12s | R$ %-10.2f |%n",
+          System.out.printf("| %-5d | %-30s | %-15s | %-12s | R$ %-10.2f |%n",
               resultado.getInt("id_funcionario"),
               resultado.getString("nome"),
               resultado.getString("cpf"),
@@ -182,5 +187,32 @@ public class FuncionarioDAO implements CriacaoTabela {
       throw new RuntimeException("Erro ao buscar funcionário: " + error.getMessage());
     }
 
+  }
+
+  public Funcionario buscarPorCpf(String cpf) {
+
+    String comandoSQL = "SELECT * FROM funcionario WHERE cpf = ?";
+    Funcionario funcionario = null;
+
+    try (Connection con = conexao.conectarDB();
+        PreparedStatement stmt = con.prepareStatement(comandoSQL)) {
+
+      stmt.setString(1, cpf);
+
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+          funcionario = new Funcionario();
+          funcionario.setId_funcionario(rs.getInt("id_funcionario"));
+          funcionario.setNome(rs.getString("nome"));
+          funcionario.setCpf(rs.getString("cpf"));
+          funcionario.setDataNacimento(rs.getDate("data_nascimento").toLocalDate());
+          funcionario.setSalarioBruto(rs.getDouble("salario_bruto"));
+        }
+      }
+    } catch (SQLException error) {
+      System.out.print("Errou feio, errou rude, erro: " + error.getMessage());
+
+    }
+    return funcionario;
   }
 }
