@@ -15,9 +15,10 @@ public class Dependente extends Pessoa {
     super();
   }
 
-  public Dependente(String nome, String cpf, LocalDate dataNascimento, Funcionario funcionario) {
+  public Dependente(String nome, String cpf, LocalDate dataNascimento, Funcionario funcionario, Parentesco parentesco) {
     super(nome, cpf, dataNascimento);
     this.funcionario = funcionario.getId_funcionario();
+    this.parentesco = parentesco;
   }
 
   public Parentesco getParentesco() {

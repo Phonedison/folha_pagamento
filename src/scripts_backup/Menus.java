@@ -60,7 +60,7 @@ public class Menus {
 
         } while (nomeDB.isEmpty() && usuario.isEmpty() && senha.isEmpty() && porta == null);
 
-        // ConexaoDB conexao = new ConexaoDB(porta, nomeDB, usuario, senha);
+        ConexaoDB conexao = new ConexaoDB(porta, nomeDB, usuario, senha);
 
         return conexao;
     }

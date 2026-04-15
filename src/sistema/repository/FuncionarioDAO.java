@@ -132,7 +132,8 @@ public class FuncionarioDAO implements CriacaoTabela {
         case 4 -> parametroSQL = "salario_bruto"; // data nascimento
         default -> throw new AssertionError("Opção inválida! -> opcaoSQL");
       }
-      comandoSQL = "SELECT * FROM funcionario " + parametroSQL + " " + condicao + " ? ORDER BY id_funcionario DESC;";
+      comandoSQL = "SELECT * FROM funcionario WHERE" + parametroSQL + " " + condicao
+          + " ? ORDER BY id_funcionario DESC;";
       /* selecionarFuncionario ( funcionario, 2, "") */
     }
 

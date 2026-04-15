@@ -57,7 +57,9 @@ public class DependenteDAO implements CriacaoTabela {
       // esperado
       stmt.setObject(2, dependente.getCpf());
       stmt.setObject(3, dependente.getDataNacimento());
-      stmt.setObject(4, dependente.getParentesco().name()); // converte o enum para string utilizando o name();
+      stmt.setObject(4, dependente.getParentesco() != null
+          ? dependente.getParentesco().name()
+          : null);// converte o enum para string utilizando o name();
       stmt.setObject(5, dependente.getFuncionario());
 
       stmt.executeUpdate();
@@ -89,8 +91,9 @@ public class DependenteDAO implements CriacaoTabela {
       switch (opcao) {
         case 1 -> stmt.setObject(1, dependente.getNome());
         case 2 -> stmt.setObject(1, dependente.getCpf());
-        case 3 -> stmt.setObject(1, dependente.getParentesco());
-        case 4 -> stmt.setObject(1, dependente.getFuncionario());
+        case 3 -> stmt.setObject(1, dependente.getDataNacimento());
+        case 4 -> stmt.setObject(1, dependente.getParentesco().name());
+        case 5 -> stmt.setObject(1, dependente.getFuncionario());
 
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
@@ -127,55 +130,81 @@ public class DependenteDAO implements CriacaoTabela {
 
   // SELECT
   public void selecionarDependente(Dependente dependente, int opcao, String condicao) {
+
     String comandoSQL;
 
+    // SELECT padrão (sem filtro)
     if (opcao == 0) {
-      comandoSQL = "SELECT * FROM dependente ORDER BY id_dependente DESC";
+      comandoSQL = """
+              SELECT
+                  id_dependente,
+                  nome,
+                  cpf,
+                  data_nascimento,
+                  parentesco::text AS parentesco,
+                  id_funcionario
+              FROM dependente
+              ORDER BY id_dependente DESC
+          """;
     } else {
+
       String parametroSQL;
+
       switch (opcao) {
-        case 0 -> parametroSQL = "";
         case 1 -> parametroSQL = "nome";
         case 2 -> parametroSQL = "cpf";
         case 3 -> parametroSQL = "parentesco";
         case 4 -> parametroSQL = "id_funcionario";
-
         default -> throw new AssertionError("Opção inválida! -> opcaoSQL");
       }
-      comandoSQL = "SELECT * FROM dependente " + parametroSQL + " " + condicao + " ? ORDER BY id_dependente DESC;";
+
+      comandoSQL = """
+          SELECT
+              id_dependente,
+              nome,
+              cpf,
+              data_nascimento,
+              parentesco::text AS parentesco,
+              id_funcionario
+          FROM dependente
+          WHERE """ + parametroSQL + " " + condicao +
+          (opcao == 3 ? " ?::parentesco " : " ? ") +
+          "ORDER BY id_dependente DESC";
     }
 
     try (
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
 
+      // SET dos parâmetros
       if (opcao != 0) {
         switch (opcao) {
-
-          case 1 -> stmt.setObject(1, dependente.getNome());
-          case 2 -> stmt.setObject(1, dependente.getCpf());
-          case 3 -> stmt.setObject(1, dependente.getParentesco());
-          case 4 -> stmt.setObject(1, dependente.getFuncionario());
+          case 1 -> stmt.setString(1, dependente.getNome());
+          case 2 -> stmt.setString(1, dependente.getCpf());
+          case 3 -> stmt.setString(1, dependente.getParentesco().name());
+          case 4 -> stmt.setInt(1, dependente.getFuncionario());
         }
       }
+
       try (ResultSet resultado = stmt.executeQuery()) {
-        System.out.println(" --- Relatório --- ");
-        System.out.println(" ");
-        System.out.println("CÓDIGO | NOME DEPENDENTE | CPF | DATA NASCIMENTO | PARENTESCO | ID FUNCIONARIO");
-        System.out.println(" ------------------ ");
+
+        String formato = "| %-5s | %-25s | %-15s | %-12s | %-12s | %-10s |%n";
+        System.out.printf(formato, "ID", "NOME", "CPF", "NASC.", "PARENTESCO", "ID FUN.");
 
         while (resultado.next()) {
-          System.out.println(resultado.getInt("id_dependente") + " | "
-              + resultado.getNString("nome") + " | "
-              + resultado.getNString("cpf") + " | "
-              + resultado.getDate("data_nascimento") + " | "
-              + resultado.getNString("parentesco") + " | "
-              + resultado.getInt("id_funcionario"));
+
+          System.out.printf(formato,
+              resultado.getInt("id_dependente"),
+              resultado.getString("nome"),
+              resultado.getString("cpf"),
+              resultado.getDate("data_nascimento"),
+              resultado.getString("parentesco"),
+              resultado.getInt("id_funcionario"));
         }
       }
 
     } catch (Exception error) {
-      throw new RuntimeException("Erro ao buscar dempendente: " + error.getMessage());
+      throw new RuntimeException("Erro ao buscar dependente: " + error.getMessage(), error);
     }
   }
 }

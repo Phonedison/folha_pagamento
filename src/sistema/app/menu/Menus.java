@@ -218,7 +218,7 @@ public class Menus {
 
         System.out.println("Escolha o parentesco: ");
         System.out.println("1 - Filho(a)");
-        System.err.println("2 - Sobrinho(a)");
+        System.out.println("2 - Sobrinho(a)");
         System.out.println("3 - Outros");
         System.out.print("Opção: ");
         int opcaoParentesco = lerOpcao();
@@ -227,6 +227,7 @@ public class Menus {
 
         try {
           d.validarDependente();
+          depDAO.atualizarDependente(d, opcaoParentesco, idFuncionario);
           depDAO.salvarDependente(d);
           System.out.println("Dependente cadastrado com sucesso!");
 
@@ -402,7 +403,7 @@ public class Menus {
           case 4 -> {
             System.out.print("Novo parentesco, Escolha: ");
             System.out.println("1 - Filho(a)");
-            System.err.println("2 - Sobrinho(a)");
+            System.out.println("2 - Sobrinho(a)");
             System.out.println("3 - Outros");
             System.out.print("Opção: ");
             int opcaoParentesco = lerOpcao();
