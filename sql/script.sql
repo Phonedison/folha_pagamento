@@ -18,7 +18,7 @@ nome VARCHAR(100) NOT NULL,
 cpf VARCHAR(14) UNIQUE NOT NULL,
 data_nascimento DATE NOT NULL,
 parentesco parentesco NOT NULL,
-id_funcionario INT REFERENCES funcionarios(id_funcionario) NOT NULL
+id_funcionario INT REFERENCES funcionario(id_funcionario) NOT NULL
 );
 
 CREATE TABLE folha_pagamento (
@@ -28,7 +28,7 @@ data_pagamento DATE NOT NULL,
 desconto_inss NUMERIC(15,2),
 desconto_ir	NUMERIC(15,2),
 salario_liquido NUMERIC(15,2),
-id_funcionario INT REFERENCES funcionarios(id_funcionario) NOT NULL
+id_funcionario INT REFERENCES funcionario(id_funcionario) NOT NULL
 );	
 
 UPDATE -- Define a Tabela que será Modificada.
