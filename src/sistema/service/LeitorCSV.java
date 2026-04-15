@@ -36,19 +36,12 @@ public class LeitorCSV {
 
         linha = linha.replace("\"", "");
 
-        String[] dados = linha.split(";");
+        String[] dados = linha.split("[;,]");
         //
-        if (dados.length != 4) {
-          System.out.println(linha);
-          continue;
-        }
-
-        if (linha.contains(",")) {
-          dados = linha.split(",");
-
-        } else {
-          dados = linha.split(";");
-        }
+        // if (dados.length != 4) {
+        // System.out.println(linha);
+        // continue;
+        // }
 
         if (isSalario(dados[3])) {
           funcionarioAtual = new Funcionario();

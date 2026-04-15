@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import sistema.exception.CpfDuplicado;
 import sistema.model.Funcionario;
 
 public class FuncionarioDAO implements CriacaoTabela {
@@ -59,7 +60,7 @@ public class FuncionarioDAO implements CriacaoTabela {
   }
 
   // UPDATE
-  public void atualizarFuncionario(Funcionario funcionario, int opcao, int id_funcionario) {
+  public void atualizarFuncionario(Funcionario funcionario, int opcao, int id_funcionario) throws CpfDuplicado {
     String parteSQL;
 
     switch (opcao) {
@@ -90,6 +91,9 @@ public class FuncionarioDAO implements CriacaoTabela {
       stmt.executeUpdate();
 
     } catch (SQLException error) {
+      if (error.getMessage().contains("cpf")) {
+        throw new CpfDuplicado("CPF já cadastrado! Tente novamente com outro CPF.");
+      }
       throw new RuntimeException("Erro ao atualizar: " + error.getMessage());
     }
   }

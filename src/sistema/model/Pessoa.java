@@ -36,23 +36,13 @@ public abstract class Pessoa {
   }
 
   public void setCpf(String cpf) {
-    String cpfClean = cpf.trim();
-    int tamanho = cpfClean.length();
+    String cpfClean = cpf.replaceAll("\\D", "");
 
-    if (tamanho == 11) {
-      this.cpf = cpfClean.substring(0, 3) + "." +
-          cpfClean.substring(3, 6) + "." +
-          cpfClean.substring(6, 9) + "-" +
-          cpfClean.substring(9, 11);
-
-    } else if (tamanho == 14) {
-      this.cpf = cpfClean;
-
-    } else {
-      System.out.println("Formato de CPF inválido!");
-      System.out.println("Use: 000.000.000-00");
+    if (cpfClean.length() != 11) {
+      throw new IllegalArgumentException("CPF inválido");
     }
 
+    this.cpf = cpfClean;
   }
 
   public void setDataNacimento(LocalDate dataNascimento) {

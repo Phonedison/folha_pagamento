@@ -141,10 +141,10 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
         while (resultado.next()) {
 
           System.out.println(resultado.getInt("codigo") + " | "
-              + resultado.getNString("data_pagamento") + " | "
-              + resultado.getNString("desconto_inss") + " | "
-              + resultado.getNString("desconto_liquido") + " | "
-              + resultado.getNString("id_funcionario"));
+              + resultado.getDate("data_pagamento") + " | "
+              + resultado.getDouble("desconto_inss") + " | "
+              + resultado.getDouble("desconto_liquido") + " | "
+              + resultado.getInt("id_funcionario"));
         }
       }
 
