@@ -79,35 +79,39 @@ public class FolhaPagamento {
 
     public void calcularINSS() {
         double salario = funcionario.getSalarioBruto();
+        double teto = 8157.41;
+
+        double base = Math.min(salario, teto);
 
         if (salario <= 1518.00) {
-            this.descontoInss = salario * 0.075;
+            this.descontoInss = base * 0.075;
 
-        } else if (salario > 1518.00 && salario <= 2793.88) {
-            this.descontoInss = salario * 0.09;
+        } else if (salario <= 2793.88) {
+            this.descontoInss = base * 0.09;
 
-        } else if (salario > 2793.88 && salario <= 4190.83) {
-            this.descontoInss = salario * 0.12;
+        } else if (salario <= 4190.83) {
+            this.descontoInss = base * 0.12;
 
         } else {
-            this.descontoInss = salario * 0.14;
+            this.descontoInss = base * 0.14;
         }
     }
 
     public void calcularIR() {
-        double base = funcionario.getSalarioBruto() - this.descontoInss
+        double base = funcionario.getSalarioBruto()
+                - this.descontoInss
                 - (funcionario.getDependentes().size() * 189.59);
 
         if (base <= 2259.00) {
             this.descontoIR = 0;
 
-        } else if (base > 2259.00 && base <= 2826.65) {
+        } else if (base <= 2826.65) {
             this.descontoIR = (base * 0.075) - 169.44;
 
-        } else if (base > 2826.65 && base <= 3751.05) {
+        } else if (base <= 3751.05) {
             this.descontoIR = (base * 0.15) - 381.44;
 
-        } else if (base > 3751.05 && base <= 4664.68) {
+        } else if (base <= 4664.68) {
             this.descontoIR = (base * 0.225) - 662.77;
 
         } else {
@@ -116,6 +120,8 @@ public class FolhaPagamento {
     }
 
     public void calcularSalarioLiquido() {
-        salarioLiquido = funcionario.getSalarioBruto() - this.descontoInss - this.descontoIR;
+        this.salarioLiquido = funcionario.getSalarioBruto()
+                - this.descontoInss
+                - this.descontoIR;
     }
 }

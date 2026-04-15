@@ -23,7 +23,7 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
         + " desconto_inss NUMERIC(15,2),"
         + " desconto_ir NUMERIC(15,2),"
         + " salario_liquido NUMERIC(15,2),"
-        + " id_funcionario INT REFERENCES funcionarios(id_funcionario) NOT NULL"
+        + " id_funcionario INT REFERENCES funcionario(id_funcionario) NOT NULL"
         + " );";
 
     try (
@@ -143,7 +143,8 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
           System.out.println(resultado.getInt("codigo") + " | "
               + resultado.getDate("data_pagamento") + " | "
               + resultado.getDouble("desconto_inss") + " | "
-              + resultado.getDouble("desconto_liquido") + " | "
+              + resultado.getDouble("desconto_ir") + " | "
+              + resultado.getDouble("salario_liquido") + " | "
               + resultado.getInt("id_funcionario"));
         }
       }
