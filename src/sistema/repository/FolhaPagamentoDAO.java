@@ -146,12 +146,12 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
 
         while (resultado.next()) {
 
-          System.out.printf("| %-7d | %-14s | %-13s | %-11s | %-15s | %-14d |%n",
+          System.out.printf("| %-7d | %-14s | R$ %-10.2f | R$ %-8.2f | R$ %-12.2f | %-14d |%n",
               resultado.getInt("codigo"),
               resultado.getDate("data_pagamento"),
-              ("R$ " + resultado.getDouble("desconto_inss")),
-              ("R$ " + resultado.getDouble("desconto_ir")),
-              ("R$ " + resultado.getDouble("salario_liquido")),
+              resultado.getDouble("desconto_inss"),
+              resultado.getDouble("desconto_ir"),
+              resultado.getDouble("salario_liquido"),
               resultado.getInt("id_funcionario"));
         }
       }

@@ -123,7 +123,7 @@ public class LeitorCSV {
       }
 
       System.out.print("");
-      System.out.print("Funcionários e Dependentes registrados!");
+      customLogger.logSucess("FUNCIONÁRIOS, DEPENDENTES e FOLHA DE PAGAMENTOS registrados!");
       System.out.print("");
 
     } catch (Exception erou) {
