@@ -167,6 +167,8 @@ Relacionamentos:
 - Funcionário → Dependente (1:N)
 - Funcionário → Folha de Pagamento (1:N)
 
+---
+
 ## 📋 Como Executar
 
 ### Pré-requisitos:
