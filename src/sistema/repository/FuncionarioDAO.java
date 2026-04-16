@@ -5,11 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import sistema.app.menu.CustomLogger;
 import sistema.exception.CpfDuplicado;
 import sistema.model.Funcionario;
 
 public class FuncionarioDAO implements CriacaoTabela {
 
+  CustomLogger customLogger = new CustomLogger();
   private final ConexaoDB conexao;
 
   public FuncionarioDAO(ConexaoDB conexao) {
@@ -39,6 +41,7 @@ public class FuncionarioDAO implements CriacaoTabela {
 
   // INSET INTO
   public void salvarFuncionario(Funcionario funcionario) {
+
     String comandoSQL = "INSERT INTO funcionario (nome, cpf, data_nascimento, salario_bruto) VALUES (?, ?, ?, ?);";
 
     try (
@@ -49,7 +52,8 @@ public class FuncionarioDAO implements CriacaoTabela {
       stmt.setObject(3, funcionario.getDataNacimento());
       stmt.setObject(4, funcionario.getSalarioBruto());
       stmt.executeUpdate();
-      System.out.println("Funcionário cadastrado no jiraiya XD");
+
+      customLogger.logSucess("Funcionário '" + funcionario.getNome() + "' Cadastrado com sucesso!");
 
       try (ResultSet rs = stmt.getGeneratedKeys()) {
         if (rs.next()) {
@@ -58,7 +62,8 @@ public class FuncionarioDAO implements CriacaoTabela {
       }
 
     } catch (Exception error) {
-      throw new RuntimeException("Erro ao atualizar: " + error.getMessage());
+      customLogger.logError("Erro ao inserir: " + funcionario.getNome());
+      throw new RuntimeException("Erro: " + error.getMessage());
     }
   }
 
@@ -113,7 +118,7 @@ public class FuncionarioDAO implements CriacaoTabela {
       int linhas = stmt.executeUpdate();
 
       if (linhas > 0) {
-        System.out.println("Funcionário removido!");
+        System.out.println("Funcionário de ID '" + id_funcionario + "' removido!");
       } else {
         System.out.println("Funcionário não encontrado!");
       }
@@ -160,7 +165,8 @@ public class FuncionarioDAO implements CriacaoTabela {
       }
 
       try (ResultSet resultado = stmt.executeQuery()) {
-
+        System.out
+            .println("------------------------------------------------------------------------------------------");
         String formato = "| %-5s | %-30s | %-15s | %-12s | %-13s |%n";
         System.out.printf(formato, "COD", "NOME", "CPF", "NASC.", "SALARIO");
         System.out
@@ -179,6 +185,9 @@ public class FuncionarioDAO implements CriacaoTabela {
               resultado.getString("data_nascimento"),
               resultado.getDouble("salario_bruto"));
         }
+
+        System.out
+            .println("------------------------------------------------------------------------------------------");
       }
 
       // stmt.executeUpdate(); // -> Comando apenas para deleted, update e insert;

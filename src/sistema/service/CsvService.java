@@ -7,8 +7,8 @@ import sistema.repository.FuncionarioDAO;
 
 public class CsvService {
 
-  private LeitorCSV leitor;
-  private EscritorCSV escritor;
+  private final LeitorCSV leitor;
+  private final EscritorCSV escritor;
 
   public CsvService(FuncionarioDAO funDAO, DependenteDAO denDAO, FolhaPagamentoDAO folhaDAO, ConexaoDB conexao) {
 

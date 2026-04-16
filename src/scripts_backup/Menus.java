@@ -127,16 +127,16 @@ public class Menus {
         System.out.println("===== CADASTRO DE FUNCIONÁRIO =====");
 
         do {
-            System.out.println("Informe o Nome do Funcionário: ");
+            System.out.println("Informe o Nome do(a) Funcionário(a): ");
             nome = sc.next();
 
-            System.out.println("Informe o CPF do Funcionário: ");
+            System.out.println("Informe o CPF do(a) Funcionário(a): ");
             cpf = sc.next();
 
-            System.out.println("Informe a Data de Nascimento do Funcionário (xx/xx/xxxx): ");
+            System.out.println("Informe a Data de Nascimento do(a) Funcionário(a): ");
             dataNascimento = sc.nextLine();
 
-            System.out.println("Informe o Salario Bruto do Funcionário: ");
+            System.out.println("Informe o Salario Bruto do(a) Funcionário(a): ");
             salario = sc.nextDouble();
 
             // System.out.println("Informe o nome do dependente se houver: ");

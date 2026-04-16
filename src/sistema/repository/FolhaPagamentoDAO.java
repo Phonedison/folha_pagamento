@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import sistema.app.menu.CustomLogger;
 import sistema.model.FolhaPagamento;
 
 public class FolhaPagamentoDAO implements CriacaoTabela {
+  CustomLogger customLogger = new CustomLogger();
 
   private final ConexaoDB conexao;
 
@@ -52,11 +54,15 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
       stmt.setObject(5, folhaPagamento.getFuncionario().getId_funcionario());
 
       stmt.executeUpdate();
-      System.out.println("Folha de pagamento registrado XD");
+      customLogger
+          .logSucess("Folha de pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario()
+              + " " + folhaPagamento.getFuncionario().getNome() + "' Registrado!");
 
     } catch (Exception error) {
-
-      throw new RuntimeException("Erro na inserção: " + error.getMessage());
+      customLogger.logError("Erro na inserção da folha de pagamento do(a) funcionário(a) '"
+          + folhaPagamento.getFuncionario().getId_funcionario() + " " + folhaPagamento.getFuncionario().getNome()
+          + "' !");
+      throw new RuntimeException("Erro: " + error.getMessage());
 
     }
   }
@@ -91,6 +97,7 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
 
+      customLogger.logSucess("Folha de Pagamento do(a) funcionário(a) ");
       stmt.executeUpdate();
 
     } catch (SQLException error) {

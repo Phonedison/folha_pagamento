@@ -187,9 +187,14 @@ public class DependenteDAO implements CriacaoTabela {
       }
 
       try (ResultSet resultado = stmt.executeQuery()) {
-
+        System.out
+            .println(
+                "--------------------------------------------------------------------------------------------------");
         String formato = "| %-5s | %-25s | %-15s | %-12s | %-12s | %-10s |%n";
         System.out.printf(formato, "ID", "NOME", "CPF", "NASC.", "PARENTESCO", "ID FUN.");
+        System.out
+            .println(
+                "--------------------------------------------------------------------------------------------------");
 
         while (resultado.next()) {
 
@@ -201,6 +206,10 @@ public class DependenteDAO implements CriacaoTabela {
               resultado.getString("parentesco"),
               resultado.getInt("id_funcionario"));
         }
+
+        System.out
+            .println(
+                "--------------------------------------------------------------------------------------------------");
       }
 
     } catch (Exception error) {

@@ -9,6 +9,8 @@ import sistema.repository.*;
 import sistema.service.CsvService;
 
 public class Menus {
+  CustomLogger customLogger = new CustomLogger();
+
   private final Scanner sc = new Scanner(System.in);
   private ConexaoDB conexao;
 
@@ -213,7 +215,7 @@ public class Menus {
         System.out.print("Data de Nascimento: ");
         d.setDataNacimento(converterData(sc.nextLine()));
 
-        System.out.println("ID do funcionário responsável: ");
+        System.out.println("ID do(a) funcionário(a) responsável: ");
         int idFuncionario = lerOpcao();
         d.setFuncionario(idFuncionario); // Integer
 
@@ -243,7 +245,7 @@ public class Menus {
       case "FOLHA DE PAGAMENTO" -> {
         FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
 
-        System.out.print("Digite o ID do funcionário: ");
+        System.out.print("Digite o ID do(a) funcionário(a): ");
         int idFuncionario = lerOpcao();
 
         FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
@@ -261,7 +263,7 @@ public class Menus {
         // Salva os dados no DB
         folhaDAO.salvarFolha(folha);
 
-        System.out.println("Folha gerada com sucesso!");
+        customLogger.logSucess("Folha de pagamento do(a) Funcionário(a) Registrado!");
       }
 
       default -> System.out.println("Entidade inválida para cadastro!");
@@ -305,7 +307,7 @@ public class Menus {
         // funcionário
         FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
         // valida
-        System.out.println("Tem certeza que deseja excluir o funcionário de ID " + id + "? (S/N)");
+        System.out.println("Tem certeza que deseja excluir o funcionário de ID '" + id + "'? (S/N)");
         String confirmacao = sc.nextLine().toUpperCase();
         if (confirmacao.equals("S")) {
           // se sim, executa o método excluir funcionario
@@ -318,7 +320,7 @@ public class Menus {
       case "DEPENDENTE" -> {
         DependenteDAO depDAO = new DependenteDAO(conexao);
 
-        System.out.println("Tem certeza que deseja excluir o dependente de ID " + id + "? (S/N)");
+        System.out.println("Tem certeza que deseja excluir o dependente de ID '" + id + "'? (S/N)");
         String confirmacao = sc.nextLine().toUpperCase();
         if (confirmacao.equals("S")) {
           depDAO.excluirDependente(id);
@@ -338,7 +340,7 @@ public class Menus {
         FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
         Funcionario f = new Funcionario();
 
-        System.out.println("Digite o ID do funcionário a ser atualizado: ");
+        System.out.println("Digite o ID do(a) funcionário(a) a ser atualizado: ");
         int id = lerOpcao();
         // informa os dados atuais do funcionário para facilitar a escolha do que
         // atualizar
@@ -363,7 +365,7 @@ public class Menus {
           }
 
           case 3 -> {
-            System.out.print("Nova data de aniversário: ");
+            System.out.print("Nova data de nascimento: ");
             // Criar método de tratativa da data de aniversário para evitar erros de
             // formatação
             f.setDataNacimento(converterData(sc.nextLine()));
@@ -378,8 +380,8 @@ public class Menus {
         }
 
         try {
+          System.out.println("Funcionário '" + f.getId_funcionario() + " " + f.getNome() + "' atualizado com sucesso!");
           funDAO.atualizarFuncionario(f, opcao, id);
-          System.out.println("Funcionário atualizado com sucesso!");
 
         } catch (Exception error) {
           System.out.println("Erro ao atualizar funcionário: " + error.getMessage());
@@ -433,7 +435,7 @@ public class Menus {
           }
 
           case 5 -> {
-            System.out.print("Novo ID do funcionário: ");
+            System.out.print("Novo ID do(a) funcionário(a): ");
             d.setFuncionario(Integer.valueOf(sc.nextLine()));
           }
 
@@ -441,7 +443,7 @@ public class Menus {
         }
         try {
           depDAO.atualizarDependente(d, opcao, id);
-          System.out.println("Dependente atualizado com sucesso!");
+          System.out.println("Dependente '" + d.getId_dependente() + " " + d.getNome() + "' atualizado com sucesso!");
 
         } catch (Exception error) {
           System.out.println("Erro ao atualizar dependente: " + error.getMessage());
