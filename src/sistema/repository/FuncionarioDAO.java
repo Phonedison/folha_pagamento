@@ -193,7 +193,8 @@ public class FuncionarioDAO implements CriacaoTabela {
       // stmt.executeUpdate(); // -> Comando apenas para deleted, update e insert;
 
     } catch (SQLException error) {
-      throw new RuntimeException("Erro ao buscar funcionário: " + error.getMessage());
+      customLogger.logError("Erro ao buscar dados dos funcionários!");
+      throw new RuntimeException(error.getMessage());
     }
 
   }

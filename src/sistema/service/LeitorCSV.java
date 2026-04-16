@@ -58,31 +58,35 @@ public class LeitorCSV {
           Funcionario funcionarioExistente = funcionarioDAO.buscarPorCpf(cpf);
 
           if (funcionarioExistente != null) {
-            System.out.println("Pulando! Funcionário " + funcionarioExistente.getNome() + " já está no banco.");
             funcionarioAtual = funcionarioExistente;
             linhaFuncionario = false;
             continue;
           }
 
           funcionarioAtual = new Funcionario();
+
           funcionarioAtual.setNome(dados[0]);
           funcionarioAtual.setCpf(dados[1]);
           funcionarioAtual.setDataNacimento(formatarData(dados[2]));
           funcionarioAtual.setSalarioBruto(Double.parseDouble(dados[3]));
 
           try {
+
             // força o comando sql para inserir a lista dos funcionários
             funcionarioDAO.salvarFuncionario(funcionarioAtual);
 
-            FolhaPagamento folha = new FolhaPagamento(); // gerando o objeto folha de pagamento
+            if (funcionarioAtual != null) {// Caso seja apontado como vazio, ele não gera a folha de pagamento
 
-            folha.setFuncionario(funcionarioAtual); // funcionario inserido na folha
-            folha.setDataPagamento(LocalDate.now()); // pegando a data Atual
-            folha.calcularINSS();// calcula o INSS do funcionário
-            folha.calcularIR();// calcula o IR do funcionário
-            folha.calcularSalarioLiquido(); // calcula o salário liquido do funcionário
+              FolhaPagamento folha = new FolhaPagamento(); // gerando o objeto folha de pagamento
 
-            folhaPagamentoDAO.salvarFolha(folha); // Salva a folha do funcionário na tabela folha_pagamento
+              folha.setFuncionario(funcionarioAtual); // funcionario inserido na folha
+              folha.setDataPagamento(LocalDate.now()); // pegando a data Atual
+              folha.calcularINSS();// calcula o INSS do funcionário
+              folha.calcularIR();// calcula o IR do funcionário
+              folha.calcularSalarioLiquido(); // calcula o salário liquido do funcionário
+
+              folhaPagamentoDAO.salvarFolha(folha); // Salva a folha do funcionário na tabela folha_pagamento
+            }
 
             funcionarios.add(funcionarioAtual); // adiciona o funcionário na tabela funcionario no DB
 
@@ -112,12 +116,15 @@ public class LeitorCSV {
 
           } catch (Exception error) {
             customLogger
-                .logError("Aviso: Dependente " + dados[0] + " já cadastrado ou erro na inserção. Pulandoooo...");
+                .logError("Aviso: Dependente '" + dados[0] + "' já cadastrado!");
+
           }
         }
       }
 
+      System.out.print("");
       System.out.print("Funcionários e Dependentes registrados!");
+      System.out.print("");
 
     } catch (Exception erou) {
       throw new RuntimeException("Erro cirítico ao ler CSV: " + erou.getMessage(), erou);

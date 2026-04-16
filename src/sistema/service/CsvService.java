@@ -12,7 +12,7 @@ public class CsvService {
 
   public CsvService(FuncionarioDAO funDAO, DependenteDAO denDAO, FolhaPagamentoDAO folhaDAO, ConexaoDB conexao) {
 
-    this.leitor = new LeitorCSV(funDAO, denDAO);
+    this.leitor = new LeitorCSV(funDAO, denDAO, folhaDAO);
     this.escritor = new EscritorCSV(conexao);
 
   }

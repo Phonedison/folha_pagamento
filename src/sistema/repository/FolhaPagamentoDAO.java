@@ -136,28 +136,32 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
         }
       }
       try (ResultSet resultado = stmt.executeQuery()) {
-        System.out.println("--- Relatório ---");
-        System.out.println(" ");
-        System.out.println("CÓDIGO | DATA PAGAMENTO | DESCONTO INSS | DESCONTO IR | SALARIO LIQUIDO | ID FUNCIONARIO");
-        System.out.println(" ------------------ ");
-        /*
-         * APENAS UM TESTE
-         * Imprime os dados após a busca utilizando o select armazenado na variavel
-         * resultado, enquanto for passado com valor
-         */
+        System.out
+            .println("---------------------------------------------------------------------------------------------");
+        String formato = "| %-7s | %-14s | %-13s | %-11s | %-15s | %-14s |%n";
+        System.out.printf(formato, "CÓDIGO", "DATA PAGAMENTO", "DESC. INSS", "DESC. IR", "SAL. LÍQUIDO", "ID FUNC.");
+
+        System.out
+            .println("---------------------------------------------------------------------------------------------");
+
         while (resultado.next()) {
 
-          System.out.println(resultado.getInt("codigo") + " | "
-              + resultado.getDate("data_pagamento") + " | "
-              + resultado.getDouble("desconto_inss") + " | "
-              + resultado.getDouble("desconto_ir") + " | "
-              + resultado.getDouble("salario_liquido") + " | "
-              + resultado.getInt("id_funcionario"));
+          System.out.printf("| %-7d | %-14s | %-13s | %-11s | %-15s | %-14d |%n",
+              resultado.getInt("codigo"),
+              resultado.getDate("data_pagamento"),
+              ("R$ " + resultado.getDouble("desconto_inss")),
+              ("R$ " + resultado.getDouble("desconto_ir")),
+              ("R$ " + resultado.getDouble("salario_liquido")),
+              resultado.getInt("id_funcionario"));
         }
       }
 
+      System.out
+          .println("---------------------------------------------------------------------------------------------");
+
     } catch (Exception error) {
-      throw new RuntimeException("Erro ao buscar folha: " + error.getMessage());
+      customLogger.logError("Erro ao buscar dados da Folha de pagamento!");
+      throw new RuntimeException(error.getMessage());
     }
   }
 }
