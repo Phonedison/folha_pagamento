@@ -122,9 +122,9 @@ public class LeitorCSV {
         }
       }
 
-      System.out.print("");
+      System.out.println("");
       customLogger.logSucess("FUNCIONÁRIOS, DEPENDENTES e FOLHA DE PAGAMENTOS registrados!");
-      System.out.print("");
+      System.out.println("");
 
     } catch (Exception erou) {
       throw new RuntimeException("Erro cirítico ao ler CSV: " + erou.getMessage(), erou);

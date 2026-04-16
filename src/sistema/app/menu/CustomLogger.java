@@ -7,10 +7,10 @@ public class CustomLogger {
   public static final String RED = "\u001B[31m";
   public static final String YELLOW = "\u001B[33m";
   public static final String CYAN = "\u001B[36m";
+  public static final String CyanBackgound = "\u001B[96m";
 
   public void logError(String message) {
     System.out.println(" " + RED + LocalDateTime.now() + " ERROR - " + message + RESET);
-    System.out.println("");
   }
 
   public void logWarning(String message) {
@@ -22,5 +22,4 @@ public class CustomLogger {
     System.out.println(" " + CYAN + LocalDateTime.now() + " SUCESS - " + message + RESET);
     System.out.println("");
   }
-
 }

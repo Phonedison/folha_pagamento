@@ -97,7 +97,9 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
 
-      customLogger.logSucess("Folha de Pagamento do(a) funcionário(a) ");
+      customLogger.logSucess(
+          "Folha de Pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario() + " "
+              + folhaPagamento.getFuncionario().getNome() + "' atualizado!");
       stmt.executeUpdate();
 
     } catch (SQLException error) {

@@ -12,12 +12,12 @@ import java.time.LocalDate;
 import sistema.app.menu.CustomLogger;
 import sistema.repository.ConexaoDB;
 
-public class EscritorCSV {
+public class EscreverCSV {
   CustomLogger customLogger = new CustomLogger();
 
   private final ConexaoDB conexao;
 
-  public EscritorCSV(ConexaoDB conexao) {
+  public EscreverCSV(ConexaoDB conexao) {
     this.conexao = conexao;
   }
 

@@ -3,9 +3,12 @@ package sistema.repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import sistema.app.menu.CustomLogger;
 import sistema.model.Dependente;
 
 public class DependenteDAO implements CriacaoTabela {
+
+  CustomLogger customLogger = new CustomLogger();
 
   private final ConexaoDB conexao;
 
@@ -63,6 +66,7 @@ public class DependenteDAO implements CriacaoTabela {
       stmt.setObject(5, dependente.getFuncionario());
 
       stmt.executeUpdate();
+      customLogger.logWarning("Dependente '" + dependente.getNome() + "' Cadastrado com sucesso!");
 
     } catch (Exception error) {
       throw new RuntimeException("Erro na inserção: " + error.getMessage());

@@ -8,12 +8,12 @@ import sistema.repository.FuncionarioDAO;
 public class CsvService {
 
   private final LeitorCSV leitor;
-  private final EscritorCSV escritor;
+  private final EscreverCSV escritor;
 
   public CsvService(FuncionarioDAO funDAO, DependenteDAO denDAO, FolhaPagamentoDAO folhaDAO, ConexaoDB conexao) {
 
     this.leitor = new LeitorCSV(funDAO, denDAO, folhaDAO);
-    this.escritor = new EscritorCSV(conexao);
+    this.escritor = new EscreverCSV(conexao);
 
   }
 
