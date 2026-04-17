@@ -1,66 +1,171 @@
 # 📑 Sistema de Folha de Pagamento - Desafio POO
 
-Este projeto é o trabalho final da disciplina de **Programação Orientada a Objetos** do Serratec. O objetivo é desenvolver um sistema robusto para o cálculo de salário líquido, aplicando conceitos de engenharia de software e persistência de dados.
+Este projeto é o trabalho final da disciplina de **Programação Orientada a Objetos** do Serratec. O objetivo é desenvolver um **sistema de gestão de folha de pagamento**, para o cálculo de salário líquido, aplicando conceitos e persistência de dados.
 
 ## 🚀 Sobre o projeto
 
-O sistema permite o cadastro e gerenciamento de funcionários e seus dependentes, realizando o cálculo automatizado do salário líquido com base nas regras definidas.
+A aplicação permite o gerenciamento completo de:
 
-### 🔍 Principais funcionalidades:
+- Funcionários
+- Dependentes
+- Folha de pagamento
 
-- Cadastro de funcionários
-- Associação de dependentes
-- Validação de regras de negócio _(idade, parentesco, CPF único)_
-- Cálculo de salário bruto e líquido
-- Aplicação de descontos _(INSS e IR)_
-- Persistência de dados via arquivo e/ou banco de dados
+Além disso, realiza automaticamente o cálculo de:
 
-### 🛠️ Tecnologias e Conceitos Aplicados
+- Desconto de INSS
+- Desconto de Imposto de Renda (IR)
+- Salário líquido
 
-- **Linguagem**: Java(JDK 17+)
-- **Conceitos de POO**:
-  - **Abstração e Herança**: Classe `Pessoa` como base para `Funcionario` e `Dependente`.
-  - **Encapsulamento**: Proteção de dados sensíveis e cálculo via métodos acessores.
-  - **Polimorfismo**: Implementação de interfaces para regras de cálculo.
-    <!-- - **Tratamento de Erros**: Uso de exceções personalizadas como _(DependenteException)_ para validação de regras de negócio. -->
-    <!-- - **Coleções**: uso de `HashSet` para garantir a unicidade de CPFs; -->
+O sistema também realiza integração com:
+
+- 📂 Arquivos CSV (entrada e saída)
+- 🗄️ Banco de dados PostgreSQL
 
 ---
 
+### 🔍 Funcionalidades
+
+#### 👤 Funcionário
+
+- Cadastro, listagem, atualização e exclusão
+- Validação de CPF único
+- Armazenamento de salário bruto
+
+#### 👶 Dependente
+
+- Associação com funcionário
+- Validação de:
+  - Idade (< 18 anos)
+  - CPF único
+- Definição de parentesco via ENUM:
+  - FILHO
+  - SOBRINHO
+  - OUTROS
+
+#### 💰 Folha de Pagamento
+
+- Cálculo automático:
+  - INSS (com teto)
+  - IR (com base nas faixas salariais)
+- Consideração de dependentes (dedução de R$ 189,59 por dependente)
+- Armazenamento no banco de dados
+
+---
+
+### 📂 CSV (Importação / Exportação)
+
+#### 📥 Importação:
+
+- Leitura de arquivos CSV contendo:
+  - Funcionários
+  - Dependentes
+- Inserção automática no banco
+- Geração automática da folha de pagamento
+
+#### 📤 Exportação:
+
+- Geração de arquivo CSV com:
+  - Nome
+  - CPF
+  - Desconto INSS
+  - Desconto IR
+  - Salário líquido
+- Nome do arquivo gerado automaticamente:
+  `folha_pagamento_YYYY-MM-DD.csv`
+
+---
+
+### 🛠️ Tecnologias e Conceitos Aplicados
+
+#### 💻 Linguagem
+
+- Java(JDK 17+)
+
+#### 🗄️ Banco de Dados
+
+- PostgreSQL
+- JDBC
+
+---
+
+### 📚 Conceitos de POO aplicados
+
+- ✅ Abstração
+  - Classe `Pessoa`
+- ✅ Herança
+  - `Funcionario` e `Dependente` herdam de `Pessoa`
+- ✅ Encapsulamento
+  - Uso de getters/setters e validações internas
+- ✅ Enum
+  - `Parentesco` para padronização de valores
+- ✅ Exceções personalizadas
+  - `CpfDuplicado`
+  - `DependenteException`
+- ✅ Interfaces
+  - `CriacaoTabela` para padronização de criação de tabelas
+- ✅ Coleções
+  - `HashSet` para dependentes
+  - ` ArrayList` para leitura de CSV
+- ✅ Separação por camadas
+  - Model
+  - Repository (DAO)
+  - Service
+  - App (menu)
+
+- ***
+
 ### 🏗️ Estrutura do Projeto
 
-O projeto está organizado seguindo padrões de separação de responsabilidades:
-
-- `model`: Entidades principais e representação de dados.
-- `service`: Core business _(Lógica de cálculos de INSS e IR)_.
-- `repository`: Camada de persistência _(DAO e I/O de arquivos)_.
-- `exception`: Gestão de erros e validações específicas.
-
 ```
-Folha_pagamento
-├── 📁 sql
-│   └── 📄 script.sql                     # Criação de tabelas, restrições e relacionamentos
-├── 📁 src/sistema
-│   ├── 📁 app
-│   │   └── ☕ Main.java                  # Inicialização da aplicação e interface via console
-│   ├── 📁 enums
-│   │   └── ☕ Parentesco.java            # Definições de tipos enumerados para validação de dependentes
-│   ├── 📁 exception
-│   │   ├── ☕ CpfDuplicado.java          # Exceção customizada para violações de integridade de CPF
-│   │   └── ☕ DependenteException.java   # Tratamento de regras de negócio (idade e parentesco)
-│   ├── 📁 model
-│   │   ├── ☕ Pessoa.java                # Superclasse abstrata com atributos base (Nome, CPF, Nascimento)
-│   │   ├── ☕ Funcionario.java           # Entidade principal
-│   │   ├── ☕ Dependente.java            # Entidade vinculada ao funcionário
-│   │   └── ☕ FolhaPagamento.java        # Modelo para processamento e cálculo de vencimentos
-│   └── 📁 repository
-│       ├── ☕ ConexaoDB.java             # Gerenciamento da conexão
-│       ├── ☕ FuncionarioDAO.java        # Operações CRUD no Banco de Dados
-│       ├── ☕ ConsultasSQL.java          # Constantes com queries SQL para centralização do código
-│       └── ☕ DadosConexao.java          # DTO para armazenamento de credenciais de acesso
-├── ⚙️ .gitignore                         # Arquivos ignorados pelo controle de versão
-└── 📝 README.md                          # Documentação técnica e equipe de desenvolvimento
+...
+src/sistema
+├── app
+│   ├── menu
+│   │   ├── Menus.java
+│   │   └── CustomLogger.java
+│   └── Main.java
+│
+├── enums
+│   └── Parentesco.java
+│
+├── exception
+│   ├── CpfDuplicado.java
+│   └── DependenteException.java
+│
+├── model
+│   ├── Pessoa.java
+│   ├── Funcionario.java
+│   ├── Dependente.java
+│   └── FolhaPagamento.java
+│
+├── repository
+│   ├── ConexaoDB.java
+│   ├── InicializarDB.java
+│   ├── FuncionarioDAO.java
+│   ├── DependenteDAO.java
+│   └── FolhaPagamentoDAO.java
+│
+└── service
+    ├── CsvService.java
+    ├── LeitorCSV.java
+    └── EscritorCSV.java
 ```
+
+---
+
+### ⚙️ Banco de Dados
+
+O sistema cria automaticamente:
+
+- Tabela `funcionario`
+- Tabela `dependente`
+- Tabela `folha_pagamento`
+- Enum `parentesco`
+
+Relacionamentos:
+
+- Funcionário → Dependente (1:N)
+- Funcionário → Folha de Pagamento (1:N)
 
 ---
 
@@ -68,8 +173,9 @@ Folha_pagamento
 
 ### Pré-requisitos:
 
-- Java JDK 17 ou superior
-- IDE _(IntelliJ, Eclipse ou VS Code)_
+- Java JDK 17+
+- PostgreSQL instalado
+- Driver JDBC configurado (`postgresql-42.7.10.jar)`)
 
 ### Passo a passo:
 
@@ -77,19 +183,50 @@ Folha_pagamento
 # Clone o repositório
 git clone https://github.com/Phonedison/folha_pagamento.git
 
-# Acesse a pasta do projeto
+# Acesse o diretório
 cd folha_pagamento
 
-# Compile o projeto
-javac Main.java
+# Execute pela IDE (recomendado)
+```
 
-# Execute
+OU via Terminal
+
+```bash
+javac Main.java
 java Main
 ```
 
-> 💡 Caso utilize uma IDE, basta importar o projeto e executar a classe Main.
+---
 
-# 👥 Grupo e Responsabilidades
+## 💡 Fluxo de Uso
+
+1.  Conectar ao banco de dados
+2.  Inicializar tabelas automaticamente
+3.  Escolher uma opção:
+
+- Cadastro manual
+- Importação CSV
+
+4. Sistema:
+
+- Persiste dados
+- Calcula folha automaticamente
+
+5. Exportar CSV com resultados
+
+---
+
+## ⚠️ Regras
+
+- CPF deve ser único (funcionário e dependente)
+- Dependente deve ter menos de 18 anos
+- Cada dependente reduz R$ 189,59 no cálculo do IR
+- INSS respeita teto de R$ 8.157,41
+- Cálculo de IR baseado em faixas salariais
+
+---
+
+# 👥 Grupo
 
 |                                  Integrantes                                   | GitHub                                                       |
 | :----------------------------------------------------------------------------: | :----------------------------------------------------------- |

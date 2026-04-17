@@ -28,7 +28,7 @@ public class ConexaoDB {
       // Executa a conexão com o banco de dados.
       return conectar();
 
-    } catch (Exception error) {
+    } catch (ClassNotFoundException | SQLException error) {
 
       throw new RuntimeException("Erro ao CONECTAR:" + error.getMessage());
 

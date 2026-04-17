@@ -1,58 +1,60 @@
 package sistema.model;
 
-import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.ZoneId;
-
 import sistema.enums.Parentesco;
+import sistema.exception.DependenteException;
 
 public class Dependente extends Pessoa {
 
   private Integer funcionario;
   private Parentesco parentesco;
+  private Integer id_dependente;
 
-  public Dependente(String nome, String cpf, Date dataNascimento, Funcionario funcionario) {
+  public Dependente() {
+    super();
+  }
+
+  public Dependente(String nome, String cpf, LocalDate dataNascimento, Funcionario funcionario, Parentesco parentesco) {
     super(nome, cpf, dataNascimento);
     this.funcionario = funcionario.getId_funcionario();
+    this.parentesco = parentesco;
   }
 
   public Parentesco getParentesco() {
     return this.parentesco;
   }
 
+  public Integer getId_dependente() {
+    return this.id_dependente;
+  }
+
   public void setParentesco(Parentesco parente) {
     this.parentesco = parente;
   }
 
-  public void escolherParentesco(Parentesco opcao) {
+  public void escolherParentesco(String opcao) {
 
-    if (null == opcao) {
-      System.out.print("ERRO");
-    } else
-      switch (opcao) {
+    switch (opcao) {
 
-        case FILHO -> {
-          setParentesco(Parentesco.FILHO);
-          break;
-        }
+      case "FILHO" -> setParentesco(Parentesco.FILHO);
+      case "SOBRINHO" -> setParentesco(Parentesco.SOBRINHO);
+      case "OUTROS" -> setParentesco(Parentesco.OUTROS);
+      default -> System.out.println("ERRO");
 
-        case SOBRINHO -> {
-          setParentesco(Parentesco.SOBRINHO);
-          break;
-        }
+    }
+  }
 
-        case OUTROS -> {
-          setParentesco(Parentesco.OUTROS);
-          break;
-        }
+  public void escolherParentesco(int opcao) {
 
-        default -> {
-          System.out.print("ERRO");
-        }
-      }
+    switch (opcao) {
 
+      case 1 -> setParentesco(Parentesco.FILHO);
+      case 2 -> setParentesco(Parentesco.SOBRINHO);
+      case 3 -> setParentesco(Parentesco.OUTROS);
+      default -> System.out.println("ERRO");
+
+    }
   }
 
   public Integer getFuncionario() {
@@ -61,6 +63,13 @@ public class Dependente extends Pessoa {
 
   public void setFuncionario(Integer funcionario) {
     this.funcionario = funcionario;
+  }
+
+  public void validarDependente() throws DependenteException {
+    int idade = Period.between(getDataNacimento(), LocalDate.now()).getYears();
+    if (idade > 18) {
+      throw new DependenteException("Dependente deve ter menos de 18 anos.");
+    }
   }
 
 }

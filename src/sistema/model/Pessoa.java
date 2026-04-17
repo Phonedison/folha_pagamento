@@ -1,14 +1,17 @@
 package sistema.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public abstract class Pessoa {
 
   protected String nome;
   protected String cpf;
-  protected Date dataNascimento;
+  protected LocalDate dataNascimento;
 
-  public Pessoa(String nome, String cpf, Date dataNascimento) {
+  public Pessoa() {
+  }
+
+  public Pessoa(String nome, String cpf, LocalDate dataNascimento) {
     this.nome = nome;
     this.cpf = cpf;
     this.dataNascimento = dataNascimento;
@@ -23,7 +26,7 @@ public abstract class Pessoa {
     return this.cpf;
   }
 
-  public Date getDataNacimento() {
+  public LocalDate getDataNacimento() {
     return this.dataNascimento;
   }
 
@@ -33,26 +36,16 @@ public abstract class Pessoa {
   }
 
   public void setCpf(String cpf) {
-    String cpfClean = cpf.trim();
-    int tamanho = cpfClean.length();
+    String cpfClean = cpf.replaceAll("\\D", "");
 
-    if (tamanho == 11) {
-      this.cpf = cpfClean.substring(0, 3) + "." +
-          cpfClean.substring(3, 6) + "." +
-          cpfClean.substring(6, 9) + "-" +
-          cpfClean.substring(9, 11);
-
-    } else if (tamanho == 14) {
-      this.cpf = cpfClean;
-
-    } else {
-      System.out.println("Formato de CPF inválido!");
-      System.out.println("Use: 000.000.000-00");
+    if (cpfClean.length() != 11) {
+      throw new IllegalArgumentException("CPF inválido");
     }
 
+    this.cpf = cpfClean;
   }
 
-  public void setDataNacimento(Date dataNascimento) {
+  public void setDataNacimento(LocalDate dataNascimento) {
     this.dataNascimento = dataNascimento;
   }
 }
