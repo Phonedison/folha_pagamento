@@ -3,8 +3,10 @@ package sistema.repository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException; // classe que permite fornecer informações sobre erros durante a conexao com banco
+import sistema.app.menu.CustomLogger;
 
 public class ConexaoDB {
+  CustomLogger customLogger = new CustomLogger();
 
   protected int porta;
   protected String meuDb;
@@ -20,7 +22,7 @@ public class ConexaoDB {
     gerarConexao();
   }
 
-  public Connection conectarDB() {
+  public Connection conectarDB() throws SQLException {
     try {
       // Carregando o driver do banco de dados.
       Class.forName("org.postgresql.Driver");
@@ -28,10 +30,12 @@ public class ConexaoDB {
       // Executa a conexão com o banco de dados.
       return conectar();
 
-    } catch (ClassNotFoundException | SQLException error) {
+    } catch (ClassNotFoundException error) {
+      customLogger.logError("Drive não encontrado:");
+      throw new RuntimeException(error.getMessage());
 
-      throw new RuntimeException("Erro ao CONECTAR:" + error.getMessage());
-
+    } catch (SQLException error) {
+      throw error;
     }
   }
 

@@ -91,7 +91,7 @@ public class LeitorCSV {
             funcionarios.add(funcionarioAtual); // adiciona o funcionário na tabela funcionario no DB
 
           } catch (Exception error) {
-            System.out.println("Error ao salvar funcionário: " + error.getMessage());
+            System.out.println("Erro ao salvar funcionário: " + error.getMessage());
             continue;
           }
 
@@ -116,7 +116,7 @@ public class LeitorCSV {
 
           } catch (Exception error) {
             customLogger
-                .logError("Aviso: Dependente '" + dados[0] + "' já cadastrado!");
+                .logDependenteError("Aviso: Dependente '" + dados[0] + "' já cadastrado!");
 
           }
         }
@@ -124,10 +124,9 @@ public class LeitorCSV {
 
       System.out.println("");
       customLogger.logSucess("FUNCIONÁRIOS, DEPENDENTES e FOLHA DE PAGAMENTOS registrados!");
-      System.out.println("");
 
     } catch (Exception erou) {
-      throw new RuntimeException("Erro cirítico ao ler CSV: " + erou.getMessage(), erou);
+      throw new RuntimeException("Erro crítico ao ler CSV: " + erou.getMessage(), erou);
     }
 
     return funcionarios;

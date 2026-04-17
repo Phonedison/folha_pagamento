@@ -34,7 +34,8 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
       stmt.execute();
 
     } catch (Exception error) {
-      throw new RuntimeException("Erro ao inicializar tabela Folha_pagamento: " + error.getMessage(),
+      customLogger.logError("Erro ao inicializar tabela Folha_pagamento: ");
+      throw new RuntimeException(error.getMessage(),
           error);
     }
   }
@@ -55,8 +56,9 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
 
       stmt.executeUpdate();
       customLogger
-          .logSucess("Folha de pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario()
-              + " " + folhaPagamento.getFuncionario().getNome() + "' Registrado!");
+          .logFolhaSucess(
+              "Folha de pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario()
+                  + " " + folhaPagamento.getFuncionario().getNome() + "' Registrado!");
 
     } catch (Exception error) {
       customLogger.logError("Erro na inserção da folha de pagamento do(a) funcionário(a) '"
@@ -97,13 +99,14 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
 
-      customLogger.logSucess(
+      customLogger.logFolhaSucess(
           "Folha de Pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario() + " "
               + folhaPagamento.getFuncionario().getNome() + "' atualizado!");
       stmt.executeUpdate();
 
     } catch (SQLException error) {
-      throw new RuntimeException("Erro ao atualizar: " + error.getMessage());
+      customLogger.logError("Erro ao atualizar:");
+      throw new RuntimeException(error.getMessage());
     }
   }
 
@@ -138,29 +141,32 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
         }
       }
       try (ResultSet resultado = stmt.executeQuery()) {
-        System.out
-            .println("---------------------------------------------------------------------------------------------");
-        String formato = "| %-7s | %-14s | %-13s | %-11s | %-15s | %-14s |%n";
-        System.out.printf(formato, "CÓDIGO", "DATA PAGAMENTO", "DESC. INSS", "DESC. IR", "SAL. LÍQUIDO", "ID FUNC.");
+        if (resultado != null) {
+          System.out
+              .println("---------------------------------------------------------------------------------------------");
+          String formato = "| %-7s | %-14s | %-13s | %-11s | %-15s | %-14s |%n";
+          System.out.printf(formato, "CÓDIGO", "DATA PAGAMENTO", "DESC. INSS", "DESC. IR", "SAL. LÍQUIDO", "ID FUNC.");
 
-        System.out
-            .println("---------------------------------------------------------------------------------------------");
+          System.out
+              .println("---------------------------------------------------------------------------------------------");
 
-        while (resultado.next()) {
+          while (resultado.next()) {
 
-          System.out.printf("| %-7d | %-14s | R$ %-10.2f | R$ %-8.2f | R$ %-12.2f | %-14d |%n",
-              resultado.getInt("codigo"),
-              resultado.getDate("data_pagamento"),
-              resultado.getDouble("desconto_inss"),
-              resultado.getDouble("desconto_ir"),
-              resultado.getDouble("salario_liquido"),
-              resultado.getInt("id_funcionario"));
+            System.out.printf("| %-7d | %-14s | R$ %-10.2f | R$ %-8.2f | R$ %-12.2f | %-14d |%n",
+                resultado.getInt("codigo"),
+                resultado.getDate("data_pagamento"),
+                resultado.getDouble("desconto_inss"),
+                resultado.getDouble("desconto_ir"),
+                resultado.getDouble("salario_liquido"),
+                resultado.getInt("id_funcionario"));
+          }
+          System.out
+              .println("---------------------------------------------------------------------------------------------");
+        } else {
+          customLogger.logWarning("Tabela FOLHA PAGAMENTO vazio!");
         }
+
       }
-
-      System.out
-          .println("---------------------------------------------------------------------------------------------");
-
     } catch (Exception error) {
       customLogger.logError("Erro ao buscar dados da Folha de pagamento!");
       throw new RuntimeException(error.getMessage());
