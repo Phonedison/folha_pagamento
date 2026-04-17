@@ -34,8 +34,8 @@ public class FuncionarioDAO implements CriacaoTabela {
       stmt.execute();
 
     } catch (Exception error) {
-      throw new RuntimeException("Erro ao inicializar tabela Funcionario: " + error.getMessage(),
-          error);
+      customLogger.logError("Erro ao inicializar tabela Funcionario:");
+      throw new RuntimeException(error.getMessage(), error);
     }
   }
 
@@ -118,9 +118,9 @@ public class FuncionarioDAO implements CriacaoTabela {
       int linhas = stmt.executeUpdate();
 
       if (linhas > 0) {
-        System.out.println("Funcionário de ID '" + id_funcionario + "' removido!");
+        customLogger.logWarning("Funcionário de ID '" + id_funcionario + "' removido!");
       } else {
-        System.out.println("Funcionário não encontrado!");
+        customLogger.logError("Funcionário não encontrado!");
       }
 
     } catch (Exception error) {
@@ -220,7 +220,7 @@ public class FuncionarioDAO implements CriacaoTabela {
         }
       }
     } catch (SQLException error) {
-      System.out.print("Errou feio, errou rude, erro: " + error.getMessage());
+      customLogger.logWarning("Erro ao Encontrar Funcionário" + error.getMessage());
 
     }
     return funcionario;

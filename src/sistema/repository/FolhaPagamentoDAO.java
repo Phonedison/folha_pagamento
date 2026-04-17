@@ -34,7 +34,8 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
       stmt.execute();
 
     } catch (Exception error) {
-      throw new RuntimeException("Erro ao inicializar tabela Folha_pagamento: " + error.getMessage(),
+      customLogger.logError("Erro ao inicializar tabela Folha_pagamento: ");
+      throw new RuntimeException(error.getMessage(),
           error);
     }
   }
@@ -55,8 +56,9 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
 
       stmt.executeUpdate();
       customLogger
-          .logSucess("Folha de pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario()
-              + " " + folhaPagamento.getFuncionario().getNome() + "' Registrado!");
+          .logFolhaSucess(
+              "Folha de pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario()
+                  + " " + folhaPagamento.getFuncionario().getNome() + "' Registrado!");
 
     } catch (Exception error) {
       customLogger.logError("Erro na inserção da folha de pagamento do(a) funcionário(a) '"
@@ -97,13 +99,14 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
 
-      customLogger.logSucess(
+      customLogger.logFolhaSucess(
           "Folha de Pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario() + " "
               + folhaPagamento.getFuncionario().getNome() + "' atualizado!");
       stmt.executeUpdate();
 
     } catch (SQLException error) {
-      throw new RuntimeException("Erro ao atualizar: " + error.getMessage());
+      customLogger.logError("Erro ao atualizar:");
+      throw new RuntimeException(error.getMessage());
     }
   }
 

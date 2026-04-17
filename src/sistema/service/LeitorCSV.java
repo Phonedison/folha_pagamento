@@ -116,7 +116,7 @@ public class LeitorCSV {
 
           } catch (Exception error) {
             customLogger
-                .logError("Aviso: Dependente '" + dados[0] + "' já cadastrado!");
+                .logDependenteError("Aviso: Dependente '" + dados[0] + "' já cadastrado!");
 
           }
         }
@@ -124,7 +124,6 @@ public class LeitorCSV {
 
       System.out.println("");
       customLogger.logSucess("FUNCIONÁRIOS, DEPENDENTES e FOLHA DE PAGAMENTOS registrados!");
-      System.out.println("");
 
     } catch (Exception erou) {
       throw new RuntimeException("Erro cirítico ao ler CSV: " + erou.getMessage(), erou);

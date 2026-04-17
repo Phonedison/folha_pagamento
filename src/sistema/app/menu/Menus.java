@@ -89,7 +89,7 @@ public class Menus {
       switch (opcao) {
         case 1 -> {
           conexao = conexao_db();
-          System.out.println("Conexão realizada com sucesso!");
+          customLogger.logConectionSucess("Conexão realizada com sucesso!");
         }
         case 2 -> menu_csv();
         case 3 -> menu_modelDAO("FUNCIONARIO"); // acessa o menu de funcionário, passando o nome da entidade como
@@ -99,7 +99,7 @@ public class Menus {
                                               // para
                                               // identificar qual menu acessar
         case 5 -> menu_modelDAO("FOLHA DE PAGAMENTO");
-        case 0 -> System.out.println("Finalizando atendimento...");
+        case 0 -> customLogger.logFinal("SERVIÇO FINALIZADO!");
         default -> System.out.println("Número inválido!");
       }
     } while (opcao != 0);
@@ -110,8 +110,8 @@ public class Menus {
 
     if (conexao == null) { // verifica se foi feito a conexão com o banco de dados
       titulo("E R R O");
-      System.out.println("Conexão com o Banco de Dados não estabelecida!");
-      System.out.println("Você precisa se conetar ao banco (Opção 1) para acessar os recursos de " + ".");
+      customLogger.logError("Conexão com o Banco de Dados não estabelecida!");
+      customLogger.logWarning("Você precisa se conetar ao banco (Opção 1) para acessar os recursos de " + ".");
       return;
     }
 
@@ -134,8 +134,8 @@ public class Menus {
         case 2 -> listar(entidade);
         case 3 -> atualizar(entidade);
         case 4 -> excluir(entidade);
-        case 0 -> System.out.println("Voltando...");
-        default -> System.out.println("Número inválido!");
+        case 0 -> customLogger.logWarning("Voltando...");
+        default -> customLogger.logWarning("Número inválido!");
       }
 
     } while (opcao != 0);
@@ -152,7 +152,7 @@ public class Menus {
 
     } catch (NumberFormatException error) {
       sc.nextLine();
-      System.out.println("Valor inválido! Digite um número inteiro.");
+      customLogger.logWarning("Valor inválido! Digite um número inteiro.");
       return 0;
     }
 
@@ -197,7 +197,7 @@ public class Menus {
           // caso ocorra um erro durante a validação ou inserção do funcionário, será
           // capturada a exceção e exibida uma mensagem de erro informando o motivo do
           // erro, facilitando a correção do mesmo
-          System.out.println("Erro ao cadastrar funcionário: " + e.getMessage());
+          customLogger.logError("Erro ao cadastrar funcionário: " + e.getMessage());
         }
       }
       case "DEPENDENTE" -> {
@@ -233,12 +233,12 @@ public class Menus {
           d.validarDependente();
           depDAO.atualizarDependente(d, opcaoParentesco, idFuncionario);
           depDAO.salvarDependente(d);
-          System.out.println("Dependente cadastrado com sucesso!");
+          customLogger.logSucess("Dependente cadastrado com sucesso!");
 
           // caso ocorra um erro durante a validação ou inserção do dependente, será
           // capturada a exceção e exibida uma mensagem de erro informando o motivo
         } catch (DependenteException error) {
-          System.out.println("Erro ao cadastrar dependente: " + error.getMessage());
+          customLogger.logError("Erro ao cadastrar dependente: " + error.getMessage());
         }
 
       }
@@ -249,7 +249,7 @@ public class Menus {
         System.out.print("Digite o ID do(a) funcionário(a): ");
         int idFuncionario = lerOpcao();
 
-        FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
+        // FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
         Funcionario f = new Funcionario();
         f.setId_funcionario(idFuncionario);
 
@@ -293,7 +293,7 @@ public class Menus {
             titulo("RELATORIO DE QTD " + entidade);
             funDAO.selececionarQtdDependentePorFUncionario();
           }
-          default -> System.out.println("Opção Invalida!");
+          default -> customLogger.logWarning("Opção Invalida!");
         }
 
       }
@@ -307,7 +307,7 @@ public class Menus {
         FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
         folhaDAO.selecionarFolha(new FolhaPagamento(), 0, "");
       }
-      default -> System.out.println("Entidade inválida para listagem!");
+      default -> customLogger.logWarning("Entidade inválida para listagem!");
     }
   }
 
@@ -329,7 +329,7 @@ public class Menus {
           // se sim, executa o método excluir funcionario
           funDAO.excluirFuncionario(id);
         } else {
-          System.out.println("Exclusão cancelada.");
+          customLogger.logWarning("Exclusão cancelada.");
         }
       }
 
@@ -342,7 +342,7 @@ public class Menus {
           depDAO.excluirDependente(id);
 
         } else {
-          System.out.println("Exclusão cancelada.");
+          customLogger.logWarning("Exclusão cancelada.");
         }
       }
     }
@@ -390,7 +390,7 @@ public class Menus {
             f.setSalarioBruto(Double.parseDouble(sc.nextLine()));
           }
 
-          default -> System.out.println("Opção inválida!");
+          default -> customLogger.logWarning("Opção inválida!");
         }
 
         try {
@@ -398,7 +398,7 @@ public class Menus {
           funDAO.atualizarFuncionario(f, opcao, id);
 
         } catch (CpfDuplicado error) {
-          System.out.println("Erro ao atualizar funcionário: " + error.getMessage());
+          customLogger.logError("Erro ao atualizar funcionário: " + error.getMessage());
         }
 
       }
@@ -457,14 +457,15 @@ public class Menus {
         }
         try {
           depDAO.atualizarDependente(d, opcao, id);
-          System.out.println("Dependente '" + d.getId_dependente() + " " + d.getNome() + "' atualizado com sucesso!");
+          customLogger
+              .logSucess("Dependente '" + d.getId_dependente() + " " + d.getNome() + "' atualizado com sucesso!");
 
         } catch (Exception error) {
-          System.out.println("Erro ao atualizar dependente: " + error.getMessage());
+          customLogger.logWarning("Erro ao atualizar dependente: " + error.getMessage());
         }
 
       }
-      default -> System.out.println("Entidade inválida para atualização!");
+      default -> customLogger.logError("Entidade inválida para atualização!");
     }
   }
 
@@ -494,7 +495,7 @@ public class Menus {
       case 3 -> csvService.exportarFuncionario(caminho);
       case 4 -> csvService.exportarDependente(caminho);
       case 5 -> csvService.exportarQtdDependenteFuncionario(caminho);
-      default -> System.out.println("Opção invalida!");
+      default -> customLogger.logWarning("Opção invalida!");
 
     }
 
