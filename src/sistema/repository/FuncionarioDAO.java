@@ -225,4 +225,49 @@ public class FuncionarioDAO implements CriacaoTabela {
     }
     return funcionario;
   }
+
+  public void selececionarQtdDependentePorFUncionario() {
+    String comandoSQL = """
+        SELECT
+            f.id_funcionario,
+            f.nome,
+            COUNT(d.id_dependente) AS quantidade_dependentes
+        FROM funcionario f
+        LEFT JOIN dependente d
+            ON f.id_funcionario = d.id_funcionario
+        GROUP BY f.id_funcionario, f.nome
+        ORDER BY f.id_funcionario;
+            """;
+
+    try (
+        Connection con = conexao.conectarDB();
+        PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
+
+      try (ResultSet resultado = stmt.executeQuery()) {
+        System.out.println("------------------------------------------------");
+        String formato = "| %-5s | %-30s | %-3s |%n";
+        System.out.printf(formato, "COD", "NOME", "QTD");
+        System.out.println("------------------------------------------------");
+
+        /*
+         * Imprime os dados após a busca utilizando o select armazenado na variavel
+         * resultado.
+         */
+        while (resultado.next()) {
+
+          System.out.printf("| %-5d | %-30s | %-3s |%n",
+              resultado.getInt("id_funcionario"),
+              resultado.getString("nome"),
+              resultado.getInt("quantidade_dependentes"));
+        }
+        System.out.println("--------------------------------------------------");
+      }
+
+    } catch (SQLException error) {
+      customLogger.logError("Erro ao buscar dados dos funcionários!");
+      throw new RuntimeException(error.getMessage());
+    }
+
+  }
+
 }

@@ -3,6 +3,7 @@ package sistema.app.menu;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+import sistema.exception.CpfDuplicado;
 import sistema.exception.DependenteException;
 import sistema.model.*;
 import sistema.repository.*;
@@ -273,12 +274,27 @@ public class Menus {
   private void listar(String entidade) {
     switch (entidade) {
       case "FUNCIONARIO" -> {
-        titulo("RELATORIO - " + entidade);
+        System.out.println("Escolha :");
+        System.out.println("1 - Funcionarios");
+        System.out.println("2 - Lista de Quantidade de Dependente por Funcionários");
+
+        int opcao = lerOpcao();
         FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
-        // utilizando o método selecionarFuncionario da classe FuncionarioDAO para
-        // listar os funcionários cadastrados
-        funDAO.selecionarFuncionario(new Funcionario(), 0, "");
-        // select padrão para listar todos os funcionários, sem filtro
+
+        switch (opcao) {
+          case 1 -> {
+            titulo("RELATORIO DE " + entidade);
+            // utilizando o método selecionarFuncionario da classe FuncionarioDAO para
+            // listar os funcionários cadastrados
+            funDAO.selecionarFuncionario(new Funcionario(), 0, "");
+            // select padrão para listar todos os funcionários, sem filtro
+          }
+          case 2 -> {
+            titulo("RELATORIO DE QTD " + entidade);
+            funDAO.selececionarQtdDependentePorFUncionario();
+          }
+          default -> System.out.println("Opção Invalida!");
+        }
 
       }
       case "DEPENDENTE" -> {
@@ -366,8 +382,6 @@ public class Menus {
 
           case 3 -> {
             System.out.print("Nova data de nascimento: ");
-            // Criar método de tratativa da data de aniversário para evitar erros de
-            // formatação
             f.setDataNacimento(converterData(sc.nextLine()));
           }
 
@@ -383,7 +397,7 @@ public class Menus {
           System.out.println("Funcionário '" + f.getId_funcionario() + " " + f.getNome() + "' atualizado com sucesso!");
           funDAO.atualizarFuncionario(f, opcao, id);
 
-        } catch (Exception error) {
+        } catch (CpfDuplicado error) {
           System.out.println("Erro ao atualizar funcionário: " + error.getMessage());
         }
 
@@ -450,10 +464,6 @@ public class Menus {
         }
 
       }
-
-      case "FOLHA DE PAGAMENTO" -> {
-        System.out.println("Em atualização...");
-      }
       default -> System.out.println("Entidade inválida para atualização!");
     }
   }
@@ -463,6 +473,9 @@ public class Menus {
     titulo("MENU CSV");
     System.out.println("1 - Importar CSV (Funcionario + Dependentes)");
     System.out.println("2 - Exportar Folha de Pagamento");
+    System.out.println("3 - Exportar Apenas Funcionário");
+    System.out.println("4 - Exportar Apenas Dependente");
+    System.out.println("5 - Exportar Qtd Dependente por Funcionário");
     System.out.print("Opção: ");
     int opcao = lerOpcao();
 
@@ -478,6 +491,9 @@ public class Menus {
     switch (opcao) {
       case 1 -> csvService.importar(caminho);
       case 2 -> csvService.exportarFolha(caminho);
+      case 3 -> csvService.exportarFuncionario(caminho);
+      case 4 -> csvService.exportarDependente(caminho);
+      case 5 -> csvService.exportarQtdDependenteFuncionario(caminho);
       default -> System.out.println("Opção invalida!");
 
     }

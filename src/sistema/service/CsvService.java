@@ -8,12 +8,12 @@ import sistema.repository.FuncionarioDAO;
 public class CsvService {
 
   private final LeitorCSV leitor;
-  private final EscreverCSV escritor;
+  private final EscreverCSV escrever;
 
   public CsvService(FuncionarioDAO funDAO, DependenteDAO denDAO, FolhaPagamentoDAO folhaDAO, ConexaoDB conexao) {
 
     this.leitor = new LeitorCSV(funDAO, denDAO, folhaDAO);
-    this.escritor = new EscreverCSV(conexao);
+    this.escrever = new EscreverCSV(conexao);
 
   }
 
@@ -22,7 +22,19 @@ public class CsvService {
   }
 
   public void exportarFolha(String caminho) {
-    escritor.escreverFolhaPagamentoCSV(caminho);
+    escrever.escreverFolhaPagamentoCSV(caminho);
+  }
+
+  public void exportarFuncionario(String caminho) {
+    escrever.escreverFuncionarioCSV(caminho);
+  }
+
+  public void exportarDependente(String caminho) {
+    escrever.escreverDependenteCSV(caminho);
+  }
+
+  public void exportarQtdDependenteFuncionario(String caminho) {
+    escrever.escreverQtdDependentePorFuncionario(caminho);
   }
 
 }
