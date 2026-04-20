@@ -195,29 +195,33 @@ public class DependenteDAO implements CriacaoTabela {
       }
 
       try (ResultSet resultado = stmt.executeQuery()) {
-        System.out
-            .println(
-                "--------------------------------------------------------------------------------------------------");
-        String formato = "| %-5s | %-25s | %-15s | %-12s | %-12s | %-10s |%n";
-        System.out.printf(formato, "ID", "NOME", "CPF", "NASC.", "PARENTESCO", "ID FUN.");
-        System.out
-            .println(
-                "--------------------------------------------------------------------------------------------------");
+        if (resultado != null) {
+          System.out
+              .println(
+                  "--------------------------------------------------------------------------------------------------");
+          String formato = "| %-5s | %-25s | %-15s | %-12s | %-12s | %-10s |%n";
+          System.out.printf(formato, "ID", "NOME", "CPF", "NASC.", "PARENTESCO", "ID FUN.");
+          System.out
+              .println(
+                  "--------------------------------------------------------------------------------------------------");
 
-        while (resultado.next()) {
+          while (resultado.next()) {
 
-          System.out.printf(formato,
-              resultado.getInt("id_dependente"),
-              resultado.getString("nome"),
-              resultado.getString("cpf"),
-              resultado.getDate("data_nascimento"),
-              resultado.getString("parentesco"),
-              resultado.getInt("id_funcionario"));
+            System.out.printf(formato,
+                resultado.getInt("id_dependente"),
+                resultado.getString("nome"),
+                resultado.getString("cpf"),
+                resultado.getDate("data_nascimento"),
+                resultado.getString("parentesco"),
+                resultado.getInt("id_funcionario"));
+          }
+
+          System.out
+              .println(
+                  "--------------------------------------------------------------------------------------------------");
+        } else {
+          customLogger.logWarning("Tabela DEPENDENTE vazio!");
         }
-
-        System.out
-            .println(
-                "--------------------------------------------------------------------------------------------------");
       }
 
     } catch (Exception error) {

@@ -1,5 +1,7 @@
 package sistema.app.menu;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -73,6 +75,7 @@ public class Menus {
   }
 
   public void menu_opcoes() {
+
     int opcao;
     do {
       titulo("Menu Principal");
@@ -88,8 +91,31 @@ public class Menus {
 
       switch (opcao) {
         case 1 -> {
-          conexao = conexao_db();
-          customLogger.logConectionSucess("Conexão realizada com sucesso!");
+          boolean conectado = false;
+          while (!conectado) {
+            try {
+              conexao = conexao_db();
+
+              try (Connection con = conexao.conectarDB()) {
+                customLogger.logConectionSucess("Conexão realizada com sucesso!");
+                conectado = true;
+              }
+
+            } catch (SQLException error) {
+              titulo("ERRO DE CONEXÃO");
+              customLogger.logConectionError("Falha: " + error.getMessage());
+
+              System.out.print("Deseja tentar novamente? (S/N): ");
+              String resposta = sc.nextLine().toUpperCase();
+              if (resposta.equals("N")) {
+                conectado = true;
+                conexao = null;
+              }
+            } catch (Exception e) {
+              customLogger.logError("Erro inesperado: " + e.getMessage());
+              break;
+            }
+          }
         }
         case 2 -> menu_csv();
         case 3 -> menu_modelDAO("FUNCIONARIO"); // acessa o menu de funcionário, passando o nome da entidade como
@@ -100,6 +126,7 @@ public class Menus {
                                               // identificar qual menu acessar
         case 5 -> menu_modelDAO("FOLHA DE PAGAMENTO");
         case 0 -> customLogger.logFinal("SERVIÇO FINALIZADO!");
+
         default -> System.out.println("Número inválido!");
       }
     } while (opcao != 0);

@@ -165,29 +165,33 @@ public class FuncionarioDAO implements CriacaoTabela {
       }
 
       try (ResultSet resultado = stmt.executeQuery()) {
-        System.out
-            .println("------------------------------------------------------------------------------------------");
-        String formato = "| %-5s | %-30s | %-15s | %-12s | %-13s |%n";
-        System.out.printf(formato, "COD", "NOME", "CPF", "NASC.", "SALARIO");
-        System.out
-            .println("------------------------------------------------------------------------------------------");
+        if (resultado != null) {
+          System.out
+              .println("------------------------------------------------------------------------------------------");
+          String formato = "| %-5s | %-30s | %-15s | %-12s | %-13s |%n";
+          System.out.printf(formato, "COD", "NOME", "CPF", "NASC.", "SALARIO");
+          System.out
+              .println("------------------------------------------------------------------------------------------");
 
-        /*
-         * Imprime os dados após a busca utilizando o select armazenado na variavel
-         * resultado.
-         */
-        while (resultado.next()) {
+          /*
+           * Imprime os dados após a busca utilizando o select armazenado na variavel
+           * resultado.
+           */
+          while (resultado.next()) {
 
-          System.out.printf("| %-5d | %-30s | %-15s | %-12s | R$ %-10.2f |%n",
-              resultado.getInt("id_funcionario"),
-              resultado.getString("nome"),
-              resultado.getString("cpf"),
-              resultado.getString("data_nascimento"),
-              resultado.getDouble("salario_bruto"));
+            System.out.printf("| %-5d | %-30s | %-15s | %-12s | R$ %-10.2f |%n",
+                resultado.getInt("id_funcionario"),
+                resultado.getString("nome"),
+                resultado.getString("cpf"),
+                resultado.getString("data_nascimento"),
+                resultado.getDouble("salario_bruto"));
+          }
+
+          System.out
+              .println("------------------------------------------------------------------------------------------");
+        } else {
+          customLogger.logWarning("Tabela FUNCIONARIO vazio!");
         }
-
-        System.out
-            .println("------------------------------------------------------------------------------------------");
       }
 
       // stmt.executeUpdate(); // -> Comando apenas para deleted, update e insert;
