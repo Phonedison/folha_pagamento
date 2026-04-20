@@ -126,6 +126,7 @@ public class Menus {
                                               // identificar qual menu acessar
         case 5 -> menu_modelDAO("FOLHA DE PAGAMENTO");
         case 0 -> customLogger.logFinal("SERVIÇO FINALIZADO!");
+
         default -> System.out.println("Número inválido!");
       }
     } while (opcao != 0);
