@@ -228,7 +228,7 @@ java Main
 
 # 👥 Grupo
 
-|                                  Integrantes                                   | GitHub                                                       |                                            Função                                            |
+|                                  Integrantes                                   | GitHub                                                       |
 | :----------------------------------------------------------------------------: | :----------------------------------------------------------- | :------------------------------------------------------------------------------------------: |
 | <img src="https://avatars.githubusercontent.com/u/242983951?v=4" width="100"/> | [João Pedro Carneiro Motta](https://github.com/joaopedrobr3) |                         CONSTRUTOR DO CALCULO DA FOLHA DE PAGAMENTO                          |
 | <img src="https://avatars.githubusercontent.com/u/266845673?v=4" width="100"/> | [Kenny](https://github.com/kennypavelka)                     | E DANDO DICAS <img src="https://i.ytimg.com/vi/URvro2UkQzY/maxresdefault.jpg"  width="200"/> |
