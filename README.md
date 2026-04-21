@@ -2,6 +2,8 @@
 
 Este projeto é o trabalho final da disciplina de **Programação Orientada a Objetos** do Serratec. O objetivo é desenvolver um **sistema de gestão de folha de pagamento**, para o cálculo de salário líquido, aplicando conceitos e persistência de dados.
 
+<img align="right" src="https://media.tenor.com/R8L_lcmmYdQAAAAM/surfsup-tadandoonda.gif" width="500" />
+
 ## 🚀 Sobre o projeto
 
 A aplicação permite o gerenciamento completo de:
@@ -76,6 +78,8 @@ O sistema também realiza integração com:
 ---
 
 ### 🛠️ Tecnologias e Conceitos Aplicados
+
+<img src="https://media.tenor.com/Jdm1hN5rbDwAAAAM/jo%C3%A3o-frango.gif" align="right"/>
 
 #### 💻 Linguagem
 
@@ -228,11 +232,15 @@ java Main
 
 # 👥 Grupo
 
-|                                  Integrantes                                   | GitHub                                                       |
-| :----------------------------------------------------------------------------: | :----------------------------------------------------------- | :------------------------------------------------------------------------------------------: |
-| <img src="https://avatars.githubusercontent.com/u/242983951?v=4" width="100"/> | [João Pedro Carneiro Motta](https://github.com/joaopedrobr3) |                         CONSTRUTOR DO CALCULO DA FOLHA DE PAGAMENTO                          |
-| <img src="https://avatars.githubusercontent.com/u/266845673?v=4" width="100"/> | [Kenny](https://github.com/kennypavelka)                     | E DANDO DICAS <img src="https://i.ytimg.com/vi/URvro2UkQzY/maxresdefault.jpg"  width="200"/> |
-|  <img src="https://avatars.githubusercontent.com/u/7592603?v=4" width="100"/>  | [Lucas Leal da Silva](https://github.com/Phonedison)         |                                     CONSTRUTOR DAS DAOS                                      |
-| <img src="https://avatars.githubusercontent.com/u/267740773?v=4" width="100"/> | [Paulo Cesar Neto](https://github.com/paulocesar-neto)       |                                 CRIADOR DO CONCEITO DO MENU                                  |
-| <img src="https://avatars.githubusercontent.com/u/267657658?v=4" width="100"/> | [Vinicius de Souza Lamas](https://github.com/vLamass)        |                                      TESTADOR DO CÓDIGO                                      |
-| <img src="https://avatars.githubusercontent.com/u/267758048?v=4" width="100"/> | [Vitor Ribeiro](https://github.com/vitorribeiro77)           |                                CONSTRUTOR E CONSELHEIRO DO DB                                |
+|                                  Integrantes                                   | GitHub                                                       |                                             |
+| :----------------------------------------------------------------------------: | :----------------------------------------------------------- | :-----------------------------------------: |
+| <img src="https://avatars.githubusercontent.com/u/242983951?v=4" width="100"/> | [João Pedro Carneiro Motta](https://github.com/joaopedrobr3) | CONSTRUTOR DO CALCULO DA FOLHA DE PAGAMENTO |
+| <img src="https://avatars.githubusercontent.com/u/266845673?v=4" width="100"/> | [Kenny](https://github.com/kennypavelka)                     |                                             |
+|  <img src="https://avatars.githubusercontent.com/u/7592603?v=4" width="100"/>  | [Lucas Leal da Silva](https://github.com/Phonedison)         |                E DANDO DICAS                |
+| <img src="https://avatars.githubusercontent.com/u/267740773?v=4" width="100"/> | [Paulo Cesar Neto](https://github.com/paulocesar-neto)       |                                             |
+| <img src="https://avatars.githubusercontent.com/u/267657658?v=4" width="100"/> | [Vinicius de Souza Lamas](https://github.com/vLamass)        |                                             |
+| <img src="https://avatars.githubusercontent.com/u/267758048?v=4" width="100"/> | [Vitor Ribeiro](https://github.com/vitorribeiro77)           |                                             |
+
+---
+
+<img align="left" src="https://i.makeagif.com/media/4-07-2021/tsQQAc.gif"/>

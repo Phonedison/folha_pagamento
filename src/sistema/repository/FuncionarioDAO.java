@@ -165,7 +165,7 @@ public class FuncionarioDAO implements CriacaoTabela {
       }
 
       try (ResultSet resultado = stmt.executeQuery()) {
-        if (resultado != null) {
+        if (resultado.next()) {
           System.out
               .println("------------------------------------------------------------------------------------------");
           String formato = "| %-5s | %-30s | %-15s | %-12s | %-13s |%n";

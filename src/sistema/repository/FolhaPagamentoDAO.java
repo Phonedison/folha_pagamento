@@ -141,7 +141,7 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
         }
       }
       try (ResultSet resultado = stmt.executeQuery()) {
-        if (resultado != null) {
+        if (resultado.next()) {
           System.out
               .println("---------------------------------------------------------------------------------------------");
           String formato = "| %-7s | %-14s | %-13s | %-11s | %-15s | %-14s |%n";

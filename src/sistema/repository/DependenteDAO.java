@@ -195,7 +195,7 @@ public class DependenteDAO implements CriacaoTabela {
       }
 
       try (ResultSet resultado = stmt.executeQuery()) {
-        if (resultado != null) {
+        if (resultado.next()) {
           System.out
               .println(
                   "--------------------------------------------------------------------------------------------------");
