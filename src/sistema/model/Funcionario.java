@@ -11,6 +11,7 @@ public class Funcionario extends Pessoa {
   // private double descontoInss;
   // private double descontoIR;
   private Set<Dependente> dependentes = new HashSet<>();
+
   /*
    * 
    * Set <tipo da lista> -> Declarando uma lista chamado que não pode ter valor de

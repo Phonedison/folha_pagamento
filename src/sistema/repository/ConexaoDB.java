@@ -24,10 +24,9 @@ public class ConexaoDB {
 
   public Connection conectarDB() throws SQLException {
     try {
-      // Carregando o driver do banco de dados.
+
       Class.forName("org.postgresql.Driver");
 
-      // Executa a conexão com o banco de dados.
       return conectar();
 
     } catch (ClassNotFoundException error) {
@@ -39,16 +38,12 @@ public class ConexaoDB {
     }
   }
 
-  // método para gerar o caminho da conexão
   public void gerarConexao() {
     this.stringConexao = "jdbc:postgresql://localhost:" + this.porta + "/" + this.meuDb;
   }
 
-  // método do tipo Connection que retorna a conexão
   private Connection conectar() throws SQLException {
 
-    // Cria a conexao com o DB utilizando os parametros stringConexao, usuario e
-    // senha
     return DriverManager.getConnection(this.stringConexao, this.usuario, this.senha);
   }
 

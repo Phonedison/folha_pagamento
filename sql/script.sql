@@ -1,7 +1,7 @@
 -- CREATE database folha_pagamento
 -- create schema pagamentos
 CREATE TYPE parentesco AS enum('FILHO', 'SOBRINHO', 'OUTROS');
-
+--criação da tabela funcionario.
 CREATE TABLE funcionario (
 
 id_funcionario SERIAL PRIMARY KEY,
@@ -10,7 +10,7 @@ cpf VARCHAR(14) UNIQUE NOT NULL,
 data_nascimento DATE NOT NULL,
 salario_bruto NUMERIC(15,2) NOT NULL
 );
-
+-- criação da tabela dependente.
 CREATE TABLE dependente (
 
 id_dependente SERIAL PRIMARY KEY,
@@ -20,7 +20,7 @@ data_nascimento DATE NOT NULL,
 parentesco parentesco NOT NULL,
 id_funcionario INT REFERENCES funcionario(id_funcionario) NOT NULL
 );
-
+--criação da tabela folha_pagamento.
 CREATE TABLE folha_pagamento (
 
 codigo SERIAL PRIMARY KEY,

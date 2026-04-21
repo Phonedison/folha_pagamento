@@ -11,8 +11,6 @@ public class FolhaPagamento {
     private double descontoIR;
     private double salarioLiquido;
 
-    /* CONSUTRUTOR */
-
     public FolhaPagamento() {
 
     }

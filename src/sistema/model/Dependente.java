@@ -40,6 +40,7 @@ public class Dependente extends Pessoa {
       case "FILHO" -> setParentesco(Parentesco.FILHO);
       case "SOBRINHO" -> setParentesco(Parentesco.SOBRINHO);
       case "OUTROS" -> setParentesco(Parentesco.OUTROS);
+
       default -> System.out.println("ERRO");
 
     }
