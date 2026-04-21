@@ -18,7 +18,7 @@ public class Menus {
   CustomLogger customLogger = new CustomLogger();
 
   private final Scanner sc = new Scanner(System.in);
-
+  // Objeto de conexão com o banco de dados
   private ConexaoDB conexao;
 
   /*Chama o método menu opções*/

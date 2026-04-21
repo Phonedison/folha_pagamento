@@ -89,11 +89,14 @@ public class DependenteDAO implements CriacaoTabela {
       case 5 -> parteSQL = "id_funcionario = ?";
       default -> throw new AssertionError("Opção inválida! -> parteSQL");
     }
-
+    // Monta o comando SQL de UPDATE dinamicamente,
+    // substituindo apenas o campo escolhido (parteSQL)
     String comandoSQL = "UPDATE dependente SET " + parteSQL + " WHERE id_dependente = ?";
 
     try (
+         // Abre conexão com o banco
         Connection con = conexao.conectarDB();
+         // Prepara o comando SQL para execução
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
 
       // Define o valor do campo que será atualizado
@@ -125,10 +128,14 @@ public class DependenteDAO implements CriacaoTabela {
     String comandoSQL = "DELETE FROM dependente WHERE id_dependente = ?";
 
     try (
+        // Conexão com banco
         Connection con = conexao.conectarDB();
+        // Prepara SQL
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
 
+      // Define o ID que será deletado
       stmt.setObject(1, id_dependente);
+      // Executa o DELETE e retorna quantidade de linhas afetadas
       int linhas = stmt.executeUpdate();
 
       // Se deletou pelo menos 1 linha → sucesso
@@ -203,9 +210,11 @@ public class DependenteDAO implements CriacaoTabela {
           case 4 -> stmt.setInt(1, dependente.getFuncionario());
         }
       }
-
+      // Executa a consulta
       try (ResultSet resultado = stmt.executeQuery()) {
+        // Se resultado não for nulo
         if (resultado != null) {
+          // Cabeçalho da tabela no console
           System.out
               .println(
                   "--------------------------------------------------------------------------------------------------");
@@ -216,7 +225,7 @@ public class DependenteDAO implements CriacaoTabela {
                   "--------------------------------------------------------------------------------------------------");
 
           while (resultado.next()) {
-
+            // Imprime os dados formatados
             System.out.printf(formato,
                 resultado.getInt("id_dependente"),
                 resultado.getString("nome"),
@@ -230,6 +239,7 @@ public class DependenteDAO implements CriacaoTabela {
               .println(
                   "--------------------------------------------------------------------------------------------------");
         } else {
+          // Caso não haja dados
           customLogger.logWarning("Tabela DEPENDENTE vazio!");
         }
       }

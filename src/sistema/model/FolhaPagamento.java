@@ -3,11 +3,15 @@ package sistema.model;
 import java.time.LocalDate;
 
 public class FolhaPagamento {
-
+    // Código único da folha (chave primária no banco)
     private int codigo;
+    // Funcionário associado à folha
     private Funcionario funcionario;
+    // Data em que o pagamento foi realizado
     private LocalDate dataPagamento;
+    // Valor do desconto do INSS
     private double descontoInss;
+    // Valor do desconto do Imposto de Renda
     private double descontoIR;
     private double salarioLiquido;
 
@@ -16,7 +20,7 @@ public class FolhaPagamento {
     public FolhaPagamento() {
 
     }
-
+    /* CONSTRUTOR COMPLETO */
     public FolhaPagamento(int codigo, Funcionario funcionario, LocalDate dataPagamento, double descontoInss,
             double descontoIR, double salarioLiquido) {
         this.codigo = codigo;

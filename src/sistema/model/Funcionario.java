@@ -3,13 +3,18 @@ package sistema.model;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-
+// Classe Funcionario herda de Pessoa (herança)
+// Ou seja, já possui: nome, cpf e dataNascimento
 public class Funcionario extends Pessoa {
-
+  // ID único do funcionário (chave primária no banco)
   private int id_funcionario;
+  // Salário bruto do funcionário
   private double salarioBruto;
   // private double descontoInss;
   // private double descontoIR;
+
+  // Conjunto de dependentes do funcionário
+  // Set não permite elementos duplicados
   private Set<Dependente> dependentes = new HashSet<>();
   /*
    * 
@@ -20,11 +25,11 @@ public class Funcionario extends Pessoa {
    * do 'FUNCIONARIO'
    * 
    */
-
+  // Construtor padrão (vazio)
   public Funcionario() {
     super();
   }
-
+  // Construtor com parâmetros
   public Funcionario(String nome, String cpf, LocalDate dataNacimento, double salarioBruto,
       Set<Dependente> dependentes) {
     super(nome, cpf, dataNacimento);

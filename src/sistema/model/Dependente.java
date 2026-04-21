@@ -4,20 +4,24 @@ import java.time.LocalDate;
 import java.time.Period;
 import sistema.enums.Parentesco;
 import sistema.exception.DependenteException;
-
+// Classe Dependente herda de Pessoa (nome, cpf, dataNascimento)
 public class Dependente extends Pessoa {
-
+  // Guarda o ID do funcionário responsável por esse dependente
   private Integer funcionario;
+  // Enum que representa o tipo de parentesco
   private Parentesco parentesco;
+  // ID único do dependente, chave primária no banco
   private Integer id_dependente;
-
+  // Construtor padrão
   public Dependente() {
     super();
   }
-
+  // Construtor com parâmetros
   public Dependente(String nome, String cpf, LocalDate dataNascimento, Funcionario funcionario, Parentesco parentesco) {
     super(nome, cpf, dataNascimento);
+    // Armazena apenas o ID do funcionário (e não o objeto inteiro)
     this.funcionario = funcionario.getId_funcionario();
+    // Define o parentesco
     this.parentesco = parentesco;
   }
 

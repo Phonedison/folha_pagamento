@@ -3,14 +3,14 @@ package sistema.model;
 import java.time.LocalDate;
 
 public abstract class Pessoa {
-
+  // Atributos protegidos → acessíveis pelas classes filhas
   protected String nome;
   protected String cpf;
   protected LocalDate dataNascimento;
-
+  // Construtor padrão (vazio)
   public Pessoa() {
   }
-
+  // Construtor com parâmetros
   public Pessoa(String nome, String cpf, LocalDate dataNascimento) {
     this.nome = nome;
     this.cpf = cpf;

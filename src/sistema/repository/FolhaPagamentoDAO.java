@@ -6,12 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import sistema.app.menu.CustomLogger;
 import sistema.model.FolhaPagamento;
-
+// Classe responsável por acessar e manipular dados da tabela folha_pagamento no banco
 public class FolhaPagamentoDAO implements CriacaoTabela {
+  // Logger personalizado para registrar mensagens (erro, sucesso, aviso)
   CustomLogger customLogger = new CustomLogger();
-
+  // Objeto responsável pela conexão com o banco
   private final ConexaoDB conexao;
-
+  // Construtor que recebe a conexão
   public FolhaPagamentoDAO(ConexaoDB conexao) {
     this.conexao = conexao;
   }
@@ -32,8 +33,11 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
         + " );";
 
     try (
+        // Abre conexão
         Connection con = conexao.conectarDB();
+        // Prepara SQL
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
+      // Executa criação da tabela
       stmt.execute();
 
     } catch (Exception error) {
@@ -59,14 +63,16 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
       stmt.setObject(3, folhaPagamento.getDescontoIR());
       stmt.setObject(4, folhaPagamento.getSalarioLiquido());
       stmt.setObject(5, folhaPagamento.getFuncionario().getId_funcionario());
-
+      // Executa inserção
       stmt.executeUpdate();
+      // Log de sucesso
       customLogger
           .logFolhaSucess(
               "Folha de pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario()
                   + " " + folhaPagamento.getFuncionario().getNome() + "' Registrado!");
 
     } catch (Exception error) {
+      // Log de erro
       customLogger.logError("Erro na inserção da folha de pagamento do(a) funcionário(a) '"
           + folhaPagamento.getFuncionario().getId_funcionario() + " " + folhaPagamento.getFuncionario().getNome()
           + "' !");
@@ -107,10 +113,11 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
 
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
-
+      // Log de sucesso
       customLogger.logFolhaSucess(
           "Folha de Pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario() + " "
               + folhaPagamento.getFuncionario().getNome() + "' atualizado!");
+      // Executa atualização
       stmt.executeUpdate();
 
     } catch (SQLException error) {
@@ -152,8 +159,10 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
           case 3 -> stmt.setObject(1, folhaPagamento.getFuncionario().getId_funcionario());
         }
       }
+      // Executa consulta
       try (ResultSet resultado = stmt.executeQuery()) {
         if (resultado != null) {
+          // Cabeçalho da tabela
           System.out
               .println("---------------------------------------------------------------------------------------------");
           String formato = "| %-7s | %-14s | %-13s | %-11s | %-15s | %-14s |%n";
@@ -161,7 +170,7 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
 
           System.out
               .println("---------------------------------------------------------------------------------------------");
-
+          // Percorre resultados
           while (resultado.next()) {
 
             System.out.printf("| %-7d | %-14s | R$ %-10.2f | R$ %-8.2f | R$ %-12.2f | %-14d |%n",
@@ -175,6 +184,7 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
           System.out
               .println("---------------------------------------------------------------------------------------------");
         } else {
+          // Caso não tenha dados
           customLogger.logWarning("Tabela FOLHA PAGAMENTO vazio!");
         }
 

@@ -26,47 +26,47 @@ public class CustomLogger {
   public static final String BG_ROXO = "\u001B[45m";
   public static final String BG_CIANO = "\u001B[46m";
 
-  /*Mensagens customizadas e cores personalizadas*/
+  // Log de erro
   public void logError(String message) {
     System.out.println(BG_VERMELHO + BOLD + " " + LocalDateTime.now() + " ERROR - " + message + " " + RESET + " ");
   }
-
+  // Log de aviso
   public void logWarning(String message) {
     System.out.println(AMARELO + BOLD + " " + LocalDateTime.now() + " WARNING - " + message + " " + RESET + " ");
   }
-
+  // Log de sucesso
   public void logSucess(String message) {
     System.out.println(VERDE + BOLD + " " + LocalDate.now() + " SUCESS - " + message + " " + RESET + " ");
   }
-
+  // Log de sucesso na conexão
   public void logConectionSucess(String message) {
     System.out.println(BG_CIANO + BOLD + " " + LocalDateTime.now() + " CONEXAO - " + message + " " + RESET + " ");
   }
-
+  //Log de erro na conexão
   public void logConectionError(String message) {
     System.out.println(BG_AMARELO + BOLD + " " + LocalDateTime.now() + " CONEXAO - " + message + " " + RESET + " ");
   }
-
+  // Log final
   public void logFinal(String message) {
     System.out.println(BG_ROXO + ITALIC + " " + LocalDateTime.now() + " FINAL - " + message + " " + RESET + " ");
   }
-
+  // Log específico para folha de pagamento
   public void logFolhaSucess(String message) {
     System.out.println(CIANO + ITALIC + " " + LocalDate.now() + " " + message + " " + RESET + " ");
   }
-
+  // Log de sucesso para funcionário
   public void logFuncionarioSucess(String message) {
     System.out.println(VERDE + ITALIC + " " + LocalDate.now() + " " + message + " " + RESET + " ");
   }
-
+  // Log de erro para funcionário
   public void logFuncionarioError(String message) {
     System.out.println(VERMELHO + ITALIC + " " + LocalDate.now() + " " + message + " " + RESET + " ");
   }
-
+  // Log de erro para dependente
   public void logDependenteError(String message) {
     System.out.println(VERMELHO + ITALIC + " " + LocalDate.now() + " " + message + " " + RESET + " ");
   }
-
+  // Log de sucesso para dependente
   public void logDependenteSucess(String message) {
     System.out.println(AMARELO + ITALIC + " " + LocalDate.now() + " " + message + " " + RESET + " ");
   }

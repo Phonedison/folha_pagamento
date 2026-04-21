@@ -8,16 +8,17 @@ import java.sql.Statement;
 import sistema.app.menu.CustomLogger;
 import sistema.exception.CpfDuplicado;
 import sistema.model.Funcionario;
-
+// Classe DAO responsável por acessar e manipular a tabela "funcionario"
 public class FuncionarioDAO implements CriacaoTabela {
-
+  // Logger personalizado para mensagens
   CustomLogger customLogger = new CustomLogger();
+  // Conexão com o banco
   private final ConexaoDB conexao;
-
+  // Construtor que recebe a conexão
   public FuncionarioDAO(ConexaoDB conexao) {
     this.conexao = conexao;
   }
-
+  // Método sobrescrito da interface para criar tabela
   @Override
   public void criarTabela() {
     // String com comando SQL para criar a tabela "funcionario" caso ela não exista
@@ -29,6 +30,7 @@ public class FuncionarioDAO implements CriacaoTabela {
         + " salario_bruto NUMERIC(15,2) NOT NULL" // Corrigido para NUMERIC
         + " );";
     try (
+        // Abre conexão
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
 
@@ -50,14 +52,16 @@ public class FuncionarioDAO implements CriacaoTabela {
     try (
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL, Statement.RETURN_GENERATED_KEYS);) {
+      // Define os valores dos parâmetros
       stmt.setObject(1, funcionario.getNome());
       stmt.setObject(2, funcionario.getCpf());
       stmt.setObject(3, funcionario.getDataNacimento());
       stmt.setObject(4, funcionario.getSalarioBruto());
+      // Executa INSERT
       stmt.executeUpdate();
 
       customLogger.logSucess("Funcionário '" + funcionario.getNome() + "' Cadastrado com sucesso!");
-
+      // Recupera o ID gerado automaticamente
       try (ResultSet rs = stmt.getGeneratedKeys()) {
         if (rs.next()) {
           funcionario.setId_funcionario((rs.getInt(1))); // setar para 0 com o intuito
@@ -84,7 +88,7 @@ public class FuncionarioDAO implements CriacaoTabela {
       default -> throw new AssertionError("Opção inválida! -> parteSQL");
     }
 
-
+    // Monta comando SQL de UPDATE dinâmico com parteSQL como parâmetro
     String comandoSQL = "UPDATE funcionario SET " + parteSQL + " WHERE id_funcionario = ?; ";
 
     try (
@@ -158,6 +162,7 @@ public class FuncionarioDAO implements CriacaoTabela {
         case 4 -> parametroSQL = "salario_bruto"; // data nascimento
         default -> throw new AssertionError("Opção inválida! -> opcaoSQL");
       }
+      // Monta comando SQL dinâmico com base no parâmetro escolhido no menu
       comandoSQL = "SELECT * FROM funcionario WHERE" + parametroSQL + " " + condicao
           + " ? ORDER BY id_funcionario DESC;";
       /* selecionarFuncionario ( funcionario, 2, "") */
@@ -166,7 +171,7 @@ public class FuncionarioDAO implements CriacaoTabela {
     try (
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
-
+      // Define parâmetro do filtro
       if (opcao != 0) {
         switch (opcao) {
 
@@ -177,9 +182,10 @@ public class FuncionarioDAO implements CriacaoTabela {
 
         }
       }
-
+      // Executa consulta
       try (ResultSet resultado = stmt.executeQuery()) {
         if (resultado != null) {
+          // Cabeçalho
           System.out
               .println("------------------------------------------------------------------------------------------");
           String formato = "| %-5s | %-30s | %-15s | %-12s | %-13s |%n";
