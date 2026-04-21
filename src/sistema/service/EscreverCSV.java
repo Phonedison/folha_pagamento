@@ -24,7 +24,7 @@ public class EscreverCSV {
   public void escreverFolhaPagamentoCSV(String caminho) {
     String nomeArquivo = "folha_de_pagamento_" + LocalDate.now() + ".csv";
     String caminhoExportacao = caminho + File.separator + nomeArquivo;
-    // SQL que busca dados de funcionário e folha de pagamento.
+    
     String comandoSQL = """
         SELECT f.nome,
                f.cpf,
@@ -36,7 +36,7 @@ public class EscreverCSV {
           ON f.id_funcionario = fp.id_funcionario
         ORDER BY fp.codigo DESC
         """;
-    // Abre conexão com banco
+    
     try (Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);
         ResultSet rs = stmt.executeQuery();
@@ -52,17 +52,17 @@ public class EscreverCSV {
                 rs.getDouble("salario_liquido"));
         bw.newLine();
       }
-      // Log de sucesso ao finalizar exportação.
+      
       customLogger.logSucess("Arquivo gerado em: " + caminhoExportacao);
 
     } catch (Exception e) {
-      // Log de erro caso algo falhe.
+     
       customLogger.logError("Erro ao exportar FOLHA DE PAGAMENTO!");
       throw new RuntimeException(e.getMessage());
     }
   }
 
-  // Exporta lista de funcionários para CSV.
+  
   public void escreverFuncionarioCSV(String caminho) {
     String nomeArquivo = "Lista_de_funcionario_" + LocalDate.now() + ".csv";
     String caminhoExportacao = caminho + File.separator + nomeArquivo;
@@ -96,7 +96,7 @@ public class EscreverCSV {
     }
   }
 
-  // Exporta quantidade de dependentes por funcionário.
+  /
   public void escreverDependenteCSV(String caminho) {
     String nomeArquivo = "Lista_de_dependente_" + LocalDate.now() + ".csv";
     String caminhoExportacao = caminho + File.separator + nomeArquivo;
@@ -120,11 +120,11 @@ public class EscreverCSV {
                 rs.getInt("id_funcionario"));
         bw.newLine();
       }
-      // Log sucesso
+     
       customLogger.logSucess("Arquivo gerado em: " + caminhoExportacao);
 
     } catch (Exception e) {
-      // Log erro
+      
       customLogger.logError("Erro ao exportar DEPENDENTE!");
       throw new RuntimeException(e.getMessage());
     }

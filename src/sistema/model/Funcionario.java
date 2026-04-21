@@ -21,11 +21,12 @@ public class Funcionario extends Pessoa {
    * do 'FUNCIONARIO'
    * 
    */
-
+  // Construtor Vazio.
   public Funcionario() {
     super();
   }
 
+  // Construtor com Parametros.
   public Funcionario(String nome, String cpf, LocalDate dataNacimento, double salarioBruto,
       Set<Dependente> dependentes) {
     super(nome, cpf, dataNacimento);

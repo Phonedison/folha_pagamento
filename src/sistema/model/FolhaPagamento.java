@@ -3,7 +3,7 @@ package sistema.model;
 import java.time.LocalDate;
 
 public class FolhaPagamento {
-
+    // Criação de Variaveis.
     private int codigo;
     private Funcionario funcionario;
     private LocalDate dataPagamento;
@@ -11,10 +11,12 @@ public class FolhaPagamento {
     private double descontoIR;
     private double salarioLiquido;
 
+    // Construtor Vazio
     public FolhaPagamento() {
 
     }
 
+    // Construtor com parametros.
     public FolhaPagamento(int codigo, Funcionario funcionario, LocalDate dataPagamento, double descontoInss,
             double descontoIR, double salarioLiquido) {
         this.codigo = codigo;
@@ -95,34 +97,37 @@ public class FolhaPagamento {
         }
     }
 
+    // Calcula a base de cálculo do Imposto de Renda.
     public void calcularIR() {
         double base = funcionario.getSalarioBruto()
                 - this.descontoInss
                 - (funcionario.getDependentes().size() * 189.59);
-
+        // Se a base for menor ou igual a 2259, não há desconto de IR.
         if (base <= 2259.00) {
             this.descontoIR = 0;
-
+            // Aplica 7,5%.
         } else if (base <= 2826.65) {
             this.descontoIR = (base * 0.075) - 169.44;
-
+            // Aplica 15%.
         } else if (base <= 3751.05) {
             this.descontoIR = (base * 0.15) - 381.44;
-
+            // Aplica 22,5%.
         } else if (base <= 4664.68) {
             this.descontoIR = (base * 0.225) - 662.77;
-
+            // Aplica 27,5%.
         } else {
             this.descontoIR = (base * 0.275) - 896.00;
         }
     }
 
+    // Calcula o salário líquido do funcionário.
     public void calcularSalarioLiquido() {
         this.salarioLiquido = funcionario.getSalarioBruto()
                 - this.descontoInss
                 - this.descontoIR;
     }
 
+    // Define o funcionário atual para este objeto.
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
     }
