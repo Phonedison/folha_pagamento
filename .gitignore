@@ -12,3 +12,4 @@ bin/
 # Arquivos de sistema e temporários
 thumbs.db
 .DS_Store
+lib/
