@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InicializarDB {
+  //Método para inicializar conexão com banco de dados
   public static void inicializar(ConexaoDB conexao) {
     try (Connection con = conexao.conectarDB()) {
 

@@ -26,6 +26,7 @@ public class CustomLogger {
   public static final String BG_ROXO = "\u001B[45m";
   public static final String BG_CIANO = "\u001B[46m";
 
+  /*Mensagens customizadas e cores personalizadas*/
   public void logError(String message) {
     System.out.println(BG_VERMELHO + BOLD + " " + LocalDateTime.now() + " ERROR - " + message + " " + RESET + " ");
   }

@@ -76,9 +76,11 @@ public class DependenteDAO implements CriacaoTabela {
   }
 
   // UPDATE
+  // Método para atualizar dados de um dependente
   public void atualizarDependente(Dependente dependente, int opcao, int id_dependente) {
     String parteSQL;
 
+    // Define qual campo será atualizado com base na opção escolhida
     switch (opcao) {
       case 1 -> parteSQL = "nome = ?";
       case 2 -> parteSQL = "cpf = ?";
@@ -94,6 +96,7 @@ public class DependenteDAO implements CriacaoTabela {
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
 
+      // Define o valor do campo que será atualizado
       switch (opcao) {
         case 1 -> stmt.setObject(1, dependente.getNome());
         case 2 -> stmt.setObject(1, dependente.getCpf());
@@ -104,7 +107,9 @@ public class DependenteDAO implements CriacaoTabela {
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
 
+      // Define o ID do dependente que será atualizado
       stmt.setObject(2, id_dependente);
+      // Executa o UPDATE
       stmt.executeUpdate();
 
     } catch (Exception error) {
@@ -114,7 +119,9 @@ public class DependenteDAO implements CriacaoTabela {
   }
 
   // DELETE
+  // Método para excluir um dependente pelo ID
   public void excluirDependente(int id_dependente) {
+    // Comando SQL de exclusão
     String comandoSQL = "DELETE FROM dependente WHERE id_dependente = ?";
 
     try (
@@ -124,6 +131,7 @@ public class DependenteDAO implements CriacaoTabela {
       stmt.setObject(1, id_dependente);
       int linhas = stmt.executeUpdate();
 
+      // Se deletou pelo menos 1 linha → sucesso
       if (linhas > 0) {
         customLogger.logSucess("Dependente removido!");
       } else {
@@ -137,6 +145,7 @@ public class DependenteDAO implements CriacaoTabela {
   }
 
   // SELECT
+  // Método para buscar dependentes com ou sem filtro
   public void selecionarDependente(Dependente dependente, int opcao, String condicao) {
 
     String comandoSQL;
@@ -158,6 +167,7 @@ public class DependenteDAO implements CriacaoTabela {
 
       String parametroSQL;
 
+      // Define qual campo será usado no filtro
       switch (opcao) {
         case 1 -> parametroSQL = "nome";
         case 2 -> parametroSQL = "cpf";

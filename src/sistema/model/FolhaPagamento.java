@@ -77,6 +77,7 @@ public class FolhaPagamento {
         this.salarioLiquido = salarioLiquido;
     }
 
+    //Calculo do desconto do INSS
     public void calcularINSS() {
         double salario = funcionario.getSalarioBruto();
         double teto = 8157.41;
@@ -97,6 +98,7 @@ public class FolhaPagamento {
         }
     }
 
+    //Calculo de desconto do Imposto de Renda
     public void calcularIR() {
         double base = funcionario.getSalarioBruto()
                 - this.descontoInss
@@ -119,6 +121,7 @@ public class FolhaPagamento {
         }
     }
 
+    //Calculo do salário líquido
     public void calcularSalarioLiquido() {
         this.salarioLiquido = funcionario.getSalarioBruto()
                 - this.descontoInss

@@ -38,6 +38,8 @@ public abstract class Pessoa {
   public void setCpf(String cpf) {
     String cpfClean = cpf.replaceAll("\\D", "");
 
+    // Verifica se o CPF possui exatamente 11 dígitos
+    // Caso não tenha, lança uma exceção indicando que o CPF é inválido
     if (cpfClean.length() != 11) {
       throw new IllegalArgumentException("CPF inválido");
     }

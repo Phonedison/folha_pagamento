@@ -33,6 +33,7 @@ public class Dependente extends Pessoa {
     this.parentesco = parente;
   }
 
+  //Método de menu para escolha de parentesco de dependente
   public void escolherParentesco(String opcao) {
 
     switch (opcao) {
@@ -45,6 +46,7 @@ public class Dependente extends Pessoa {
     }
   }
 
+  //Método para definir parentesco
   public void escolherParentesco(int opcao) {
 
     switch (opcao) {
@@ -65,6 +67,7 @@ public class Dependente extends Pessoa {
     this.funcionario = funcionario;
   }
 
+  //Método de validação do dependente pela idade
   public void validarDependente() throws DependenteException {
     int idade = Period.between(getDataNacimento(), LocalDate.now()).getYears();
     if (idade > 18) {

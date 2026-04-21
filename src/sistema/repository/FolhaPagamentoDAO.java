@@ -16,9 +16,12 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
     this.conexao = conexao;
   }
 
+  // Sobrescreve método da interface CriacaoTabela
   @Override
+  // Método que cria a tabela no banco
   public final void criarTabela() { // -> Comando para executar a criação da tabela
 
+    // Comando SQL para criar a tabela folha_pagamento se ela não existir
     String comandoSQL = "CREATE TABLE IF NOT EXISTS folha_pagamento ( "
         + " codigo SERIAL PRIMARY KEY,"
         + " data_pagamento DATE NOT NULL,"
@@ -41,12 +44,15 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
   }
 
   // INSET INTO
+  // Método para inserir uma nova folha de pagamento
   public void salvarFolha(FolhaPagamento folhaPagamento) {
+    // Comando SQL de inserção com parâmetros
     String comandoSQL = "INSERT INTO folha_pagamento (data_pagamento, desconto_inss, desconto_ir, salario_liquido, id_funcionario) VALUES (?, ?, ?, ?, ?);";
 
     try (
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
+      // Define os valores dos parâmetros
       stmt.setObject(1, folhaPagamento.getDataPagamento());
       // -> checar com o professor se o melhor é setObject ou setDate
       stmt.setObject(2, folhaPagamento.getDescontoInss());
@@ -70,9 +76,11 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
   }
 
   // UPDATE
+  // Método para atualizar dados da folha de pagamento
   public void atualizarFolha(FolhaPagamento folhaPagamento, int opcao) {
     String parteSQL;
 
+    // Define qual campo será atualizado
     switch (opcao) {
       case 1 -> parteSQL = " data_pagamento = ? ";
       case 2 -> parteSQL = " desconto_inss = ? ";
@@ -82,13 +90,14 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
 
       default -> throw new AssertionError("Opção inválida! -> parteSQL");
     }
-
+    // Monta SQL de UPDATE
     String comandoSQL = "UPDATE folha_pagamento SET" + parteSQL + " WHERE codigo = ?";
 
     try (
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
 
+      // Define valor do campo conforme opção
       switch (opcao) {
         case 1 -> stmt.setObject(1, folhaPagamento.getDataPagamento());
         case 2 -> stmt.setObject(1, folhaPagamento.getDescontoInss());
@@ -111,13 +120,16 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
   }
 
   // SELECT
+  // Método para buscar dados da folha de pagamento
   public void selecionarFolha(FolhaPagamento folhaPagamento, int opcao, String condicao) {
 
     String comandoSQL;
+    // Se opcao = 0, busca tudo
     if (opcao == 0) {
       comandoSQL = "SELECT * FROM folha_pagamento ORDER BY codigo DESC";
     } else {
       String parametroSQL;
+      // Define campo de filtro
       switch (opcao) {
         case 0 -> parametroSQL = "";
         case 1 -> parametroSQL = "codigo";

@@ -11,16 +11,22 @@ import sistema.model.*;
 import sistema.repository.*;
 import sistema.service.CsvService;
 
+/* Parte respnsável pela interação com usuário*/
 public class Menus {
+
+  /* Serve para customizar as mensagens exibidas pro usuário*/
   CustomLogger customLogger = new CustomLogger();
 
   private final Scanner sc = new Scanner(System.in);
+
   private ConexaoDB conexao;
 
+  /*Chama o método menu opções*/
   public void execute() {
     menu_opcoes();
   }
 
+  /* Método para fazer conexão com o banco de dados com as informações providas pelo usuário*/
   public ConexaoDB conexao_db() {
 
     String nomeDB;
@@ -46,6 +52,7 @@ public class Menus {
       System.out.print("Senha : ");
       senha = sc.nextLine();
 
+      /* Verificação de dados vazios*/
       if (nomeDB.isEmpty() && usuario.isEmpty() && senha.isEmpty() && porta == null) {
         System.out.println("Valores inválidos!");
 
@@ -69,11 +76,12 @@ public class Menus {
 
     } while (nomeDB.isEmpty() || usuario.isEmpty() || senha.isEmpty() || porta == null);
 
+    /* Instância pra conexão com o Banco*/
     ConexaoDB conexao = new ConexaoDB(porta, nomeDB, usuario, senha);
 
     return conexao;
   }
-
+  /* Método que dá opções de ações para o usuário após a conexão com o Banco de Dados*/
   public void menu_opcoes() {
 
     int opcao;
@@ -90,6 +98,7 @@ public class Menus {
       opcao = lerOpcao();
 
       switch (opcao) {
+        /* Verifica se está conectado com o banco e envia mensagem de confirmação de conexão ou erro de conexão*/
         case 1 -> {
           boolean conectado = false;
           while (!conectado) {
@@ -117,14 +126,18 @@ public class Menus {
             }
           }
         }
+        /* Chama o método de opções do que fazer com arquivo .CSV*/
         case 2 -> menu_csv();
+
         case 3 -> menu_modelDAO("FUNCIONARIO"); // acessa o menu de funcionário, passando o nome da entidade como
                                                 // parâmetro para
                                                 // identificar qual menu acessar
         case 4 -> menu_modelDAO("DEPENDENTE");// acessa o menu de dependente, passando o nome da entidade como parâmetro
                                               // para
                                               // identificar qual menu acessar
+        /* Acessa o menu de folha de pagamento*/
         case 5 -> menu_modelDAO("FOLHA DE PAGAMENTO");
+        /* Finaliza a leitura de dados do usuário*/
         case 0 -> customLogger.logFinal("SERVIÇO FINALIZADO!");
 
         default -> System.out.println("Número inválido!");
@@ -168,7 +181,7 @@ public class Menus {
     } while (opcao != 0);
   }
 
-  //
+  //Método para ler opção digitada e tratar excessões
 
   private int lerOpcao() {
 
@@ -184,10 +197,11 @@ public class Menus {
     }
 
   }
-
+ // Método para cadastrar Funcionario ou dependente com dados fornecidos pelo usuário e para acessar a folha de pagamento
   private void cadastrar(String entidade) {
     switch (entidade) {
 
+      //Opção de cadastrar funcionario
       case "FUNCIONARIO" -> {
 
         // criando o objeto do tipo FuncionarioDAO para acessar os métodos de CRUD do
@@ -227,6 +241,7 @@ public class Menus {
           customLogger.logError("Erro ao cadastrar funcionário: " + e.getMessage());
         }
       }
+      //Opção de cadastrar dependente
       case "DEPENDENTE" -> {
 
         DependenteDAO depDAO = new DependenteDAO(conexao);
@@ -256,6 +271,7 @@ public class Menus {
 
         d.escolherParentesco(opcaoParentesco);
 
+        //Tratamento de excessões no cadastro de dependentes
         try {
           d.validarDependente();
           depDAO.atualizarDependente(d, opcaoParentesco, idFuncionario);
@@ -269,7 +285,7 @@ public class Menus {
         }
 
       }
-
+      //Opção para registrar folha de pagamento
       case "FOLHA DE PAGAMENTO" -> {
         FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
 
@@ -297,7 +313,7 @@ public class Menus {
       default -> System.out.println("Entidade inválida para cadastro!");
     }
   }
-
+  // Método para exibir os funcionarios e a quantidade de dependentes
   private void listar(String entidade) {
     switch (entidade) {
       case "FUNCIONARIO" -> {
@@ -338,6 +354,7 @@ public class Menus {
     }
   }
 
+  //Metodo para deletar um funcionario ou um dependente
   private void excluir(String entidade) {
 
     System.out.println("Digite o ID para excluir:");
@@ -375,6 +392,7 @@ public class Menus {
     }
   }
 
+  //Método para atualizar informações específicas de Funcionario ou de dependente
   private void atualizar(String entidade) {
 
     switch (entidade) {

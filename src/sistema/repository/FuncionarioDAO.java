@@ -20,6 +20,7 @@ public class FuncionarioDAO implements CriacaoTabela {
 
   @Override
   public void criarTabela() {
+    // String com comando SQL para criar a tabela "funcionario" caso ela não exista
     String comandoSQL = "CREATE TABLE IF NOT EXISTS funcionario ("
         + " id_funcionario SERIAL PRIMARY KEY,"
         + " nome VARCHAR(100) NOT NULL,"
@@ -31,6 +32,7 @@ public class FuncionarioDAO implements CriacaoTabela {
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
 
+      // Executa o comando (criação da tabela)
       stmt.execute();
 
     } catch (Exception error) {
@@ -40,8 +42,9 @@ public class FuncionarioDAO implements CriacaoTabela {
   }
 
   // INSET INTO
+  // Método para inserir um funcionário no banco
   public void salvarFuncionario(Funcionario funcionario) {
-
+    //Comando SQL de inserção com parâmetros
     String comandoSQL = "INSERT INTO funcionario (nome, cpf, data_nascimento, salario_bruto) VALUES (?, ?, ?, ?);";
 
     try (
@@ -68,9 +71,11 @@ public class FuncionarioDAO implements CriacaoTabela {
   }
 
   // UPDATE
+  // Método para atualizar dados de um funcionário
   public void atualizarFuncionario(Funcionario funcionario, int opcao, int id_funcionario) throws CpfDuplicado {
     String parteSQL;
 
+    // Define qual campo será atualizado com base na opção
     switch (opcao) {
       case 1 -> parteSQL = "nome = ?"; // nome
       case 2 -> parteSQL = "cpf = ?"; // cpf
@@ -79,12 +84,14 @@ public class FuncionarioDAO implements CriacaoTabela {
       default -> throw new AssertionError("Opção inválida! -> parteSQL");
     }
 
+
     String comandoSQL = "UPDATE funcionario SET " + parteSQL + " WHERE id_funcionario = ?; ";
 
     try (
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
 
+      // Define valor do campo baseado na opção
       switch (opcao) {
 
         case 1 -> stmt.setObject(1, funcionario.getNome());
@@ -94,8 +101,9 @@ public class FuncionarioDAO implements CriacaoTabela {
 
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
-
+      // Define ID do funcionário
       stmt.setObject(2, id_funcionario);
+      // Executa UPDATE
       stmt.executeUpdate();
 
     } catch (SQLException error) {
@@ -107,6 +115,7 @@ public class FuncionarioDAO implements CriacaoTabela {
   }
 
   // DELETE
+  // Método para excluir funcionário pelo ID
   public void excluirFuncionario(int id_funcionario) {
     String comandoSQL = "DELETE FROM funcionario WHERE id_funcionario = ?;";
 
@@ -114,7 +123,9 @@ public class FuncionarioDAO implements CriacaoTabela {
         Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
 
+      // Define ID
       stmt.setObject(1, id_funcionario);
+      // Executa DELETE e retorna quantas linhas foram afetadas
       int linhas = stmt.executeUpdate();
 
       if (linhas > 0) {
@@ -129,13 +140,16 @@ public class FuncionarioDAO implements CriacaoTabela {
   }
 
   // SELECT
+  // Método para selecionar funcionários
   public void selecionarFuncionario(Funcionario funcionario, int opcao, String condicao) {
     String comandoSQL;
 
+    // Se opção for 0 → busca todos
     if (opcao == 0) {
       comandoSQL = "SELECT * FROM funcionario ORDER BY id_funcionario DESC";
     } else {
       String parametroSQL;
+      // Define qual campo será usado no filtro
       switch (opcao) {
         case 0 -> parametroSQL = ""; // tudo
         case 1 -> parametroSQL = "nome"; // nome
@@ -202,7 +216,7 @@ public class FuncionarioDAO implements CriacaoTabela {
     }
 
   }
-
+  // Busca um funcionário pelo CPF
   public Funcionario buscarPorCpf(String cpf) {
 
     String comandoSQL = "SELECT * FROM funcionario WHERE cpf = ?";
@@ -214,8 +228,13 @@ public class FuncionarioDAO implements CriacaoTabela {
       stmt.setString(1, cpf);
 
       try (ResultSet rs = stmt.executeQuery()) {
+        // Se encontrou resultado
         if (rs.next()) {
+
+          // Cria objeto
           funcionario = new Funcionario();
+
+          // Preenche os dados
           funcionario.setId_funcionario(rs.getInt("id_funcionario"));
           funcionario.setNome(rs.getString("nome"));
           funcionario.setCpf(rs.getString("cpf"));
@@ -230,6 +249,7 @@ public class FuncionarioDAO implements CriacaoTabela {
     return funcionario;
   }
 
+  // Método que mostra quantidade de dependentes por funcionário
   public void selececionarQtdDependentePorFUncionario() {
     String comandoSQL = """
         SELECT
