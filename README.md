@@ -232,14 +232,14 @@ java Main
 
 # 👥 Grupo
 
-|                                  Integrantes                                   | GitHub                                                       |                                             |
-| :----------------------------------------------------------------------------: | :----------------------------------------------------------- | :-----------------------------------------: |
-| <img src="https://avatars.githubusercontent.com/u/242983951?v=4" width="100"/> | [João Pedro Carneiro Motta](https://github.com/joaopedrobr3) | CONSTRUTOR DO CALCULO DA FOLHA DE PAGAMENTO |
-| <img src="https://avatars.githubusercontent.com/u/266845673?v=4" width="100"/> | [Kenny](https://github.com/kennypavelka)                     |                                             |
-|  <img src="https://avatars.githubusercontent.com/u/7592603?v=4" width="100"/>  | [Lucas Leal da Silva](https://github.com/Phonedison)         |                E DANDO DICAS                |
-| <img src="https://avatars.githubusercontent.com/u/267740773?v=4" width="100"/> | [Paulo Cesar Neto](https://github.com/paulocesar-neto)       |                                             |
-| <img src="https://avatars.githubusercontent.com/u/267657658?v=4" width="100"/> | [Vinicius de Souza Lamas](https://github.com/vLamass)        |                                             |
-| <img src="https://avatars.githubusercontent.com/u/267758048?v=4" width="100"/> | [Vitor Ribeiro](https://github.com/vitorribeiro77)           |                                             |
+|                                  Integrantes                                   | GitHub                                                       |                                              |
+| :----------------------------------------------------------------------------: | :----------------------------------------------------------- | :------------------------------------------: |
+| <img src="https://avatars.githubusercontent.com/u/242983951?v=4" width="100"/> | [João Pedro Carneiro Motta](https://github.com/joaopedrobr3) | CONSTRUTOR DO CALCULO DA FOLHA DE PAGAMENTO, |
+| <img src="https://avatars.githubusercontent.com/u/266845673?v=4" width="100"/> | [Kenny](https://github.com/kennypavelka)                     |                                              |
+|  <img src="https://avatars.githubusercontent.com/u/7592603?v=4" width="100"/>  | [Lucas Leal da Silva](https://github.com/Phonedison)         |                E DANDO DICAS                 |
+| <img src="https://avatars.githubusercontent.com/u/267740773?v=4" width="100"/> | [Paulo Cesar Neto](https://github.com/paulocesar-neto)       |                                              |
+| <img src="https://avatars.githubusercontent.com/u/267657658?v=4" width="100"/> | [Vinicius de Souza Lamas](https://github.com/vLamass)        |                                              |
+| <img src="https://avatars.githubusercontent.com/u/267758048?v=4" width="100"/> | [Vitor Ribeiro](https://github.com/vitorribeiro77)           |                                              |
 
 ---
 

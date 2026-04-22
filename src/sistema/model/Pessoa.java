@@ -49,5 +49,3 @@ public abstract class Pessoa {
     this.dataNascimento = dataNascimento;
   }
 }
-
-// alooo

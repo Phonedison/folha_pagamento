@@ -78,23 +78,27 @@ public class FolhaPagamento {
     }
 
     public void calcularINSS() {
+
         double salario = funcionario.getSalarioBruto();
         double teto = 8157.41;
-
         double base = Math.min(salario, teto);
+        double inss, max_inss = 951.62;
 
         if (salario <= 1518.00) {
-            this.descontoInss = base * 0.075;
+            inss = base * 0.075;
 
         } else if (salario <= 2793.88) {
-            this.descontoInss = base * 0.09;
+            inss = (base * 0.09) - 22.77;
 
         } else if (salario <= 4190.83) {
-            this.descontoInss = base * 0.12;
+            inss = (base * 0.12) - 106.60;
 
         } else {
-            this.descontoInss = base * 0.14;
+            inss = (base * 0.14) - 190.42;
         }
+
+        inss = Math.max(inss, 0);
+        this.descontoInss = Math.min(inss, max_inss);
     }
 
     public void calcularIR() {

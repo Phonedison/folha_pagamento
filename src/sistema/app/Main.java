@@ -1,7 +1,5 @@
 package sistema.app;
 
-import sistema.app.menu.Menus;
-
 public class Main {
 
     public static void main(String[] args) throws Exception {
@@ -11,6 +9,7 @@ public class Main {
         // InicializarDB.inicializar(conexaoDB);
 
         menu.execute();
+
     }
 
 }
