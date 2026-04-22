@@ -1,8 +1,9 @@
-# 📑 Sistema de Folha de Pagamento - Desafio POO - GRUPO 06 ANTIGO, NOVO 07
+<img align= "left" src="https://media.tenor.com/R8L_lcmmYdQAAAAM/surfsup-tadandoonda.gif" />
+
+# 📑 Sistema de Folha de Pagamento - Desafio POO - GRUPO 06
 
 Este projeto é o trabalho final da disciplina de **Programação Orientada a Objetos** do Serratec. O objetivo é desenvolver um **sistema de gestão de folha de pagamento**, para o cálculo de salário líquido, aplicando conceitos e persistência de dados.
 
-<img align="right" src="https://media.tenor.com/R8L_lcmmYdQAAAAM/surfsup-tadandoonda.gif" width="500" />
 
 ## 🚀 Sobre o projeto
 
