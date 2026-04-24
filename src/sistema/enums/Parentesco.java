@@ -16,6 +16,6 @@ public enum Parentesco {
 
     // Método público para acessar o valor associado ao enum
     public int getValor() {
-        return this.valor;
+return this.valor;
     }
 }

@@ -185,6 +185,7 @@ public class Menus {
 
   }
 
+  // método para cadastrar
   private void cadastrar(String entidade) {
     switch (entidade) {
 
