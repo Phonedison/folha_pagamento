@@ -25,14 +25,16 @@ public class ConexaoDB {
   public Connection conectarDB() throws SQLException {
     try {
       // Carregando o driver do banco de dados.
-      Class.forName("org.postgresql.Driver");
+      // Class.forName("org.postgresql.Driver");
 
       // Executa a conexão com o banco de dados.
       return conectar();
 
-    } catch (ClassNotFoundException error) {
-      customLogger.logError("Drive não encontrado:");
-      throw new RuntimeException(error.getMessage());
+      // } catch (ClassNotFoundException error) {
+      // customLogger.logError("Drive não encontrado:");
+      // throw new RuntimeException(error.getMessage());
+
+      // }
 
     } catch (SQLException error) {
       throw error;
