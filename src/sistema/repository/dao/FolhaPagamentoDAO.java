@@ -149,7 +149,7 @@ public class FolhaPagamentoDAO extends BaseDAO implements GenericDAO<FolhaPagame
         folha.setDescontoInss(rs.getDouble("desconto_inss"));
         folha.setDescontoIR(rs.getDouble("desconto_ir"));
         folha.setSalarioLiquido(rs.getDouble("salario_liquido"));
-        folha.setFuncionario(rs.getInt("id_funcionario"));
+        folha.getFuncionario().setIdFuncionario(rs.getInt("id_funcionario")); // ! Possibilidade de ERROR
 
         return folha;
     }

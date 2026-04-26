@@ -1,4 +1,4 @@
-package sistema.app;
+package sistema.app.service;
 
 import java.util.Scanner;
 

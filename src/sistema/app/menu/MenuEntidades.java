@@ -13,7 +13,7 @@ import sistema.repository.dao.FolhaPagamentoDAO;
 import sistema.repository.dao.FuncionarioDAO;
 import sistema.app.ui.PrintSystem;
 // Imports de exceções e utilitários
-import sistema.exception.CpfDuplicado;
+import sistema.exception.CpfDuplicadoException;
 import sistema.exception.DependenteException;
 
 public class MenuEntidades {
@@ -266,7 +266,7 @@ public class MenuEntidades {
                             "Funcionário '" + f.getId_funcionario() + " " + f.getNome() + "' atualizado com sucesso!");
                     funDAO.atualizarFuncionario(f, opcao, id);
 
-                } catch (CpfDuplicado error) {
+                } catch (CpfDuplicadoException error) {
                     CustomLogger.logError("Erro ao atualizar funcionário: " + error.getMessage());
                 }
 

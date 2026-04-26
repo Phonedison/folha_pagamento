@@ -35,10 +35,6 @@ public class CustomLogger {
     System.out.println(BG_VERMELHO + BOLD + " " + LocalDateTime.now() + " ERROR - " + message + " " + RESET + " ");
   }
 
-  public static void logWarning(String message) {
-    System.out.println(AMARELO + BOLD + " " + LocalDateTime.now() + " WARNING - " + message + " " + RESET + " ");
-  }
-
   public static void logSucess(String message) {
     System.out.println(VERDE + BOLD + " " + LocalDate.now() + " SUCESS - " + message + " " + RESET + " ");
   }
@@ -73,5 +69,9 @@ public class CustomLogger {
 
   public static void logDependenteSucess(String message) {
     System.out.println(AMARELO + ITALIC + " " + LocalDate.now() + " " + message + " " + RESET + " ");
+  }
+
+  public static void logWarning(String message) {
+    System.out.println(AMARELO + BOLD + " " + LocalDateTime.now() + " [AVISO] - " + message + " " + RESET + " ");
   }
 }

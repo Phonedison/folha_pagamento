@@ -129,7 +129,7 @@ public class FolhaPagamento {
                 - this.descontoIR;
     }
 
-    public void setFuncionario(int funcionario) {
-        this.funcionario.setIdFuncionario(funcionario);
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 }

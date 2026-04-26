@@ -1,11 +1,11 @@
 package sistema.app;
 
-import sistema.app.menu.Menu;
+import sistema.app.menu.MenuPrincipal;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Menu menu = new Menu();
+        MenuPrincipal menu = new MenuPrincipal();
         menu.execute();
     }
 

@@ -1,5 +1,8 @@
 package sistema.service;
 
+import java.time.LocalDate;
+import sistema.model.FolhaPagamento;
+import sistema.model.Funcionario;
 import sistema.repository.connection.DatabaseConfig;
 import sistema.repository.dao.DependenteDAO;
 import sistema.repository.dao.FolhaPagamentoDAO;
@@ -11,11 +14,13 @@ public class CsvService {
 
   private final CsvReader leitor;
   private final CsvWriter escrever;
+  private final DatabaseConfig conexao;
 
   public CsvService(FuncionarioDAO funDAO, DependenteDAO denDAO, FolhaPagamentoDAO folhaDAO, DatabaseConfig conexao) {
 
     this.leitor = new CsvReader(funDAO, denDAO, folhaDAO);
     this.escrever = new CsvWriter(conexao);
+    this.conexao = conexao;
 
   }
 
@@ -37,6 +42,18 @@ public class CsvService {
 
   public void exportarQtdDependenteFuncionario(String caminho) {
     escrever.escreverQtdDependentePorFuncionario(caminho);
+  }
+
+  public void registrarFolha(Funcionario funcionario) {
+    FolhaPagamento folha = new FolhaPagamento();
+    folha.setFuncionario(funcionario);
+    folha.setDataPagamento(LocalDate.now());
+
+    FolhaService calcularFolha = new FolhaService();
+    calcularFolha.processarFolhaCompleta(folha);
+
+    FolhaPagamentoDAO fd = new FolhaPagamentoDAO(conexao);
+    fd.salvar(folha);
   }
 
 }
