@@ -65,8 +65,18 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
     }
     comandoSQL.append(" WHERE id_dependente = ?");
     parametro.add(id);
+
+    try {
+      executeUpdate(comandoSQL.toString(), parametro.toArray());
+      CustomLogger
+          .logSucess("Dependente " + dependente.getIdDependente() + " - " + dependente.getNome() + "Atualizado!");
+
+    } catch (Exception e) {
+      CustomLogger.logError("Erro ao Atualizar dependente: ");
+      throw new RuntimeException(e.getMessage(), e);
+    }
+
   }
-  // TODO: Continuar por aqui
 
   @Override
   public void excluir(int id) {

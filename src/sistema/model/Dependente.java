@@ -33,7 +33,7 @@ public class Dependente extends Pessoa {
     this.idDependente = idDependente;
   }
 
-  public void setParentesco(String parente) {
+  public void setParentesco(Parentesco parente) {
     this.parentesco = parente;
   }
 
