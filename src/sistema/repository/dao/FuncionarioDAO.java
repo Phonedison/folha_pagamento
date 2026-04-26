@@ -130,7 +130,7 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
 
     Funcionario funcionario = new Funcionario();
 
-    funcionario.setId_funcionario(rs.getInt("id_funcionario"));
+    funcionario.setIdFuncionario(rs.getInt("id_funcionario"));
     funcionario.setNome(rs.getString("nome"));
     funcionario.setCpf(rs.getString("cpf"));
     funcionario.setDataNacimento(rs.getDate("data_nascimento").toLocalDate());
