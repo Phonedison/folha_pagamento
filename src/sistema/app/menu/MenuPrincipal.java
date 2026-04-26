@@ -1,5 +1,7 @@
 package sistema.app.menu;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import sistema.app.service.ConexaoService;
 import sistema.app.ui.InputHelper;
 import sistema.app.ui.Terminal;
@@ -52,6 +54,33 @@ public class MenuPrincipal {
 
   /* função para estabelecer a conexão com o DB */
   private void realizarConexao() {
+    boolean conectado = false;
+
+    while (!conectado) {
+      try {
+        DatabaseConfig tentativa = conexaoService.solicitarDadosConexao();
+
+        // Testa se a conexão realmente funciona antes de aceitar
+        try (Connection con = tentativa.conectarDB()) {
+          CustomLogger.logConectionSucess("Conexão estabelecida com sucesso!");
+          this.conexao = tentativa;
+          conectado = true;
+        }
+
+      } catch (SQLException erro) {
+        Terminal.titulo("Erro de Conexão");
+        CustomLogger.logConectionError("Falha: " + erro.getMessage());
+
+        System.out.print("Deseja tentar novamente? (S/N): ");
+        if (!InputHelper.confirmar()) {
+          conectado = true; // encerra o loop sem conexão
+        }
+
+      } catch (Exception e) {
+        CustomLogger.logError("Erro inesperado: " + e.getMessage());
+        conectado = true;
+      }
+    }
   }
 
   /*
