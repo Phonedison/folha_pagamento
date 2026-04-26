@@ -110,7 +110,7 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
     try {
       executeUpdate(comandoSQL.toString(), parametro.toArray());
       CustomLogger
-          .logSucess("Funcionario " + funcionario.getId_funcionario() + " - " + funcionario.getNome() + " Atualizado!");
+          .logSucess("Funcionario " + funcionario.getIdFuncionario() + " - " + funcionario.getNome() + " Atualizado!");
 
     } catch (Exception e) {
 

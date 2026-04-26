@@ -3,230 +3,139 @@ package sistema.repository.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import sistema.app.util.CustomLogger;
 import sistema.model.Dependente;
-import sistema.repository.CriacaoTabela;
 import sistema.repository.connection.DatabaseConfig;
 
-public class DependenteDAO implements CriacaoTabela {
+public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
 
-  private final DatabaseConfig conexao;
-
-  // constructo para receber a conexao do banco
-  public DependenteDAO(DatabaseConfig conexao) {
-    this.conexao = conexao;
+  public DependenteDAO(DatabaseConfig db) {
+    super(db);
   }
 
   @Override
-  // Comando para criar tabela, informando os atributos e propriedades delas
-  public void criarTabela() {
+  public void atualizar(Dependente dependente, int id, int opcao) {
 
-    String comandoSQL = "CREATE TABLE IF NOT EXISTS dependente ( "
-        + " id_dependente SERIAL PRIMARY KEY,"
-        + " nome VARCHAR(100) NOT NULL,"
-        + " cpf VARCHAR(14) UNIQUE NOT NULL,"
-        + " data_nascimento DATE NOT NULL,"
-        + " parentesco parentesco NOT NULL,"
-        + " id_funcionario INT REFERENCES funcionario(id_funcionario) NOT NULL"
-        + " );";
+    StringBuilder comandoSQL = new StringBuilder("UPDATE dependente SET ");
 
-    try (
-
-        Connection con = conexao.conectarDB(); // tenta executar a conexao do banco
-        PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
-      /* ^^ cria um molde do comando sql que foi passado utilizando comandoSQL */
-      stmt.execute(); // < exectua o comando molde
-
-    } catch (Exception error) { // caso ocorra um erro
-      CustomLogger.logWarning("Erro ao inicializar tabela Dependente: ");
-      throw new RuntimeException(error.getMessage(), error); // executa uma mensagem informando o erro e mostrando o
-                                                             // erro, facilitando a
-      // correção do erro
-    }
-
-  }
-
-  // INSET INTO
-  public void salvarDependente(Dependente dependente) {
-    // comando sql para inserir valores, ? representa os valores passados pelo get
-    // das outras classes / objetos
-    String comandoSQL = "INSERT INTO dependente (nome, cpf, data_nascimento, parentesco, id_funcionario) VALUES (?, ?, ?, ?::parentesco, ?);";
-
-    try (
-        Connection con = conexao.conectarDB(); // cria a conexao
-        PreparedStatement stmt = con.prepareStatement(comandoSQL);) { // prepara o comando
-      stmt.setObject(1, dependente.getNome());
-      // prepara o parametro com base no tipo de valor necessário para o sql
-      // utilizando setObject que converte para o padrão de configuração
-      // esperado
-      stmt.setObject(2, dependente.getCpf());
-      stmt.setObject(3, dependente.getDataNacimento());
-      stmt.setObject(4, dependente.getParentesco() != null
-          ? dependente.getParentesco().name()
-          : null);// converte o enum para string utilizando o name();
-      stmt.setObject(5, dependente.getFuncionario());
-
-      stmt.executeUpdate();
-      CustomLogger.logDependenteSucess("Dependente '" + dependente.getNome() + "' Cadastrado com sucesso!");
-
-    } catch (Exception error) {
-      CustomLogger.logError("Erro na inserção: ");
-      throw new RuntimeException(error.getMessage());
-    }
-  }
-
-  // UPDATE
-  public void atualizarDependente(Dependente dependente, int opcao, int id_dependente) {
-    String parteSQL;
+    List<Object> parametro = new ArrayList<>();
 
     switch (opcao) {
-      case 1 -> parteSQL = "nome = ?";
-      case 2 -> parteSQL = "cpf = ?";
-      case 3 -> parteSQL = "data_nascimento = ?";
-      case 4 -> parteSQL = "parentesco = ?";
-      case 5 -> parteSQL = "id_funcionario = ?";
-      default -> throw new AssertionError("Opção inválida! -> parteSQL");
-    }
+      case 0 -> {
+        comandoSQL.append("nome = ?, cpf = ?, data_nascimento = ?, parentesco = ?, id_funcionario = ?");
+        parametro.add(dependente.getNome());
+        parametro.add(dependente.getCpf());
+        parametro.add(dependente.getDataNacimento());
+        parametro.add(dependente.getParentesco().name());
+        parametro.add(dependente.getFuncionario());
 
-    String comandoSQL = "UPDATE dependente SET " + parteSQL + " WHERE id_dependente = ?";
-
-    try (
-        Connection con = conexao.conectarDB();
-        PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
-
-      switch (opcao) {
-        case 1 -> stmt.setObject(1, dependente.getNome());
-        case 2 -> stmt.setObject(1, dependente.getCpf());
-        case 3 -> stmt.setObject(1, dependente.getDataNacimento());
-        case 4 -> stmt.setObject(1, dependente.getParentesco().name());
-        case 5 -> stmt.setObject(1, dependente.getFuncionario());
-
-        default -> throw new AssertionError("Opção inválida! -> stmt");
+      }
+      case 1 -> {
+        comandoSQL.append("nome = ?");
+        parametro.add(dependente.getNome());
       }
 
-      stmt.setObject(2, id_dependente);
-      stmt.executeUpdate();
+      case 2 -> {
+        comandoSQL.append("cpf = ?");
+        parametro.add(dependente.getCpf());
+      }
 
-    } catch (Exception error) {
-      CustomLogger.logError("Erro ao atualizar: ");
-      throw new RuntimeException(error.getMessage());
+      case 3 -> {
+        comandoSQL.append("data_nascimento = ?");
+        parametro.add(dependente.getDataNacimento());
+      }
+
+      case 4 -> {
+        comandoSQL.append("parentesco = ?");
+        parametro.add(dependente.getParentesco().name());
+      }
+
+      case 5 -> {
+        comandoSQL.append("parentesco = ?");
+        parametro.add(dependente.getFuncionario());
+      }
+
+      default -> {
+        CustomLogger.logWarning("Opção inválida!");
+        return;
+      }
     }
+    comandoSQL.append(" WHERE id_dependente = ?");
+    parametro.add(id);
+  }
+  // TODO: Continuar por aqui
+
+  @Override
+  public void excluir(int id) {
+    String comandoSQL = "DELETE FROM funcionario WHERE id_dependente = ?";
+    executeUpdate(comandoSQL, id);
   }
 
-  // DELETE
-  public void excluirDependente(int id_dependente) {
-    String comandoSQL = "DELETE FROM dependente WHERE id_dependente = ?";
+  @Override
+  public List<Dependente> listarTodos(int opcao) {
+    StringBuilder comandoSQL = new StringBuilder("SELECT * FROM dependente ORDER BY");
+
+    switch (opcao) {
+      case 1 -> comandoSQL.append("id_dependente DESC;");
+      case 2 -> comandoSQL.append("nome DESC;");
+      case 3 -> comandoSQL.append("cpf DESC;");
+      case 4 -> comandoSQL.append("data_nascimento DESC;");
+      case 5 -> comandoSQL.append("parentesco::parentesco DESC;");
+      case 6 -> comandoSQL.append("id_funcionario DESC;");
+      default -> {
+        CustomLogger.logWarning("Opção inválida!");
+        return null;
+      }
+    }
+
+    List<Dependente> lista = new ArrayList<>();
 
     try (
-        Connection con = conexao.conectarDB();
-        PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
+        Connection conexao = db.conectarDB();
+        PreparedStatement stmt = conexao.prepareStatement(comandoSQL.toString());
+        ResultSet rs = stmt.executeQuery();) {
 
-      stmt.setObject(1, id_dependente);
-      int linhas = stmt.executeUpdate();
-
-      if (linhas > 0) {
-        CustomLogger.logSucess("Dependente removido!");
-      } else {
-        CustomLogger.logWarning("Dependente não encontrado!");
+      while (rs.next()) {
+        lista.add(mapearDependente(rs));
       }
 
-    } catch (Exception error) {
-      CustomLogger.logError("Erro ao deletar dependente:");
-      throw new RuntimeException(error.getMessage());
+    } catch (Exception e) {
+      CustomLogger.logDependenteError("Erro ao listar Dependentes");
+      throw new RuntimeException(e.getMessage(), e);
     }
+
+    return lista;
   }
 
-  // SELECT
-  public void selecionarDependente(Dependente dependente, int opcao, String condicao) {
+  @Override
+  public void salvar(Dependente dependente) {
 
-    String comandoSQL;
+    String comandoSQL = "INSERT INTO dependente (nome, cpf, data_nascimento, parentesco, id_funcionario) VALUES (?, ?, ?, ?::parentesco, ?)";
 
-    // SELECT padrão (sem filtro)
-    if (opcao == 0) {
-      comandoSQL = """
-              SELECT
-                  id_dependente,
-                  nome,
-                  cpf,
-                  data_nascimento,
-                  parentesco::text AS parentesco,
-                  id_funcionario
-              FROM dependente
-              ORDER BY id_dependente DESC
-          """;
-    } else {
-
-      String parametroSQL;
-
-      switch (opcao) {
-        case 1 -> parametroSQL = "nome";
-        case 2 -> parametroSQL = "cpf";
-        case 3 -> parametroSQL = "parentesco";
-        case 4 -> parametroSQL = "id_funcionario";
-        default -> throw new AssertionError("Opção inválida! -> opcaoSQL");
-      }
-
-      comandoSQL = """
-          SELECT
-              id_dependente,
-              nome,
-              cpf,
-              data_nascimento,
-              parentesco::text AS parentesco,
-              id_funcionario
-          FROM dependente
-          WHERE """ + parametroSQL + " " + condicao +
-          (opcao == 3 ? " ?::parentesco " : " ? ") +
-          "ORDER BY id_dependente DESC";
-    }
-
-    try (
-        Connection con = conexao.conectarDB();
-        PreparedStatement stmt = con.prepareStatement(comandoSQL);) {
-
-      // SET dos parâmetros
-      if (opcao != 0) {
-        switch (opcao) {
-          case 1 -> stmt.setString(1, dependente.getNome());
-          case 2 -> stmt.setString(1, dependente.getCpf());
-          case 3 -> stmt.setString(1, dependente.getParentesco().name());
-          case 4 -> stmt.setInt(1, dependente.getFuncionario());
-        }
-      }
-
-      try (ResultSet resultado = stmt.executeQuery()) {
-        if (resultado.next()) {
-          System.out
-              .println(
-                  "--------------------------------------------------------------------------------------------------");
-          String formato = "| %-5s | %-25s | %-15s | %-12s | %-12s | %-10s |%n";
-          System.out.printf(formato, "ID", "NOME", "CPF", "NASC.", "PARENTESCO", "ID FUN.");
-          System.out
-              .println(
-                  "--------------------------------------------------------------------------------------------------");
-
-          while (resultado.next()) {
-
-            System.out.printf(formato,
-                resultado.getInt("id_dependente"),
-                resultado.getString("nome"),
-                resultado.getString("cpf"),
-                resultado.getDate("data_nascimento"),
-                resultado.getString("parentesco"),
-                resultado.getInt("id_funcionario"));
-          }
-
-          System.out
-              .println(
-                  "--------------------------------------------------------------------------------------------------");
-        } else {
-          CustomLogger.logWarning("Tabela DEPENDENTE vazio!");
-        }
-      }
-
-    } catch (Exception error) {
-      CustomLogger.logError("Erro ao buscar dependente: ");
-      throw new RuntimeException(error.getMessage(), error);
-    }
+    executeUpdate(
+        comandoSQL,
+        dependente.getNome(),
+        dependente.getCpf(),
+        dependente.getDataNacimento(),
+        dependente.getParentesco().name(),
+        dependente.getFuncionario());
   }
+
+  private Dependente mapearDependente(ResultSet rs) throws SQLException {
+
+    Dependente dependente = new Dependente();
+
+    dependente.setIdDependente(rs.getInt("id_dependente"));
+    dependente.setNome(rs.getString("nome"));
+    dependente.setCpf(rs.getString("cpf"));
+    dependente.setDataNacimento(rs.getDate("data_nascimento").toLocalDate());
+    dependente.escolherParentesco(rs.getString("parentesco::parentesco"));
+    dependente.setFuncionario(rs.getInt("id_funcionario"));
+
+    return dependente;
+  }
+
 }

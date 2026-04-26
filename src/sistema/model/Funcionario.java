@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class Funcionario extends Pessoa {
 
-  private int id_funcionario;
+  private int idFuncionario;
   private double salarioBruto;
   // private double descontoInss;
   // private double descontoIR;
@@ -36,8 +36,8 @@ public class Funcionario extends Pessoa {
     return this.salarioBruto;
   }
 
-  public int getId_funcionario() {
-    return this.id_funcionario;
+  public int getIdFuncionario() {
+    return this.idFuncionario;
   }
 
   public Set<Dependente> getDependentes() {
@@ -53,7 +53,7 @@ public class Funcionario extends Pessoa {
     this.dependentes = dependentes;
   }
 
-  public void setId_funcionario(int id_funcionario) {
-    this.id_funcionario = id_funcionario;
+  public void setId_funcionario(int idFuncionario) {
+    this.idFuncionario = idFuncionario;
   }
 }

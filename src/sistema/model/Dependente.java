@@ -9,7 +9,7 @@ public class Dependente extends Pessoa {
 
   private Integer funcionario;
   private Parentesco parentesco;
-  private Integer id_dependente;
+  private Integer idDependente;
 
   public Dependente() {
     super();
@@ -17,7 +17,7 @@ public class Dependente extends Pessoa {
 
   public Dependente(String nome, String cpf, LocalDate dataNascimento, Funcionario funcionario, Parentesco parentesco) {
     super(nome, cpf, dataNascimento);
-    this.funcionario = funcionario.getId_funcionario();
+    this.funcionario = funcionario.getIdFuncionario();
     this.parentesco = parentesco;
   }
 
@@ -25,11 +25,15 @@ public class Dependente extends Pessoa {
     return this.parentesco;
   }
 
-  public Integer getId_dependente() {
-    return this.id_dependente;
+  public Integer getIdDependente() {
+    return this.idDependente;
   }
 
-  public void setParentesco(Parentesco parente) {
+  public void setIdDependente(int idDependente) {
+    this.idDependente = idDependente;
+  }
+
+  public void setParentesco(String parente) {
     this.parentesco = parente;
   }
 
