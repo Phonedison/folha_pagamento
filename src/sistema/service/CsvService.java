@@ -1,19 +1,21 @@
 package sistema.service;
 
-import sistema.repository.ConexaoDB;
-import sistema.repository.DependenteDAO;
-import sistema.repository.FolhaPagamentoDAO;
-import sistema.repository.FuncionarioDAO;
+import sistema.repository.connection.DatabaseConfig;
+import sistema.repository.dao.DependenteDAO;
+import sistema.repository.dao.FolhaPagamentoDAO;
+import sistema.repository.dao.FuncionarioDAO;
+import sistema.service.io.CsvReader;
+import sistema.service.io.CsvWriter;
 
 public class CsvService {
 
-  private final LeitorCSV leitor;
-  private final EscreverCSV escrever;
+  private final CsvReader leitor;
+  private final CsvWriter escrever;
 
-  public CsvService(FuncionarioDAO funDAO, DependenteDAO denDAO, FolhaPagamentoDAO folhaDAO, ConexaoDB conexao) {
+  public CsvService(FuncionarioDAO funDAO, DependenteDAO denDAO, FolhaPagamentoDAO folhaDAO, DatabaseConfig conexao) {
 
-    this.leitor = new LeitorCSV(funDAO, denDAO, folhaDAO);
-    this.escrever = new EscreverCSV(conexao);
+    this.leitor = new CsvReader(funDAO, denDAO, folhaDAO);
+    this.escrever = new CsvWriter(conexao);
 
   }
 

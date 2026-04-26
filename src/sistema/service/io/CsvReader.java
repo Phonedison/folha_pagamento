@@ -1,4 +1,4 @@
-package sistema.service;
+package sistema.service.io;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -8,17 +8,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import sistema.app.menu.CustomLogger;
+import sistema.app.util.CustomLogger;
 import sistema.model.*;
-import sistema.repository.*;
+import sistema.repository.dao.DependenteDAO;
+import sistema.repository.dao.FolhaPagamentoDAO;
+import sistema.repository.dao.FuncionarioDAO;
 
-public class LeitorCSV {
+public class CsvReader {
 
   private final FuncionarioDAO funcionarioDAO;
   private final DependenteDAO dependenteDAO;
   private final FolhaPagamentoDAO folhaPagamentoDAO;
 
-  public LeitorCSV(FuncionarioDAO funcionarioDAO, DependenteDAO dependenteDAO, FolhaPagamentoDAO folhaPagamentoDAO) {
+  public CsvReader(FuncionarioDAO funcionarioDAO, DependenteDAO dependenteDAO, FolhaPagamentoDAO folhaPagamentoDAO) {
     this.funcionarioDAO = funcionarioDAO;
     this.dependenteDAO = dependenteDAO;
     this.folhaPagamentoDAO = folhaPagamentoDAO;
@@ -114,8 +116,7 @@ public class LeitorCSV {
             funcionarioAtual.getDependentes().add(dependente);
 
           } catch (Exception error) {
-            CustomLogger
-                .logDependenteError("Aviso: Dependente '" + dados[0] + "' já cadastrado!");
+            CustomLogger.logDependenteError("Aviso: Dependente '" + dados[0] + "' já cadastrado!");
 
           }
         }

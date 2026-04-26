@@ -1,17 +1,19 @@
-package sistema.repository;
+package sistema.repository.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import sistema.app.menu.CustomLogger;
+import sistema.app.util.CustomLogger;
 import sistema.model.FolhaPagamento;
+import sistema.repository.CriacaoTabela;
+import sistema.repository.connection.DatabaseConfig;
 
 public class FolhaPagamentoDAO implements CriacaoTabela {
 
-  private final ConexaoDB conexao;
+  private final DatabaseConfig conexao;
 
-  public FolhaPagamentoDAO(ConexaoDB conexao) {
+  public FolhaPagamentoDAO(DatabaseConfig conexao) {
     this.conexao = conexao;
   }
 

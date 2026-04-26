@@ -1,4 +1,4 @@
-package sistema.service;
+package sistema.service.io;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,14 +9,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
-import sistema.app.menu.CustomLogger;
-import sistema.repository.ConexaoDB;
+import sistema.app.util.CustomLogger;
+import sistema.repository.connection.DatabaseConfig;
 
-public class EscreverCSV {
+public class CsvWriter {
 
-  private final ConexaoDB conexao;
+  private final DatabaseConfig conexao;
 
-  public EscreverCSV(ConexaoDB conexao) {
+  public CsvWriter(DatabaseConfig conexao) {
     this.conexao = conexao;
   }
 

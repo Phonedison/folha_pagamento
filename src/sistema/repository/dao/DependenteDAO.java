@@ -1,17 +1,19 @@
-package sistema.repository;
+package sistema.repository.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import sistema.app.menu.CustomLogger;
+import sistema.app.util.CustomLogger;
 import sistema.model.Dependente;
+import sistema.repository.CriacaoTabela;
+import sistema.repository.connection.DatabaseConfig;
 
 public class DependenteDAO implements CriacaoTabela {
 
-  private final ConexaoDB conexao;
+  private final DatabaseConfig conexao;
 
   // constructo para receber a conexao do banco
-  public DependenteDAO(ConexaoDB conexao) {
+  public DependenteDAO(DatabaseConfig conexao) {
     this.conexao = conexao;
   }
 

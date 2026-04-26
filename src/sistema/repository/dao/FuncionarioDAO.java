@@ -1,18 +1,20 @@
-package sistema.repository;
+package sistema.repository.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import sistema.app.menu.CustomLogger;
+import sistema.app.util.CustomLogger;
 import sistema.exception.CpfDuplicado;
 import sistema.model.Funcionario;
+import sistema.repository.CriacaoTabela;
+import sistema.repository.connection.DatabaseConfig;
 
 public class FuncionarioDAO implements CriacaoTabela {
-  private final ConexaoDB conexao;
+  private final DatabaseConfig conexao;
 
-  public FuncionarioDAO(ConexaoDB conexao) {
+  public FuncionarioDAO(DatabaseConfig conexao) {
     this.conexao = conexao;
   }
 

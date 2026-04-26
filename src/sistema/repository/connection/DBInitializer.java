@@ -1,13 +1,17 @@
-package sistema.repository;
+package sistema.repository.connection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import sistema.repository.CriacaoTabela;
+import sistema.repository.dao.DependenteDAO;
+import sistema.repository.dao.FolhaPagamentoDAO;
+import sistema.repository.dao.FuncionarioDAO;
 
-public class InicializarDB {
-  public static void inicializar(ConexaoDB conexao) {
+public class DBInitializer {
+  public static void inicializar(DatabaseConfig conexao) {
     try (Connection con = conexao.conectarDB()) {
 
       verificarEnum(con); // Verifica se o enum existe, caso contrário, cria o enum

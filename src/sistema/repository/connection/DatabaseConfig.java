@@ -1,11 +1,11 @@
-package sistema.repository;
+package sistema.repository.connection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException; // classe que permite fornecer informações sobre erros durante a conexao com banco
-import sistema.app.menu.CustomLogger;
+import sistema.app.util.CustomLogger;
 
-public class ConexaoDB {
+public final class DatabaseConfig {
 
   protected int porta;
   protected String meuDb;
@@ -13,7 +13,7 @@ public class ConexaoDB {
   protected String senha;
   protected String stringConexao;
 
-  public ConexaoDB(int porta, String meuDb, String usuario, String senha) {
+  public DatabaseConfig(int porta, String meuDb, String usuario, String senha) {
     this.porta = porta;
     this.meuDb = meuDb;
     this.senha = senha;
