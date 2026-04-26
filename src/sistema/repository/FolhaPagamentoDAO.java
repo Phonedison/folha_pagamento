@@ -8,7 +8,6 @@ import sistema.app.menu.CustomLogger;
 import sistema.model.FolhaPagamento;
 
 public class FolhaPagamentoDAO implements CriacaoTabela {
-  CustomLogger customLogger = new CustomLogger();
 
   private final ConexaoDB conexao;
 
@@ -34,7 +33,7 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
       stmt.execute();
 
     } catch (Exception error) {
-      customLogger.logError("Erro ao inicializar tabela Folha_pagamento: ");
+      CustomLogger.logError("Erro ao inicializar tabela Folha_pagamento: ");
       throw new RuntimeException(error.getMessage(),
           error);
     }
@@ -55,13 +54,13 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
       stmt.setObject(5, folhaPagamento.getFuncionario().getId_funcionario());
 
       stmt.executeUpdate();
-      customLogger
+      CustomLogger
           .logFolhaSucess(
               "Folha de pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario()
                   + " " + folhaPagamento.getFuncionario().getNome() + "' Registrado!");
 
     } catch (Exception error) {
-      customLogger.logError("Erro na inserção da folha de pagamento do(a) funcionário(a) '"
+      CustomLogger.logError("Erro na inserção da folha de pagamento do(a) funcionário(a) '"
           + folhaPagamento.getFuncionario().getId_funcionario() + " " + folhaPagamento.getFuncionario().getNome()
           + "' !");
       throw new RuntimeException("Erro: " + error.getMessage());
@@ -99,13 +98,13 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
         default -> throw new AssertionError("Opção inválida! -> stmt");
       }
 
-      customLogger.logFolhaSucess(
+      CustomLogger.logFolhaSucess(
           "Folha de Pagamento do(a) funcionário(a) '" + folhaPagamento.getFuncionario().getId_funcionario() + " "
               + folhaPagamento.getFuncionario().getNome() + "' atualizado!");
       stmt.executeUpdate();
 
     } catch (SQLException error) {
-      customLogger.logError("Erro ao atualizar:");
+      CustomLogger.logError("Erro ao atualizar:");
       throw new RuntimeException(error.getMessage());
     }
   }
@@ -163,12 +162,12 @@ public class FolhaPagamentoDAO implements CriacaoTabela {
           System.out
               .println("---------------------------------------------------------------------------------------------");
         } else {
-          customLogger.logWarning("Tabela FOLHA PAGAMENTO vazio!");
+          CustomLogger.logWarning("Tabela FOLHA PAGAMENTO vazio!");
         }
 
       }
     } catch (Exception error) {
-      customLogger.logError("Erro ao buscar dados da Folha de pagamento!");
+      CustomLogger.logError("Erro ao buscar dados da Folha de pagamento!");
       throw new RuntimeException(error.getMessage());
     }
   }

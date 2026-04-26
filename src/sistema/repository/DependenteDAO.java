@@ -8,8 +8,6 @@ import sistema.model.Dependente;
 
 public class DependenteDAO implements CriacaoTabela {
 
-  CustomLogger customLogger = new CustomLogger();
-
   private final ConexaoDB conexao;
 
   // constructo para receber a conexao do banco
@@ -38,7 +36,7 @@ public class DependenteDAO implements CriacaoTabela {
       stmt.execute(); // < exectua o comando molde
 
     } catch (Exception error) { // caso ocorra um erro
-      customLogger.logWarning("Erro ao inicializar tabela Dependente: ");
+      CustomLogger.logWarning("Erro ao inicializar tabela Dependente: ");
       throw new RuntimeException(error.getMessage(), error); // executa uma mensagem informando o erro e mostrando o
                                                              // erro, facilitando a
       // correção do erro
@@ -67,10 +65,10 @@ public class DependenteDAO implements CriacaoTabela {
       stmt.setObject(5, dependente.getFuncionario());
 
       stmt.executeUpdate();
-      customLogger.logDependenteSucess("Dependente '" + dependente.getNome() + "' Cadastrado com sucesso!");
+      CustomLogger.logDependenteSucess("Dependente '" + dependente.getNome() + "' Cadastrado com sucesso!");
 
     } catch (Exception error) {
-      customLogger.logError("Erro na inserção: ");
+      CustomLogger.logError("Erro na inserção: ");
       throw new RuntimeException(error.getMessage());
     }
   }
@@ -108,7 +106,7 @@ public class DependenteDAO implements CriacaoTabela {
       stmt.executeUpdate();
 
     } catch (Exception error) {
-      customLogger.logError("Erro ao atualizar: ");
+      CustomLogger.logError("Erro ao atualizar: ");
       throw new RuntimeException(error.getMessage());
     }
   }
@@ -125,13 +123,13 @@ public class DependenteDAO implements CriacaoTabela {
       int linhas = stmt.executeUpdate();
 
       if (linhas > 0) {
-        customLogger.logSucess("Dependente removido!");
+        CustomLogger.logSucess("Dependente removido!");
       } else {
-        customLogger.logWarning("Dependente não encontrado!");
+        CustomLogger.logWarning("Dependente não encontrado!");
       }
 
     } catch (Exception error) {
-      customLogger.logError("Erro ao deletar dependente:");
+      CustomLogger.logError("Erro ao deletar dependente:");
       throw new RuntimeException(error.getMessage());
     }
   }
@@ -220,12 +218,12 @@ public class DependenteDAO implements CriacaoTabela {
               .println(
                   "--------------------------------------------------------------------------------------------------");
         } else {
-          customLogger.logWarning("Tabela DEPENDENTE vazio!");
+          CustomLogger.logWarning("Tabela DEPENDENTE vazio!");
         }
       }
 
     } catch (Exception error) {
-      customLogger.logError("Erro ao buscar dependente: ");
+      CustomLogger.logError("Erro ao buscar dependente: ");
       throw new RuntimeException(error.getMessage(), error);
     }
   }

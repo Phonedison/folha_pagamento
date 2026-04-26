@@ -13,7 +13,6 @@ import sistema.app.menu.CustomLogger;
 import sistema.repository.ConexaoDB;
 
 public class EscreverCSV {
-  CustomLogger customLogger = new CustomLogger();
 
   private final ConexaoDB conexao;
 
@@ -53,10 +52,10 @@ public class EscreverCSV {
         bw.newLine();
       }
 
-      customLogger.logSucess("Arquivo gerado em: " + caminhoExportacao);
+      CustomLogger.logSucess("Arquivo gerado em: " + caminhoExportacao);
 
     } catch (Exception e) {
-      customLogger.logError("Erro ao exportar FOLHA DE PAGAMENTO!");
+      CustomLogger.logError("Erro ao exportar FOLHA DE PAGAMENTO!");
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -85,10 +84,10 @@ public class EscreverCSV {
         bw.newLine();
       }
 
-      customLogger.logSucess("Arquivo gerado em: " + caminhoExportacao);
+      CustomLogger.logSucess("Arquivo gerado em: " + caminhoExportacao);
 
     } catch (Exception e) {
-      customLogger.logError("Erro ao exportar FUNCIONARIO!");
+      CustomLogger.logError("Erro ao exportar FUNCIONARIO!");
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -117,10 +116,10 @@ public class EscreverCSV {
         bw.newLine();
       }
 
-      customLogger.logSucess("Arquivo gerado em: " + caminhoExportacao);
+      CustomLogger.logSucess("Arquivo gerado em: " + caminhoExportacao);
 
     } catch (Exception e) {
-      customLogger.logError("Erro ao exportar DEPENDENTE!");
+      CustomLogger.logError("Erro ao exportar DEPENDENTE!");
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -155,10 +154,10 @@ public class EscreverCSV {
         bw.newLine();
       }
 
-      customLogger.logSucess("Arquivo gerado em: " + caminhoExportacao);
+      CustomLogger.logSucess("Arquivo gerado em: " + caminhoExportacao);
 
     } catch (Exception e) {
-      customLogger.logError("Erro ao exportar DADOS DE QTD de DEPENDENTE por FUNCIONARIO!");
+      CustomLogger.logError("Erro ao exportar DADOS DE QTD de DEPENDENTE por FUNCIONARIO!");
       throw new RuntimeException(e.getMessage());
     }
   }

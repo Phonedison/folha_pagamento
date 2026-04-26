@@ -6,7 +6,6 @@ import java.sql.SQLException; // classe que permite fornecer informações sobre
 import sistema.app.menu.CustomLogger;
 
 public class ConexaoDB {
-  CustomLogger customLogger = new CustomLogger();
 
   protected int porta;
   protected String meuDb;
@@ -31,7 +30,7 @@ public class ConexaoDB {
       return conectar();
 
     } catch (ClassNotFoundException error) {
-      customLogger.logError("Drive não encontrado:");
+      CustomLogger.logError("Drive não encontrado:");
       throw new RuntimeException(error.getMessage());
 
     } catch (SQLException error) {

@@ -10,8 +10,6 @@ import sistema.exception.CpfDuplicado;
 import sistema.model.Funcionario;
 
 public class FuncionarioDAO implements CriacaoTabela {
-
-  CustomLogger customLogger = new CustomLogger();
   private final ConexaoDB conexao;
 
   public FuncionarioDAO(ConexaoDB conexao) {
@@ -34,7 +32,7 @@ public class FuncionarioDAO implements CriacaoTabela {
       stmt.execute();
 
     } catch (Exception error) {
-      customLogger.logError("Erro ao inicializar tabela Funcionario:");
+      CustomLogger.logError("Erro ao inicializar tabela Funcionario:");
       throw new RuntimeException(error.getMessage(), error);
     }
   }
@@ -53,7 +51,7 @@ public class FuncionarioDAO implements CriacaoTabela {
       stmt.setObject(4, funcionario.getSalarioBruto());
       stmt.executeUpdate();
 
-      customLogger.logSucess("Funcionário '" + funcionario.getNome() + "' Cadastrado com sucesso!");
+      CustomLogger.logSucess("Funcionário '" + funcionario.getNome() + "' Cadastrado com sucesso!");
 
       try (ResultSet rs = stmt.getGeneratedKeys()) {
         if (rs.next()) {
@@ -62,7 +60,7 @@ public class FuncionarioDAO implements CriacaoTabela {
       }
 
     } catch (Exception error) {
-      customLogger.logError("Erro ao inserir: " + funcionario.getNome());
+      CustomLogger.logError("Erro ao inserir: " + funcionario.getNome());
       throw new RuntimeException("Erro: " + error.getMessage());
     }
   }
@@ -118,9 +116,9 @@ public class FuncionarioDAO implements CriacaoTabela {
       int linhas = stmt.executeUpdate();
 
       if (linhas > 0) {
-        customLogger.logWarning("Funcionário de ID '" + id_funcionario + "' removido!");
+        CustomLogger.logWarning("Funcionário de ID '" + id_funcionario + "' removido!");
       } else {
-        customLogger.logError("Funcionário não encontrado!");
+        CustomLogger.logError("Funcionário não encontrado!");
       }
 
     } catch (Exception error) {
@@ -190,14 +188,14 @@ public class FuncionarioDAO implements CriacaoTabela {
           System.out
               .println("------------------------------------------------------------------------------------------");
         } else {
-          customLogger.logWarning("Tabela FUNCIONARIO vazio!");
+          CustomLogger.logWarning("Tabela FUNCIONARIO vazio!");
         }
       }
 
       // stmt.executeUpdate(); // -> Comando apenas para deleted, update e insert;
 
     } catch (SQLException error) {
-      customLogger.logError("Erro ao buscar dados dos funcionários!");
+      CustomLogger.logError("Erro ao buscar dados dos funcionários!");
       throw new RuntimeException(error.getMessage());
     }
 
@@ -224,7 +222,7 @@ public class FuncionarioDAO implements CriacaoTabela {
         }
       }
     } catch (SQLException error) {
-      customLogger.logWarning("Erro ao Encontrar Funcionário" + error.getMessage());
+      CustomLogger.logWarning("Erro ao Encontrar Funcionário" + error.getMessage());
 
     }
     return funcionario;
@@ -268,7 +266,7 @@ public class FuncionarioDAO implements CriacaoTabela {
       }
 
     } catch (SQLException error) {
-      customLogger.logError("Erro ao buscar dados dos funcionários!");
+      CustomLogger.logError("Erro ao buscar dados dos funcionários!");
       throw new RuntimeException(error.getMessage());
     }
 

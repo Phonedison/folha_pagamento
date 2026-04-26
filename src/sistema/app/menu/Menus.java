@@ -12,7 +12,6 @@ import sistema.repository.*;
 import sistema.service.CsvService;
 
 public class Menus {
-  CustomLogger customLogger = new CustomLogger();
 
   private final Scanner sc = new Scanner(System.in);
   private ConexaoDB conexao;
@@ -97,13 +96,13 @@ public class Menus {
               conexao = conexao_db();
 
               try (Connection con = conexao.conectarDB()) {
-                customLogger.logConectionSucess("Conexão realizada com sucesso!");
+                CustomLogger.logConectionSucess("Conexão realizada com sucesso!");
                 conectado = true;
               }
 
             } catch (SQLException error) {
               titulo("ERRO DE CONEXÃO");
-              customLogger.logConectionError("Falha: " + error.getMessage());
+              CustomLogger.logConectionError("Falha: " + error.getMessage());
 
               System.out.print("Deseja tentar novamente? (S/N): ");
               String resposta = sc.nextLine().toUpperCase();
@@ -112,7 +111,7 @@ public class Menus {
                 conexao = null;
               }
             } catch (Exception e) {
-              customLogger.logError("Erro inesperado: " + e.getMessage());
+              CustomLogger.logError("Erro inesperado: " + e.getMessage());
               break;
             }
           }
@@ -125,7 +124,7 @@ public class Menus {
                                               // para
                                               // identificar qual menu acessar
         case 5 -> menu_modelDAO("FOLHA DE PAGAMENTO");
-        case 0 -> customLogger.logFinal("SERVIÇO FINALIZADO!");
+        case 0 -> CustomLogger.logFinal("SERVIÇO FINALIZADO!");
 
         default -> System.out.println("Número inválido!");
       }
@@ -137,8 +136,8 @@ public class Menus {
 
     if (conexao == null) { // verifica se foi feito a conexão com o banco de dados
       titulo("E R R O");
-      customLogger.logError("Conexão com o Banco de Dados não estabelecida!");
-      customLogger.logWarning("Você precisa se conetar ao banco (Opção 1) para acessar os recursos de " + ".");
+      CustomLogger.logError("Conexão com o Banco de Dados não estabelecida!");
+      CustomLogger.logWarning("Você precisa se conetar ao banco (Opção 1) para acessar os recursos de " + ".");
       return;
     }
 
@@ -161,8 +160,8 @@ public class Menus {
         case 2 -> listar(entidade);
         case 3 -> atualizar(entidade);
         case 4 -> excluir(entidade);
-        case 0 -> customLogger.logWarning("Voltando...");
-        default -> customLogger.logWarning("Número inválido!");
+        case 0 -> CustomLogger.logWarning("Voltando...");
+        default -> CustomLogger.logWarning("Número inválido!");
       }
 
     } while (opcao != 0);
@@ -179,7 +178,7 @@ public class Menus {
 
     } catch (NumberFormatException error) {
       sc.nextLine();
-      customLogger.logWarning("Valor inválido! Digite um número inteiro.");
+      CustomLogger.logWarning("Valor inválido! Digite um número inteiro.");
       return 0;
     }
 
@@ -225,7 +224,7 @@ public class Menus {
           // caso ocorra um erro durante a validação ou inserção do funcionário, será
           // capturada a exceção e exibida uma mensagem de erro informando o motivo do
           // erro, facilitando a correção do mesmo
-          customLogger.logError("Erro ao cadastrar funcionário: " + e.getMessage());
+          CustomLogger.logError("Erro ao cadastrar funcionário: " + e.getMessage());
         }
       }
       case "DEPENDENTE" -> {
@@ -261,12 +260,12 @@ public class Menus {
           d.validarDependente();
           depDAO.atualizarDependente(d, opcaoParentesco, idFuncionario);
           depDAO.salvarDependente(d);
-          customLogger.logSucess("Dependente cadastrado com sucesso!");
+          CustomLogger.logSucess("Dependente cadastrado com sucesso!");
 
           // caso ocorra um erro durante a validação ou inserção do dependente, será
           // capturada a exceção e exibida uma mensagem de erro informando o motivo
         } catch (DependenteException error) {
-          customLogger.logError("Erro ao cadastrar dependente: " + error.getMessage());
+          CustomLogger.logError("Erro ao cadastrar dependente: " + error.getMessage());
         }
 
       }
@@ -292,7 +291,7 @@ public class Menus {
         // Salva os dados no DB
         folhaDAO.salvarFolha(folha);
 
-        customLogger.logSucess("Folha de pagamento do(a) Funcionário(a) Registrado!");
+        CustomLogger.logSucess("Folha de pagamento do(a) Funcionário(a) Registrado!");
       }
 
       default -> System.out.println("Entidade inválida para cadastro!");
@@ -321,7 +320,7 @@ public class Menus {
             titulo("RELATORIO DE QTD " + entidade);
             funDAO.selececionarQtdDependentePorFUncionario();
           }
-          default -> customLogger.logWarning("Opção Invalida!");
+          default -> CustomLogger.logWarning("Opção Invalida!");
         }
 
       }
@@ -335,7 +334,7 @@ public class Menus {
         FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
         folhaDAO.selecionarFolha(new FolhaPagamento(), 0, "");
       }
-      default -> customLogger.logWarning("Entidade inválida para listagem!");
+      default -> CustomLogger.logWarning("Entidade inválida para listagem!");
     }
   }
 
@@ -357,7 +356,7 @@ public class Menus {
           // se sim, executa o método excluir funcionario
           funDAO.excluirFuncionario(id);
         } else {
-          customLogger.logWarning("Exclusão cancelada.");
+          CustomLogger.logWarning("Exclusão cancelada.");
         }
       }
 
@@ -370,7 +369,7 @@ public class Menus {
           depDAO.excluirDependente(id);
 
         } else {
-          customLogger.logWarning("Exclusão cancelada.");
+          CustomLogger.logWarning("Exclusão cancelada.");
         }
       }
     }
@@ -418,7 +417,7 @@ public class Menus {
             f.setSalarioBruto(Double.parseDouble(sc.nextLine()));
           }
 
-          default -> customLogger.logWarning("Opção inválida!");
+          default -> CustomLogger.logWarning("Opção inválida!");
         }
 
         try {
@@ -426,7 +425,7 @@ public class Menus {
           funDAO.atualizarFuncionario(f, opcao, id);
 
         } catch (CpfDuplicado error) {
-          customLogger.logError("Erro ao atualizar funcionário: " + error.getMessage());
+          CustomLogger.logError("Erro ao atualizar funcionário: " + error.getMessage());
         }
 
       }
@@ -485,15 +484,15 @@ public class Menus {
         }
         try {
           depDAO.atualizarDependente(d, opcao, id);
-          customLogger
+          CustomLogger
               .logSucess("Dependente '" + d.getId_dependente() + " " + d.getNome() + "' atualizado com sucesso!");
 
         } catch (Exception error) {
-          customLogger.logWarning("Erro ao atualizar dependente: " + error.getMessage());
+          CustomLogger.logWarning("Erro ao atualizar dependente: " + error.getMessage());
         }
 
       }
-      default -> customLogger.logError("Entidade inválida para atualização!");
+      default -> CustomLogger.logError("Entidade inválida para atualização!");
     }
   }
 
@@ -523,7 +522,7 @@ public class Menus {
       case 3 -> csvService.exportarFuncionario(caminho);
       case 4 -> csvService.exportarDependente(caminho);
       case 5 -> csvService.exportarQtdDependenteFuncionario(caminho);
-      default -> customLogger.logWarning("Opção invalida!");
+      default -> CustomLogger.logWarning("Opção invalida!");
 
     }
 

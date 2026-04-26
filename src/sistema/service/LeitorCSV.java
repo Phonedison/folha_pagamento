@@ -13,7 +13,6 @@ import sistema.model.*;
 import sistema.repository.*;
 
 public class LeitorCSV {
-  CustomLogger customLogger = new CustomLogger();
 
   private final FuncionarioDAO funcionarioDAO;
   private final DependenteDAO dependenteDAO;
@@ -115,7 +114,7 @@ public class LeitorCSV {
             funcionarioAtual.getDependentes().add(dependente);
 
           } catch (Exception error) {
-            customLogger
+            CustomLogger
                 .logDependenteError("Aviso: Dependente '" + dados[0] + "' já cadastrado!");
 
           }
@@ -123,7 +122,7 @@ public class LeitorCSV {
       }
 
       System.out.println("");
-      customLogger.logSucess("FUNCIONÁRIOS, DEPENDENTES e FOLHA DE PAGAMENTOS registrados!");
+      CustomLogger.logSucess("FUNCIONÁRIOS, DEPENDENTES e FOLHA DE PAGAMENTOS registrados!");
 
     } catch (Exception erou) {
       throw new RuntimeException("Erro crítico ao ler CSV: " + erou.getMessage(), erou);
