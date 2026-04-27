@@ -28,9 +28,9 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
         comandoSQL.append("nome = ?, cpf = ?, data_nascimento = ?, parentesco = ?, id_funcionario = ?");
         parametro.add(dependente.getNome());
         parametro.add(dependente.getCpf());
-        parametro.add(dependente.getDataNacimento());
+        parametro.add(dependente.getDataNascimento());
         parametro.add(dependente.getParentesco().name());
-        parametro.add(dependente.getFuncionario());
+        parametro.add(dependente.getIdFuncionario());
 
       }
       case 1 -> {
@@ -45,7 +45,7 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
 
       case 3 -> {
         comandoSQL.append("data_nascimento = ?");
-        parametro.add(dependente.getDataNacimento());
+        parametro.add(dependente.getDataNascimento());
       }
 
       case 4 -> {
@@ -55,7 +55,7 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
 
       case 5 -> {
         comandoSQL.append("parentesco = ?");
-        parametro.add(dependente.getFuncionario());
+        parametro.add(dependente.getIdFuncionario());
       }
 
       default -> {
@@ -69,19 +69,20 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
     try {
       executeUpdate(comandoSQL.toString(), parametro.toArray());
       CustomLogger
-          .logSucess("Dependente " + dependente.getIdDependente() + " - " + dependente.getNome() + "Atualizado!");
+          .logSucess("Dependente ID " + id + " atualizado!");
 
-    } catch (Exception e) {
+    } catch (Exception error) {
       CustomLogger.logError("Erro ao Atualizar dependente: ");
-      throw new RuntimeException(e.getMessage(), e);
+      throw new RuntimeException(error.getMessage(), error);
     }
 
   }
 
   @Override
   public void excluir(int id) {
-    String comandoSQL = "DELETE FROM funcionario WHERE id_dependente = ?";
+    String comandoSQL = "DELETE FROM dependente WHERE id_dependente = ?";
     executeUpdate(comandoSQL, id);
+    CustomLogger.logSucess("Dependente ID" + id + "excluído!");
   }
 
   @Override
@@ -97,7 +98,7 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
       case 6 -> comandoSQL.append("id_funcionario DESC;");
       default -> {
         CustomLogger.logWarning("Opção inválida!");
-        return null;
+        return new ArrayList<>();
       }
     }
 
@@ -112,9 +113,9 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
         lista.add(mapearDependente(rs));
       }
 
-    } catch (Exception e) {
+    } catch (Exception error) {
       CustomLogger.logDependenteError("Erro ao listar Dependentes");
-      throw new RuntimeException(e.getMessage(), e);
+      throw new RuntimeException(error.getMessage(), error);
     }
 
     return lista;
@@ -129,9 +130,11 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
         comandoSQL,
         dependente.getNome(),
         dependente.getCpf(),
-        dependente.getDataNacimento(),
+        dependente.getDataNascimento(),
         dependente.getParentesco().name(),
-        dependente.getFuncionario());
+        dependente.getIdFuncionario());
+
+    CustomLogger.logSucess("Dependente '" + dependente.getNome() + "' salvo com sucesso!");
   }
 
   private Dependente mapearDependente(ResultSet rs) throws SQLException {
@@ -143,7 +146,7 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
     dependente.setCpf(rs.getString("cpf"));
     dependente.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
     dependente.escolherParentesco(rs.getString("parentesco::parentesco"));
-    dependente.setFuncionario(rs.getInt("id_funcionario"));
+    dependente.setIdFuncionario(rs.getInt("id_funcionario"));
 
     return dependente;
   }

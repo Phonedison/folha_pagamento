@@ -20,8 +20,8 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
     super(db);
   }
 
-  /* Método para adicionar um funcionário */
   @Override
+  /* Método para adicionar um funcionário */
   public void salvar(Funcionario funcionario) {
 
     String comandoSQL = "INSERT INTO funcionario (nome, cpf, data_nascimento, salario_bruto) VALUES (?, ?, ?, ?);";
@@ -36,8 +36,8 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
     CustomLogger.logSucess("Funcionário '" + funcionario.getNome() + "' salvo com sucesso!");
   }
 
-  /* Método para buscar todos os funcionários */
   @Override
+  /* Método para buscar todos os funcionários */
   public List<Funcionario> listarTodos(int opcao) {
     StringBuilder comandoSQL = new StringBuilder("SELECT * FROM funcionario ORDER BY ");
 
@@ -71,8 +71,8 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
     return lista;
   }
 
-  /* Método de exclusão com base no ID e passando um parametro a ser atualizado */
   @Override
+  /* Método de exclusão com base no ID e passando um parametro a ser atualizado */
   public void atualizar(Funcionario funcionario, int id, int opcao) throws CpfDuplicadoException {
     StringBuilder sql = new StringBuilder("UPDATE funcionario SET ");
     List<Object> params = new ArrayList<>();
@@ -122,27 +122,13 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
     }
   }
 
-  /* Método de exclusão por ID */
   @Override
+  /* Método de exclusão por ID */
   public void excluir(int id) {
     String comandoSQL = "DELETE FROM funcionario WHERE id_funcionario = ?";
     executeUpdate(comandoSQL, id);
 
     CustomLogger.logSucess("Funcionário de ID " + id + "excluído com sucesso!");
-  }
-
-  /* Método para mapear e evitar repetição */
-  private Funcionario mapearFuncionario(ResultSet rs) throws SQLException {
-
-    Funcionario funcionario = new Funcionario();
-
-    funcionario.setIdFuncionario(rs.getInt("id_funcionario"));
-    funcionario.setNome(rs.getString("nome"));
-    funcionario.setCpf(rs.getString("cpf"));
-    funcionario.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
-    funcionario.setSalarioBruto(rs.getDouble("salario_bruto"));
-
-    return funcionario;
   }
 
   /* Método para buscar funcionário por CPF */
@@ -184,4 +170,19 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
     }
     return null;
   }
+
+  /* Método para mapear e evitar repetição */
+  private Funcionario mapearFuncionario(ResultSet rs) throws SQLException {
+
+    Funcionario funcionario = new Funcionario();
+
+    funcionario.setIdFuncionario(rs.getInt("id_funcionario"));
+    funcionario.setNome(rs.getString("nome"));
+    funcionario.setCpf(rs.getString("cpf"));
+    funcionario.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
+    funcionario.setSalarioBruto(rs.getDouble("salario_bruto"));
+
+    return funcionario;
+  }
+
 }

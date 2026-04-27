@@ -69,20 +69,22 @@ public class FolhaPagamento {
         this.descontoIR = descontoIR;
     }
 
-    // public void setFuncionario(int funcionario) {
-    // this.funcionario.setId_funcionario(funcionario);
-    // }
-
     public void setSalarioLiquido(double salarioLiquido) {
         this.salarioLiquido = salarioLiquido;
     }
 
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
+
+    /* MÉTODOS */
+
+    /* Calculo do Desconto INSS */
     public void calcularINSS() {
 
         double salario = funcionario.getSalarioBruto();
-        double teto = 8157.41;
-        double base = Math.min(salario, teto);
-        double inss, max_inss = 951.62;
+        double base = Math.min(salario, 8157.41);
+        double inss;
 
         if (salario <= 1518.00) {
             inss = base * 0.075;
@@ -97,10 +99,10 @@ public class FolhaPagamento {
             inss = (base * 0.14) - 190.42;
         }
 
-        inss = Math.max(inss, 0);
-        this.descontoInss = Math.min(inss, max_inss);
+        this.descontoInss = Math.min(Math.max(inss, 0), 951.62);
     }
 
+    /* Calculo do Desconto IR */
     public void calcularIR() {
         double base = funcionario.getSalarioBruto()
                 - this.descontoInss
@@ -123,13 +125,11 @@ public class FolhaPagamento {
         }
     }
 
+    /* Calculo do salário Liquido */
     public void calcularSalarioLiquido() {
         this.salarioLiquido = funcionario.getSalarioBruto()
                 - this.descontoInss
                 - this.descontoIR;
     }
 
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
 }

@@ -21,20 +21,24 @@ public class Dependente extends Pessoa {
     this.parentesco = parentesco;
   }
 
-  public Parentesco getParentesco() {
-    return this.parentesco;
-  }
+  /* GET */
 
   public Integer getIdDependente() {
     return this.idDependente;
   }
 
-  public void setIdDependente(int idDependente) {
-    this.idDependente = idDependente;
-  }
-
   public Integer getIdFuncionario() {
     return this.idFuncionario;
+  }
+
+  public Parentesco getParentesco() {
+    return this.parentesco;
+  }
+
+  /* SET */
+
+  public void setIdDependente(int idDependente) {
+    this.idDependente = idDependente;
   }
 
   public void setIdFuncionario(Integer idFuncionario) {
@@ -45,6 +49,11 @@ public class Dependente extends Pessoa {
     this.parentesco = parente;
   }
 
+  /* METODOS */
+
+  /*
+   * Método para escolher o parentesco via String (como no caso da leitura do CSV)
+   */
   public void escolherParentesco(String opcao) {
 
     switch (opcao.toUpperCase()) {
@@ -57,6 +66,7 @@ public class Dependente extends Pessoa {
     }
   }
 
+  /* Método para validar o tipo de dependente informado */
   public void escolherParentesco(int opcao) {
 
     switch (opcao) {
@@ -69,6 +79,7 @@ public class Dependente extends Pessoa {
     }
   }
 
+  /* Método para validar a a idade do dependente */
   public void validar() throws DependenteException {
     int idade = Period.between(getDataNascimento(), LocalDate.now()).getYears();
     if (idade > 18) {

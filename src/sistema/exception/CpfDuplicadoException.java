@@ -1,6 +1,6 @@
 package sistema.exception;
 
-public class CpfDuplicadoException extends Exception {
+public class CpfDuplicadoException extends BusinessException {
 
   public CpfDuplicadoException(String mensagem) {
     super(mensagem);

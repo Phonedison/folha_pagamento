@@ -7,6 +7,7 @@ import sistema.repository.connection.DatabaseConfig;
 
 public class ConexaoService {
 
+    /* Método para solicitar os dados do BD */
     public DatabaseConfig solicitarDadosConexao() {
 
         Terminal.titulo("Conexao com o Banco de Dados");

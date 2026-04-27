@@ -1,6 +1,6 @@
 package sistema.exception;
 
-public class DependenteException extends Exception {
+public class DependenteException extends BusinessException {
 
   public DependenteException(String mensagem) {
     super(mensagem);
