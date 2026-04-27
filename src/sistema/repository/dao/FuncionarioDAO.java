@@ -6,9 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.naming.spi.DirStateFactory.Result;
-
 import sistema.app.util.CustomLogger;
 import sistema.exception.CpfDuplicadoException;
 import sistema.model.Funcionario;
@@ -30,7 +27,7 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
         comandoSQL,
         funcionario.getNome(),
         funcionario.getCpf(),
-        funcionario.getDataNacimento(),
+        funcionario.getDataNascimento(),
         funcionario.getSalarioBruto());
 
     CustomLogger.logSucess("Funcionário '" + funcionario.getNome() + "' salvo com sucesso!");

@@ -151,4 +151,24 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
     return dependente;
   }
 
+  public Dependente buscarPorCpf(String cpf) {
+
+    String comandoSQL = "SELECT * FROM dependente WHERE cpf = ?";
+
+    try (
+        Connection conexao = db.conectarDB();
+        PreparedStatement stmt = conexao.prepareStatement((comandoSQL));) {
+      stmt.setString(1, cpf);
+
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (rs.next())
+          return mapearDependente(rs);
+      }
+
+    } catch (Exception error) {
+      CustomLogger.logError("Erro ao buscar dependente por CPF: " + error.getMessage());
+    }
+    return null;
+  }
+
 }

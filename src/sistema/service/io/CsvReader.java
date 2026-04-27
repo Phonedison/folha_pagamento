@@ -8,7 +8,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import sistema.app.util.CustomLogger;
+import static sistema.app.ui.Terminal.titulo;
+import static sistema.app.util.CustomLogger.*;
 import sistema.model.Dependente;
 import sistema.model.FolhaPagamento;
 import sistema.model.Funcionario;
@@ -29,8 +30,9 @@ public class CsvReader {
     this.folhaPagamentoDAO = folhaPagamentoDAO;
   }
 
-  public List<Funcionario> lerArquivo(String caminho) {
+  public ImportacaoResultado lerArquivo(String caminho) {
 
+    ImportacaoResultado resultado = new ImportacaoResultado();
     List<Funcionario> listaFuncionarios = new ArrayList<>();
 
     try (
@@ -57,31 +59,44 @@ public class CsvReader {
 
         if (proximaLinhaFuncionario) {
 
-          funcionarioAtual = processarFuncionario(dados, listaFuncionarios);
+          funcionarioAtual = processarFuncionario(dados, listaFuncionarios, resultado);
           proximaLinhaFuncionario = false;
 
         } else {
 
           if (funcionarioAtual != null) {
-            processarDependente(dados, funcionarioAtual);
+            processarDependente(dados, funcionarioAtual, resultado);
           }
         }
       }
-      CustomLogger.logSucess("Importação conclúda: Funcionários, Dependentes e Folha de Pagamentos registrados!");
+      logSucess("Importação concluida: Funcionários, Dependentes e Folha de Pagamentos registrados!");
+
+      exibirResumo(resultado);
+
     } catch (Exception error) {
       throw new RuntimeException("Erro crítico ao ler CSV" + error.getMessage(), error);
     }
 
-    return listaFuncionarios;
+    return resultado;
   }
 
-  private Funcionario processarFuncionario(String[] dados, List<Funcionario> lista) {
+  /*
+   * TODO - Cogitar
+   * a possíbilidade de criar uma classe a parte só para fazer o processamento dos
+   * dados após a leitura
+   */
+
+  /* Processa uma linha de dependente e vincula ao funcionário atual. */
+  private Funcionario processarFuncionario(String[] dados, List<Funcionario> lista, ImportacaoResultado resultado) {
 
     String cpf = dados[1];
     Funcionario existente = funcionarioDAO.buscarPorCpf(cpf);
 
     if (existente != null) {
-      CustomLogger.logWarning("Funcionário '" + existente.getIdFuncionario() + " - " + existente.getNome() + " | CPF: "
+      resultado.funcionariosDuplicados++;
+      resultado.funcionariosDuplicadosLista.add(cpf);
+
+      logWarning("Funcionário '" + existente.getIdFuncionario() + " - " + existente.getNome() + " | CPF: "
           + cpf + "' Já cadastrado.");
       return existente;
     }
@@ -94,23 +109,37 @@ public class CsvReader {
 
     try {
       funcionarioDAO.salvar(f);
+      resultado.funcionarioImportados++;
       // Gerando a folha automaticamente após cadastrar o funcionário;
       lista.add(processarFolhaPagamento(f));
 
     } catch (Exception error) {
-      CustomLogger.logError("Erro ao salvar funcionário '" + f.getNome() + "': " + error.getMessage());
+      logError("Erro ao salvar funcionário '" + f.getNome() + "': " + error.getMessage());
     }
 
     return f;
   }
 
   /* Processa uma linha de dependente e vincula ao funcionário atual. */
-  private void processarDependente(String[] dados, Funcionario funcionarioAtual) {
+  private Dependente processarDependente(String[] dados, Funcionario funcionarioAtual, ImportacaoResultado resultado) {
+
+    String cpf = dados[1];
+
+    Dependente existente = null;
+
+    if (existente != null) {
+      resultado.dependentesDuplicados++;
+      resultado.dependentesDuplicadosLista.add(cpf);
+
+      logWarning("Dependente duplicado ignorado: CPF " + cpf);
+
+      return existente;
+    }
 
     Dependente d = new Dependente();
 
     d.setNome(dados[0]);
-    d.setCpf(dados[1]);
+    d.setCpf(cpf);
     d.setDataNascimento(formatarData(dados[2]));
     d.escolherParentesco(dados[3]);// lê como String: "FILHO", "SOBRINHO" ou "OUTROS"
 
@@ -118,10 +147,17 @@ public class CsvReader {
 
     try {
       dependenteDAO.salvar(d);
+      resultado.dependentesImportados++;
       funcionarioAtual.getDependentes().add(d);
+
     } catch (Exception error) {
-      CustomLogger.logWarning("Dependente '" + dados[0] + "' já cadastrado ou erro: " + error.getMessage());
+      resultado.dependentesDuplicados++;
+      resultado.dependentesDuplicadosLista.add(cpf);
+
+      logWarning("Dependente duplicado ignorado: CPF " + cpf);
     }
+
+    return d;
   }
 
   /* Processa a folha de pagamento referente ao funcionário atual. */
@@ -140,5 +176,11 @@ public class CsvReader {
   /* Método de conversão do tipo texto para Data */
   private LocalDate formatarData(String data) {
     return LocalDate.parse(data.trim(), frtmData);
+  }
+
+  private void exibirResumo(ImportacaoResultado resultado) {
+
+    titulo("RESUMO DA IMPORTAÇÃO");
+    // ! Continuar por aqui
   }
 }

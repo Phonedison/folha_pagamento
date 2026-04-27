@@ -130,9 +130,7 @@ public class FolhaPagamentoDAO extends BaseDAO implements GenericDAO<FolhaPagame
     @Override
     public void salvar(FolhaPagamento folha) {
 
-        String comandoSQL = """
-                INSERT INTO folha_pagamento (data_agamento, desconto_inss, desconto_ir, salario_liquido, id_funcionario) VALUES (?, ?, ?, ?, ?)
-                """;
+        String comandoSQL = "INSERT INTO folha_pagamento (data_pagamento, desconto_inss, desconto_ir, salario_liquido, id_funcionario) VALUES (?, ?, ?, ?, ?)";
 
         executeUpdate(
                 comandoSQL,
