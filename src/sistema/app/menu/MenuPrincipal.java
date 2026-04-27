@@ -7,6 +7,10 @@ import sistema.app.ui.InputHelper;
 import sistema.app.ui.Terminal;
 import sistema.app.util.CustomLogger;
 import sistema.repository.connection.DatabaseConfig;
+import sistema.repository.dao.DependenteDAO;
+import sistema.repository.dao.FolhaPagamentoDAO;
+import sistema.repository.dao.FuncionarioDAO;
+import sistema.service.CsvService;
 
 /* Menu principal do sistema. */
 public class MenuPrincipal {
@@ -102,5 +106,38 @@ public class MenuPrincipal {
   /* Função do menu de Importação / Exportação de arquivos CSV */
   private void menuCsv() {
 
+    if (conexao == null) {
+      CustomLogger.logConectionError("Conexão não estabelecida. Acesse a opção 1 primeiro.");
+      return;
+    }
+
+    Terminal.titulo("Menu CSV");
+
+    System.out.println("1 - Importar CSV (Funcionários + Dependentes)");
+    System.out.println("2 - Exportar Folha de Pagamento");
+    System.out.println("3 - Exportar Lista de Funcionários");
+    System.out.println("4 - Exportar Lista de Dependentes");
+    System.out.println("5 - Exportar Qtd. de Dependentes por Funcionário");
+    System.out.print("Opção: ");
+
+    int opcao = InputHelper.lerInt();
+
+    System.out.print("Informe o caminho do arquivo/pasta: ");
+    String caminho = InputHelper.lerTexto();
+
+    FuncionarioDAO funcionarioDAO = new FuncionarioDAO(conexao);
+    DependenteDAO dependenteDAO = new DependenteDAO(conexao);
+    FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
+
+    CsvService csvService = new CsvService(funcionarioDAO, dependenteDAO, folhaDAO, conexao);
+
+    switch (opcao) {
+      case 1 -> csvService.importar(caminho);
+      case 2 -> csvService.exportarFolha(caminho);
+      case 3 -> csvService.exportarFuncionario(caminho);
+      case 4 -> csvService.exportarDependente(caminho);
+      case 5 -> csvService.exportarQtdDependenteFuncionario(caminho);
+      default -> CustomLogger.logWarning("Opção inválida!");
+    }
   }
 }
