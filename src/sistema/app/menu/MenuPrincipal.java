@@ -5,7 +5,11 @@ import java.sql.SQLException;
 import sistema.app.service.ConexaoService;
 import sistema.app.ui.InputHelper;
 import sistema.app.ui.Terminal;
-import sistema.app.util.CustomLogger;
+import static sistema.app.util.CustomLogger.logConectionError;
+import static sistema.app.util.CustomLogger.logConectionSucess;
+import static sistema.app.util.CustomLogger.logError;
+import static sistema.app.util.CustomLogger.logFinal;
+import static sistema.app.util.CustomLogger.logWarning;
 import sistema.repository.connection.DatabaseConfig;
 import sistema.repository.dao.DependenteDAO;
 import sistema.repository.dao.FolhaPagamentoDAO;
@@ -38,9 +42,8 @@ public class MenuPrincipal {
       System.out.println("4 - Gerenciar Dependente");
       System.out.println("5 - Folha de Pagamento");
       System.out.println("0 - Sair");
-      System.out.print("Opção: ");
 
-      opcao = InputHelper.lerInt();
+      opcao = InputHelper.lerInt("Opção:");
 
       switch (opcao) {
 
@@ -49,8 +52,8 @@ public class MenuPrincipal {
         case 3 -> abrirMenuEntidade("FUNCIONARIO");
         case 4 -> abrirMenuEntidade("DEPENDENTE");
         case 5 -> abrirMenuEntidade("FOLHA DE PAGAMENTO");
-        case 0 -> CustomLogger.logFinal("Sistema encerrado!");
-        default -> CustomLogger.logWarning("Opção inválida!");
+        case 0 -> logFinal("Sistema encerrado!");
+        default -> logWarning("Opção inválida!");
       }
 
     } while (opcao != 0);
@@ -66,22 +69,21 @@ public class MenuPrincipal {
 
         // Testa se a conexão realmente funciona antes de aceitar
         try (Connection con = tentativa.conectarDB()) {
-          CustomLogger.logConectionSucess("Conexão estabelecida com sucesso!");
+          logConectionSucess("Conexão estabelecida com sucesso!");
           this.conexao = tentativa;
           conectado = true;
         }
 
       } catch (SQLException erro) {
         Terminal.titulo("Erro de Conexão");
-        CustomLogger.logConectionError("Falha: " + erro.getMessage());
+        logConectionError("Falha: " + erro.getMessage());
 
-        System.out.print("Deseja tentar novamente? (S/N): ");
-        if (!InputHelper.confirmar()) {
+        if (!InputHelper.confirmar("Deseja tentar novamente?")) {
           conectado = true; // encerra o loop sem conexão
         }
 
       } catch (Exception e) {
-        CustomLogger.logError("Erro inesperado: " + e.getMessage());
+        logError("Erro inesperado: " + e.getMessage());
         conectado = true;
       }
     }
@@ -94,8 +96,8 @@ public class MenuPrincipal {
   private void abrirMenuEntidade(String entidade) {
     if (conexao == null) {
       Terminal.titulo("Erro");
-      CustomLogger.logError("Conexao com o Banco de Dados não estabelecida!");
-      CustomLogger.logWarning("Escolha a opção 1 para conectar antes de continuar.");
+      logError("Conexao com o Banco de Dados não estabelecida!");
+      logWarning("Escolha a opção 1 para conectar antes de continuar.");
       return;
     } else {
       MenuEntidades menu = new MenuEntidades(conexao);
@@ -107,7 +109,7 @@ public class MenuPrincipal {
   private void menuCsv() {
 
     if (conexao == null) {
-      CustomLogger.logConectionError("Conexão não estabelecida. Acesse a opção 1 primeiro.");
+      logConectionError("Conexão não estabelecida. Acesse a opção 1 primeiro.");
       return;
     }
 
@@ -118,12 +120,9 @@ public class MenuPrincipal {
     System.out.println("3 - Exportar Lista de Funcionários");
     System.out.println("4 - Exportar Lista de Dependentes");
     System.out.println("5 - Exportar Qtd. de Dependentes por Funcionário");
-    System.out.print("Opção: ");
 
-    int opcao = InputHelper.lerInt();
-
-    System.out.print("Informe o caminho do arquivo/pasta: ");
-    String caminho = InputHelper.lerTexto();
+    int opcao = InputHelper.lerInt("Opção:");
+    String caminho = InputHelper.lerTexto("Informe o caminho do arquivo/pasta:");
 
     FuncionarioDAO funcionarioDAO = new FuncionarioDAO(conexao);
     DependenteDAO dependenteDAO = new DependenteDAO(conexao);
@@ -137,7 +136,7 @@ public class MenuPrincipal {
       case 3 -> csvService.exportarFuncionario(caminho);
       case 4 -> csvService.exportarDependente(caminho);
       case 5 -> csvService.exportarQtdDependenteFuncionario(caminho);
-      default -> CustomLogger.logWarning("Opção inválida!");
+      default -> logWarning("Opção inválida!");
     }
   }
 }

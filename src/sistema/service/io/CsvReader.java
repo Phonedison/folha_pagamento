@@ -8,8 +8,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import static sistema.app.ui.InputHelper.confirmar;
 import static sistema.app.ui.Terminal.titulo;
-import static sistema.app.util.CustomLogger.*;
+import static sistema.app.util.CustomLogger.logError;
+import static sistema.app.util.CustomLogger.logSucess;
+import static sistema.app.util.CustomLogger.logWarning;
 import sistema.model.Dependente;
 import sistema.model.FolhaPagamento;
 import sistema.model.Funcionario;
@@ -179,8 +182,25 @@ public class CsvReader {
   }
 
   private void exibirResumo(ImportacaoResultado resultado) {
+    logSucess("Importação conclúida: Funcionários, Dependentes e Folha de Pagamentos registrados!");
 
     titulo("RESUMO DA IMPORTAÇÃO");
-    // ! Continuar por aqui
+
+    System.out.println("Qtd. Funcionário importados: " + resultado.funcionarioImportados);
+    System.out.println("Qtd. Dependentes importados: " + resultado.dependentesImportados);
+
+    if (resultado.funcionariosDuplicados > 0 || resultado.dependentesDuplicados > 0) {
+      System.out.println("\n Deseja visualizar os duplicados? (S/N): ");
+
+      // executa o método de confirmação dentro da comparação
+      if (confirmar()) {
+        titulo("Funcionários duplicados");
+        resultado.funcionariosDuplicadosLista.stream().forEach(funcionario -> System.out.println(funcionario));
+
+        titulo("Dependentes duplicados");
+        resultado.dependentesDuplicadosLista.stream().forEach(dependentes -> System.out.println(dependentes));
+      }
+    }
+
   }
 }

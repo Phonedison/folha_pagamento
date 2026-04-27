@@ -2,7 +2,7 @@ package sistema.app.service;
 
 import sistema.app.ui.InputHelper;
 import sistema.app.ui.Terminal;
-import sistema.app.util.CustomLogger;
+import static sistema.app.util.CustomLogger.logWarning;
 import sistema.repository.connection.DatabaseConfig;
 
 public class ConexaoService {
@@ -31,7 +31,7 @@ public class ConexaoService {
             senha = InputHelper.lerTexto();
 
             if (nomeDB.isBlank() || usuario.isBlank() || senha.isBlank() || porta <= 0) {
-                CustomLogger.logWarning("Dados incompletos! Por favor, preencha todos os campos.");
+                logWarning("Dados incompletos! Por favor, preencha todos os campos.");
             }
         } while (nomeDB.isBlank() || usuario.isBlank() || senha.isBlank() || porta <= 0);
 

@@ -2,8 +2,9 @@ package sistema.app.ui;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
-import sistema.app.util.CustomLogger;
+import static sistema.app.util.CustomLogger.logWarning;
 
 public class InputHelper {
 
@@ -14,45 +15,82 @@ public class InputHelper {
     }
 
     // leitura e validação do tipo Int
-    public static int lerInt() {
-        try {
-            int valor = Integer.parseInt(sc.nextLine().trim());
-            return valor;
-        } catch (NumberFormatException e) {
-            CustomLogger.logWarning("Entrada inválida! Digite um número inteiro.");
-            return -1;
+    public static int lerInt(String mensagem) {
+        while (true) {
+            try (sc) {
+                System.out.printf(mensagem + " ");
+                return Integer.parseInt(sc.nextLine().trim());
+            } catch (NumberFormatException e) {
+                logWarning("Entrada inválida! Digite um número inteiro.");
+            }
         }
     }
 
     // leitura e validação do tipo Double
-    public static double lerDouble() {
-        try {
-            return Double.parseDouble((sc.nextLine().trim().replace(",", ".")));
-        } catch (Exception e) {
-            CustomLogger.logWarning("Entrada inválida! Digite um número decimal.");
-            return -1;
+    public static double lerDouble(String mensagem) {
+        while (true) {
+            try (sc) {
+                System.out.println(mensagem + " ");
+                return Double.parseDouble((sc.nextLine().trim().replace(",", ".")));
+            } catch (NumberFormatException e) {
+                logWarning("Entrada inválida! Digite um número decimal!");
+            }
         }
     }
 
     // leitura e validação do tipo texto
-    public static String lerTexto() {
+    public static String lerTexto(String mensagem) {
+        System.out.print(mensagem + " ");
         return sc.nextLine().trim();
     }
 
     // leitura e validação do tipo Data
-    public static LocalDate lerData() {
-        try {
-            return LocalDate.parse(sc.nextLine().trim(), ftData);
-        } catch (Exception e) {
-            CustomLogger.logWarning("Data inválida! Use o formato dd/MM/yyyy.");
-            return null;
+    public static LocalDate lerData(String mensagem) {
+        while (true) {
+
+            try (sc) {
+                System.out.print(mensagem + " ");
+                return LocalDate.parse(sc.nextLine().trim(), ftData);
+
+            } catch (DateTimeParseException e) {
+                logWarning("Data inválida! Use o formato dd/MM/yyyy!");
+            }
         }
     }
 
     // leitura e validação do tipo Boolean
+    public static boolean confirmar(String mensagem) {
+        while (true) {
+
+            try (sc) {
+
+                System.out.print(mensagem + " (S/N): ");
+                String resposta = sc.nextLine().trim().toUpperCase();
+
+                if (resposta.equals("S")) {
+                    return true;
+                } else if (resposta.equals("N")) {
+                    return false;
+                }
+
+            } catch (Exception e) {
+                logWarning("Entrada inválida! Digite apenas 'S' para sim ou 'N' para não.");
+            }
+        }
+    }
+
     public static boolean confirmar() {
-        String resposta = sc.nextLine().trim().toUpperCase();
-        return resposta.equals("S");
+
+        while (true) {
+            try (sc) {
+                String resposta = sc.nextLine().trim().toUpperCase();
+                return resposta.equals("S");
+
+            } catch (Exception e) {
+                logWarning("Entrada inválida! Digite apenas (S/N)!");
+            }
+        }
+
     }
 }
 
