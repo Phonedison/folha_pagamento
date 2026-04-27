@@ -141,7 +141,7 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
     dependente.setIdDependente(rs.getInt("id_dependente"));
     dependente.setNome(rs.getString("nome"));
     dependente.setCpf(rs.getString("cpf"));
-    dependente.setDataNacimento(rs.getDate("data_nascimento").toLocalDate());
+    dependente.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
     dependente.escolherParentesco(rs.getString("parentesco::parentesco"));
     dependente.setFuncionario(rs.getInt("id_funcionario"));
 

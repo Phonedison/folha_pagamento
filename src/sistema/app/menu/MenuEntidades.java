@@ -1,346 +1,355 @@
 package sistema.app.menu;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
-
-import sistema.model.Funcionario;
+import sistema.app.ui.InputHelper;
+import sistema.app.ui.Terminal;
+import sistema.app.util.CustomLogger;
+import sistema.exception.CpfDuplicadoException;
+import sistema.exception.DependenteException;
 import sistema.model.Dependente;
 import sistema.model.FolhaPagamento;
+import sistema.model.Funcionario;
 import sistema.repository.connection.DatabaseConfig;
 import sistema.repository.dao.DependenteDAO;
 import sistema.repository.dao.FolhaPagamentoDAO;
 import sistema.repository.dao.FuncionarioDAO;
-import sistema.app.ui.PrintSystem;
-// Imports de exceções e utilitários
-import sistema.exception.CpfDuplicadoException;
-import sistema.exception.DependenteException;
 
 public class MenuEntidades {
-    private final Scanner sc = new Scanner(System.in);
-    // No topo da classe MenuEntidades:
     private final DatabaseConfig conexao;
 
     public MenuEntidades(DatabaseConfig conexao) {
         this.conexao = conexao;
     }
 
-    // método para cadastrar
+    public void exibir(String entidade) {
+        int opcao;
+
+        do {
+            Terminal.titulo("Gestão de " + entidade);
+            System.out.println("1 - Cadastrar");
+            System.out.println("2 - Listar");
+            System.out.println("3 - Atualizar");
+            System.out.println("4 - Excluir");
+            System.out.println("0 - Voltar ao Menu Principal");
+
+            System.out.print("Opção :");
+            opcao = InputHelper.lerInt();
+
+            switch (opcao) {
+                case 1 -> cadastrar(entidade);
+                case 2 -> listar(entidade);
+                case 3 -> atualizar(entidade);
+                case 4 -> excluir(entidade);
+                case 0 -> CustomLogger.logWarning("Voltando ao menu principal...");
+                default -> CustomLogger.logError("Opção inválida! Tente novamente.");
+            }
+        } while (opcao != 0);
+    }
+
     public void cadastrar(String entidade) {
         switch (entidade) {
 
             case "FUNCIONARIO" -> {
+                Terminal.titulo("Cadastrar Funcionario");
 
-                // criando o objeto do tipo FuncionarioDAO para acessar os métodos de CRUD do
-                // funcionário
-                FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
-                // criando o objeto do tipo Funcionario para acessar os atributos e métodos da
-                // classe Funcionario, e posteriormente passar como parâmetro para os métodos de
-                // CRUD
-                Funcionario f = new Funcionario();
+                FuncionarioDAO funDAO = new FuncionarioDAO(conexao); // estabelece conexao com o DB
+                Funcionario f = new Funcionario(); // Criação de um objeto do tipo funcionario
 
-                // Inserção de valores referente a funcionário
-                PintSystem.titulo("Cadastrar Funcionário");
-
+                /* Leitura dos dados */
                 System.out.print("Nome: ");
-                f.setNome(sc.nextLine());
-
+                f.setNome(InputHelper.lerTexto());
                 System.out.print("CPF: ");
-                f.setCpf(sc.nextLine());
-
-                System.out.print("Data de Nascimento: ");
-                f.setDataNacimento(converterData(sc.nextLine()));
-
-                System.out.print("Salário Bruto: ");
-                f.setSalarioBruto(Double.parseDouble(sc.nextLine()));
+                f.setCpf(InputHelper.lerTexto());
+                System.out.print("Data de Nascimento (dd/MM/yyyy): ");
+                f.setDataNascimento(InputHelper.lerData());
+                System.out.print("Salário Bruto: R$ ");
+                f.setSalarioBruto(InputHelper.lerDouble());
 
                 try {
-                    // validando os dados do funcionário utilizando o método validarFuncionario da
-                    // classe Funcionario, caso haja algum erro de validação, será lançado uma
-                    // exceção com a mensagem de erro correspondente
-                    funDAO.salvarFuncionario(f);
-                    // System.out.println("Funcionário cadastrado com sucesso!");
+                    funDAO.salvar(f);
+                    CustomLogger.logSucess("Funcionário cadastrado com sucesso!");
 
                 } catch (Exception e) {
-                    // caso ocorra um erro durante a validação ou inserção do funcionário, será
-                    // capturada a exceção e exibida uma mensagem de erro informando o motivo do
-                    // erro, facilitando a correção do mesmo
                     CustomLogger.logError("Erro ao cadastrar funcionário: " + e.getMessage());
                 }
             }
+
             case "DEPENDENTE" -> {
+                Terminal.titulo("Cadastrar Dependente");
 
                 DependenteDAO depDAO = new DependenteDAO(conexao);
                 Dependente d = new Dependente();
 
-                PrintSystem.titulo("Cadastrar Dependente");
-
                 System.out.print("Nome: ");
-                d.setNome(sc.nextLine());
-
+                d.setNome(InputHelper.lerTexto());
                 System.out.print("CPF: ");
-                d.setCpf(sc.nextLine());
-
-                System.out.print("Data de Nascimento: ");
-                d.setDataNacimento(converterData(sc.nextLine()));
-
-                System.out.println("ID do(a) funcionário(a) responsável: ");
-                int idFuncionario = lerOpcao();
-                d.setFuncionario(idFuncionario); // Integer
-
-                System.out.println("Escolha o parentesco: ");
-                System.out.println("1 - Filho(a)");
-                System.out.println("2 - Sobrinho(a)");
-                System.out.println("3 - Outros");
+                d.setCpf(InputHelper.lerTexto());
+                System.out.print("Data de Nascimento (dd/MM/yyyy): ");
+                d.setDataNascimento(InputHelper.lerData());
+                System.out.print("ID do Funcionário responsável: ");
+                d.setIdFuncionario(InputHelper.lerInt());
+                System.out.println("Parentesco:");
+                System.out.println("1 - Filho(a)  |  2 - Sobrinho(a)  |  3 - Outros");
                 System.out.print("Opção: ");
-                int opcaoParentesco = lerOpcao();
-
-                d.escolherParentesco(opcaoParentesco);
+                d.escolherParentesco(InputHelper.lerInt());
 
                 try {
-                    d.validarDependente();
-                    depDAO.atualizarDependente(d, opcaoParentesco, idFuncionario);
-                    depDAO.salvarDependente(d);
+                    d.validar(); // valida a regra de negócio (idade <= 18)
+                    depDAO.salvar(d);
                     CustomLogger.logSucess("Dependente cadastrado com sucesso!");
-
-                    // caso ocorra um erro durante a validação ou inserção do dependente, será
-                    // capturada a exceção e exibida uma mensagem de erro informando o motivo
-                } catch (DependenteException error) {
-                    CustomLogger.logError("Erro ao cadastrar dependente: " + error.getMessage());
+                } catch (DependenteException e) {
+                    CustomLogger.logError("Regra de negócio violada: " + e.getMessage());
                 }
-
             }
 
             case "FOLHA DE PAGAMENTO" -> {
+                Terminal.titulo("Gerar Folha de Pagamento");
                 FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
+                FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
 
-                System.out.print("Digite o ID do(a) funcionário(a): ");
-                int idFuncionario = lerOpcao();
+                System.out.print("Digite o ID do Funcionário: ");
+                int idFuncionario = InputHelper.lerInt();
 
-                // FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
-                Funcionario f = new Funcionario();
-                f.setId_funcionario(idFuncionario);
+                // Busca o funcionário completo (com dependentes para cálculo de IR)
+                Funcionario f = funDAO.buscarPorId(idFuncionario);
+
+                if (f == null) {
+                    CustomLogger.logError("Funcionário com ID " + idFuncionario + " não encontrado.");
+                    return;
+                }
 
                 FolhaPagamento folha = new FolhaPagamento();
                 folha.setFuncionario(f);
                 folha.setDataPagamento(LocalDate.now());
-
                 folha.calcularINSS();
                 folha.calcularIR();
                 folha.calcularSalarioLiquido();
 
-                // Salva os dados no DB
-                folhaDAO.salvarFolha(folha);
-
-                CustomLogger.logSucess("Folha de pagamento do(a) Funcionário(a) Registrado!");
+                folhaDAO.salvar(folha);
+                CustomLogger.logSucess("Folha de pagamento gerada para: " + f.getNome());
             }
 
-            default -> System.out.println("Entidade inválida para cadastro!");
+            default -> CustomLogger.logWarning("Entidade inválida para cadastro!");
         }
     }
 
     public void listar(String entidade) {
-        switch (entidade) {
-            case "FUNCIONARIO" -> {
-                System.out.println("Escolha :");
-                System.out.println("1 - Funcionarios");
-                System.out.println("2 - Lista de Quantidade de Dependente por Funcionários");
 
-                int opcao = lerOpcao();
+        switch (entidade) {
+
+            case "FUNCIONARIO" -> {
+                Terminal.titulo("Relatório de Funcionário");
+
+                System.out.println("Ordernar por:");
+                System.out.println("1 - ID");
+                System.out.println("2 - Nome");
+                System.out.println("3 - CPF");
+                System.out.println("4 - Data Nascimento");
+                System.out.println("5 - Salário");
+                System.out.println("0 - Voltar ao Menu anterior");
+
+                System.out.print("Opção: ");
+                int opcao = InputHelper.lerInt();
+
                 FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
 
-                switch (opcao) {
-                    case 1 -> {
-                        PrintSystem.titulo("RELATORIO DE " + entidade);
-                        // utilizando o método selecionarFuncionario da classe FuncionarioDAO para
-                        // listar os funcionários cadastrados
-                        funDAO.selecionarFuncionario(new Funcionario(), 0, "");
-                        // select padrão para listar todos os funcionários, sem filtro
-                    }
-                    case 2 -> {
-                        PrintSystem.titulo("RELATORIO DE QTD " + entidade);
-                        funDAO.selececionarQtdDependentePorFUncionario();
-                    }
-                    default -> CustomLogger.logWarning("Opção Invalida!");
-                }
+                funDAO.listarTodos(opcao)
+                        .forEach(f -> System.out.println("[" + f.getIdFuncionario() + "] " + f.getNome() + " | CPF : "
+                                + f.getCpf() + " | Salário: R$ " + f.getSalarioBruto()));
 
             }
+
             case "DEPENDENTE" -> {
-                PrintSystem.titulo("RELATORIO - " + entidade);
+                Terminal.titulo("Relatório de Depenendetes");
+
+                System.out.println("Ordernar por:");
+                System.out.println("1 - ID");
+                System.out.println("2 - Nome");
+                System.out.println("3 - CPF");
+                System.out.println("4 - Data Nascimento");
+                System.out.println("5 - Parentesco");
+                System.out.println("0 - Voltar ao Menu anterior");
+
+                System.out.print("Opção: ");
+                int opcao = InputHelper.lerInt();
+
                 DependenteDAO depDAO = new DependenteDAO(conexao);
-                depDAO.selecionarDependente(new Dependente(), 0, "");
+
+                depDAO.listarTodos(opcao).forEach(d -> System.out.println("[" + d.getIdDependente() + "] " + d.getNome()
+                        + " | Parentesco: " + d.getParentesco() + " | Funcionário ID: " + d.getIdFuncionario()));
             }
+
             case "FOLHA DE PAGAMENTO" -> {
-                PrintSystem.titulo("RELATORIO - " + entidade);
+                Terminal.titulo("Relatório de Folha de Pagamento");
+                System.out.println("Ordenar por:");
+
+                System.out.println("Ordernar por:");
+                System.out.println("1 - Código da folha");
+                System.out.println("2 - Data do Pagamento");
+                System.out.println("3 - Por valor de Desconto IR");
+                System.out.println("4 - Por valor de Desconto INSS");
+                System.out.println("5 - Por valor de Salário Líquido");
+                System.out.println("6 - Por ID Funcionário");
+                System.out.println("0 - Voltar ao Menu anterior");
+
+                System.out.print("Opção: ");
+                int opcao = InputHelper.lerInt();
+
                 FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
-                folhaDAO.selecionarFolha(new FolhaPagamento(), 0, "");
+                folhaDAO.listarTodos(opcao).forEach(folha -> System.out.println("Cód. " + folha.getCodigo()
+                        + " | Func. ID: " + folha.getFuncionario().getIdFuncionario()
+                        + " | Desconto INSS: R$ " + folha.getDescontoInss()
+                        + " | Desconto IR: R$ " + folha.getDescontoIR()
+                        + " | Salário Líquido: R$ " + folha.getSalarioLiquido()));
             }
+
             default -> CustomLogger.logWarning("Entidade inválida para listagem!");
         }
     }
 
-    public void excluir(String entidade) {
-
-        System.out.println("Digite o ID para excluir:");
-        int id = lerOpcao();
-
+    private void atualizar(String entidade) {
         switch (entidade) {
 
             case "FUNCIONARIO" -> {
-                // criando o objeto do tipo FuncionarioDAO para acessar os métodos de CRUD do
-                // funcionário
-                FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
-                // valida
-                System.out.println("Tem certeza que deseja excluir o funcionário de ID '" + id + "'? (S/N)");
-                String confirmacao = sc.nextLine().toUpperCase();
-                if (confirmacao.equals("S")) {
-                    // se sim, executa o método excluir funcionario
-                    funDAO.excluirFuncionario(id);
-                } else {
-                    CustomLogger.logWarning("Exclusão cancelada.");
-                }
-            }
-
-            case "DEPENDENTE" -> {
-                DependenteDAO depDAO = new DependenteDAO(conexao);
-
-                System.out.println("Tem certeza que deseja excluir o dependente de ID '" + id + "'? (S/N)");
-                String confirmacao = sc.nextLine().toUpperCase();
-                if (confirmacao.equals("S")) {
-                    depDAO.excluirDependente(id);
-
-                } else {
-                    CustomLogger.logWarning("Exclusão cancelada.");
-                }
-            }
-        }
-    }
-
-    public void atualizar(String entidade) {
-
-        switch (entidade) {
-
-            case "FUNCIONARIO" -> {
+                Terminal.titulo("Atualizar Funcionário");
                 FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
                 Funcionario f = new Funcionario();
 
-                System.out.println("Digite o ID do(a) funcionário(a) a ser atualizado: ");
-                int id = lerOpcao();
-                // informa os dados atuais do funcionário para facilitar a escolha do que
-                // atualizar
-                System.out.println("O que deseja atualizar? ");
+                System.out.print("ID do Funcionário a atualizar: ");
+                int id = InputHelper.lerInt();
+
+                System.out.println("Campo a atualizar:");
                 System.out.println("1 - Nome");
                 System.out.println("2 - CPF");
                 System.out.println("3 - Data de Nascimento");
                 System.out.println("4 - Salário Bruto");
-                System.out.print("Opção: ");
-                int opcao = lerOpcao();
 
-                // escolhe o parametro que vai ser atualizado
+                System.out.print("Opção: ");
+                int opcao = InputHelper.lerInt();
+
                 switch (opcao) {
                     case 1 -> {
                         System.out.print("Novo nome: ");
-                        f.setNome(sc.nextLine());
+                        f.setNome(InputHelper.lerTexto());
                     }
-
                     case 2 -> {
                         System.out.print("Novo CPF: ");
-                        f.setCpf(sc.nextLine());
+                        f.setCpf(InputHelper.lerTexto());
                     }
-
                     case 3 -> {
-                        System.out.print("Nova data de nascimento: ");
-                        f.setDataNacimento(converterData(sc.nextLine()));
+                        System.out.print("Nova data (dd/MM/yyyy): ");
+                        f.setDataNascimento(InputHelper.lerData());
                     }
-
                     case 4 -> {
-                        System.out.print("Novo salário bruto: ");
-                        f.setSalarioBruto(Double.parseDouble(sc.nextLine()));
+                        System.out.print("Novo salário: ");
+                        f.setSalarioBruto(InputHelper.lerDouble());
                     }
-
-                    default -> CustomLogger.logWarning("Opção inválida!");
+                    default -> {
+                        CustomLogger.logWarning("Opção inválida!");
+                        return;
+                    }
                 }
 
                 try {
-                    System.out.println(
-                            "Funcionário '" + f.getId_funcionario() + " " + f.getNome() + "' atualizado com sucesso!");
-                    funDAO.atualizarFuncionario(f, opcao, id);
-
-                } catch (CpfDuplicadoException error) {
-                    CustomLogger.logError("Erro ao atualizar funcionário: " + error.getMessage());
+                    funDAO.atualizar(f, id, opcao);
+                    CustomLogger.logSucess("Funcionário ID " + id + " atualizado com sucesso!");
+                } catch (CpfDuplicadoException e) {
+                    CustomLogger.logError("CPF já cadastrado: " + e.getMessage());
                 }
-
             }
 
             case "DEPENDENTE" -> {
+                Terminal.titulo("Atualizar Dependente");
                 DependenteDAO depDAO = new DependenteDAO(conexao);
                 Dependente d = new Dependente();
 
-                System.out.println("Digite o ID do Dependente a ser atualizado: ");
-                int id = lerOpcao();
+                System.out.print("ID do Dependente a atualizar: ");
+                int id = InputHelper.lerInt();
 
-                System.out.println("O que deseja atualizar? ");
+                System.out.println("Campo a atualizar:");
                 System.out.println("1 - Nome");
                 System.out.println("2 - CPF");
                 System.out.println("3 - Data de Nascimento");
                 System.out.println("4 - Parentesco");
                 System.out.println("5 - ID Funcionário");
+
                 System.out.print("Opção: ");
-                int opcao = lerOpcao();
+                int opcao = InputHelper.lerInt();
 
                 switch (opcao) {
                     case 1 -> {
                         System.out.print("Novo nome: ");
-                        d.setNome(sc.nextLine());
+                        d.setNome(InputHelper.lerTexto());
                     }
-
                     case 2 -> {
                         System.out.print("Novo CPF: ");
-                        d.setCpf(sc.nextLine());
+                        d.setCpf(InputHelper.lerTexto());
                     }
-
                     case 3 -> {
-                        System.out.print("Nova data de nascimento: ");
-                        // Criar método de tratativa da data de nascimento para evitar erros de
-                        // formatação
-                        d.setDataNacimento(converterData(sc.nextLine()));
+                        System.out.print("Nova data (dd/MM/yyyy): ");
+                        d.setDataNascimento(InputHelper.lerData());
                     }
-
                     case 4 -> {
-                        System.out.print("Novo parentesco, Escolha: ");
+                        System.out.println("Defina o Parentesco:");
                         System.out.println("1 - Filho(a)");
                         System.out.println("2 - Sobrinho(a)");
                         System.out.println("3 - Outros");
                         System.out.print("Opção: ");
-                        int opcaoParentesco = lerOpcao();
-
-                        d.escolherParentesco(opcaoParentesco);
+                        d.escolherParentesco(InputHelper.lerInt());
                     }
-
                     case 5 -> {
-                        System.out.print("Novo ID do(a) funcionário(a): ");
-                        d.setFuncionario(Integer.valueOf(sc.nextLine()));
+                        System.out.print("Novo ID Funcionário: ");
+                        d.setIdFuncionario(InputHelper.lerInt());
                     }
-
-                    default -> System.out.println("Opção inválida!");
+                    default -> {
+                        CustomLogger.logWarning("Opção inválida!");
+                        return;
+                    }
                 }
+
                 try {
-                    depDAO.atualizarDependente(d, opcao, id);
-                    CustomLogger
-                            .logSucess("Dependente '" + d.getId_dependente() + " " + d.getNome()
-                                    + "' atualizado com sucesso!");
-
-                } catch (Exception error) {
-                    CustomLogger.logWarning("Erro ao atualizar dependente: " + error.getMessage());
+                    depDAO.atualizar(d, id, opcao);
+                    CustomLogger.logSucess("Dependente ID " + id + " atualizado com sucesso!");
+                } catch (Exception e) {
+                    CustomLogger.logError("Erro ao atualizar dependente: " + e.getMessage());
                 }
-
             }
+
             default -> CustomLogger.logError("Entidade inválida para atualização!");
         }
     }
 
-    private LocalDate converterData(String valor) {
-        DateTimeFormatter formatar = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return LocalDate.parse(valor, formatar);
+    private void excluir(String entidade) {
+        System.out.print("ID do registro a excluir: ");
+        int id = InputHelper.lerInt();
+
+        System.out.print("Tem certeza? (S/N): ");
+        if (!InputHelper.confirmar()) {
+            CustomLogger.logWarning("Exclusão cancelada.");
+            return;
+        }
+
+        switch (entidade) {
+
+            case "FUNCIONARIO" -> {
+                FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
+                funDAO.excluir(id);
+                CustomLogger.logSucess("Funcionário ID " + id + " excluído.");
+            }
+
+            case "DEPENDENTE" -> {
+                DependenteDAO depDAO = new DependenteDAO(conexao);
+                depDAO.excluir(id);
+                CustomLogger.logSucess("Dependente ID " + id + " excluído.");
+            }
+
+            case "FOLHA DE PAGAMENTO" -> {
+                FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
+                folhaDAO.excluir(id);
+                CustomLogger.logSucess("Folha de Pagamento cód. " + id + " excluída.");
+            }
+
+            default -> CustomLogger.logWarning("Entidade inválida para exclusão!");
+        }
     }
 }

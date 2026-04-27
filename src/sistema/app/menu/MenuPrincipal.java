@@ -88,6 +88,15 @@ public class MenuPrincipal {
    * FUNCIONADIO / DEPENDENTE / FOLHA DE PAGAMENTO
    */
   private void abrirMenuEntidade(String entidade) {
+    if (conexao == null) {
+      Terminal.titulo("Erro");
+      CustomLogger.logError("Conexao com o Banco de Dados não estabelecida!");
+      CustomLogger.logWarning("Escolha a opção 1 para conectar antes de continuar.");
+      return;
+    } else {
+      MenuEntidades menu = new MenuEntidades(conexao);
+      menu.exibir(entidade);
+    }
   }
 
   /* Função do menu de Importação / Exportação de arquivos CSV */

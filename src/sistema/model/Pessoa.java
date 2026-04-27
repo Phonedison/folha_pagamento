@@ -26,7 +26,7 @@ public abstract class Pessoa {
     return this.cpf;
   }
 
-  public LocalDate getDataNacimento() {
+  public LocalDate getDataNascimento() {
     return this.dataNascimento;
   }
 
@@ -45,7 +45,7 @@ public abstract class Pessoa {
     this.cpf = cpfClean;
   }
 
-  public void setDataNacimento(LocalDate dataNascimento) {
+  public void setDataNascimento(LocalDate dataNascimento) {
     this.dataNascimento = dataNascimento;
   }
 }

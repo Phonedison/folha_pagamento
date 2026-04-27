@@ -68,7 +68,7 @@ public class CsvReader {
 
           funcionarioAtual.setNome(dados[0]);
           funcionarioAtual.setCpf(dados[1]);
-          funcionarioAtual.setDataNacimento(formatarData(dados[2]));
+          funcionarioAtual.setDataNascimento(formatarData(dados[2]));
           funcionarioAtual.setSalarioBruto(Double.parseDouble(dados[3]));
 
           try {
@@ -106,10 +106,10 @@ public class CsvReader {
           Dependente dependente = new Dependente();
           dependente.setNome((dados[0]));
           dependente.setCpf(dados[1]);
-          dependente.setDataNacimento(formatarData(dados[2])); // seta o valor do tipo String como Data
+          dependente.setDataNascimento(formatarData(dados[2])); // seta o valor do tipo String como Data
           dependente.escolherParentesco((dados[3])); // String
           // System.out.println("Erro aqui mano o/ " + dados[3]);
-          dependente.setFuncionario(funcionarioAtual.getId_funcionario());
+          dependente.setFuncionario(funcionarioAtual.getIdFuncionario());
 
           try {
             dependenteDAO.salvarDependente(dependente);

@@ -7,9 +7,9 @@ import sistema.exception.DependenteException;
 
 public class Dependente extends Pessoa {
 
-  private Integer funcionario;
-  private Parentesco parentesco;
+  private Integer idFuncionario;
   private Integer idDependente;
+  private Parentesco parentesco;
 
   public Dependente() {
     super();
@@ -17,7 +17,7 @@ public class Dependente extends Pessoa {
 
   public Dependente(String nome, String cpf, LocalDate dataNascimento, Funcionario funcionario, Parentesco parentesco) {
     super(nome, cpf, dataNascimento);
-    this.funcionario = funcionario.getIdFuncionario();
+    this.idFuncionario = funcionario.getIdFuncionario();
     this.parentesco = parentesco;
   }
 
@@ -33,18 +33,26 @@ public class Dependente extends Pessoa {
     this.idDependente = idDependente;
   }
 
+  public Integer getIdFuncionario() {
+    return this.idFuncionario;
+  }
+
+  public void setIdFuncionario(Integer idFuncionario) {
+    this.idFuncionario = idFuncionario;
+  }
+
   public void setParentesco(Parentesco parente) {
     this.parentesco = parente;
   }
 
   public void escolherParentesco(String opcao) {
 
-    switch (opcao) {
+    switch (opcao.toUpperCase()) {
 
       case "FILHO" -> setParentesco(Parentesco.FILHO);
       case "SOBRINHO" -> setParentesco(Parentesco.SOBRINHO);
       case "OUTROS" -> setParentesco(Parentesco.OUTROS);
-      default -> System.out.println("ERRO");
+      default -> throw new IllegalArgumentException("Parentesco inválido: " + opcao);
 
     }
   }
@@ -56,23 +64,15 @@ public class Dependente extends Pessoa {
       case 1 -> setParentesco(Parentesco.FILHO);
       case 2 -> setParentesco(Parentesco.SOBRINHO);
       case 3 -> setParentesco(Parentesco.OUTROS);
-      default -> System.out.println("ERRO");
+      default -> throw new IllegalArgumentException("Parentesco inválido: " + opcao);
 
     }
   }
 
-  public Integer getFuncionario() {
-    return this.funcionario;
-  }
-
-  public void setFuncionario(Integer funcionario) {
-    this.funcionario = funcionario;
-  }
-
-  public void validarDependente() throws DependenteException {
-    int idade = Period.between(getDataNacimento(), LocalDate.now()).getYears();
+  public void validar() throws DependenteException {
+    int idade = Period.between(getDataNascimento(), LocalDate.now()).getYears();
     if (idade > 18) {
-      throw new DependenteException("Dependente deve ter menos de 18 anos.");
+      throw new DependenteException("Dependente deve ter menos de 18 anos. Idade encontrada: " + idade);
     }
   }
 
