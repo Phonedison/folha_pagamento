@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import sistema.app.util.CustomLogger;
 import sistema.model.FolhaPagamento;
+import sistema.model.Funcionario;
 import sistema.repository.connection.DatabaseConfig;
 
 public class FolhaPagamentoDAO extends BaseDAO implements GenericDAO<FolhaPagamento> {
@@ -65,7 +66,7 @@ public class FolhaPagamentoDAO extends BaseDAO implements GenericDAO<FolhaPagame
             }
         }
 
-        comandoSQL.append("WHERE codigo = ?");
+        comandoSQL.append(" WHERE codigo = ?");
         parametro.add(id);
 
         try {
@@ -74,10 +75,10 @@ public class FolhaPagamentoDAO extends BaseDAO implements GenericDAO<FolhaPagame
                     .logSucess("Folha de Pagamento do " + folha.getFuncionario().getIdFuncionario() + " - "
                             + folha.getFuncionario().getNome() + " Atualizada!");
 
-        } catch (Exception e) {
+        } catch (Exception error) {
 
             CustomLogger.logError("Erro ao Atualizar Folha de Pagamento: ");
-            throw new RuntimeException(e.getMessage(), e);
+            throw new RuntimeException(error.getMessage(), error);
         }
 
     }
@@ -86,6 +87,8 @@ public class FolhaPagamentoDAO extends BaseDAO implements GenericDAO<FolhaPagame
     public void excluir(int id) {
         String comandoSQL = "DELETE FROM folha_pagamento WHERE codigo = ?";
         executeUpdate(comandoSQL, id);
+
+        CustomLogger.logSucess("Folha de pagamento cód. " + id + " excluída.");
     }
 
     @Override
@@ -101,7 +104,7 @@ public class FolhaPagamentoDAO extends BaseDAO implements GenericDAO<FolhaPagame
             case 6 -> comandoSQL.append("id_funcionario DESC;");
             default -> {
                 CustomLogger.logWarning("Opção inválida!");
-                return null;
+                return new ArrayList<>();
             }
         }
 
@@ -138,6 +141,9 @@ public class FolhaPagamentoDAO extends BaseDAO implements GenericDAO<FolhaPagame
                 folha.getDescontoIR(),
                 folha.getSalarioLiquido(),
                 folha.getFuncionario().getIdFuncionario());
+
+        CustomLogger.logSucess("Folha de pagamento salva para funcionário ID "
+                + folha.getFuncionario().getIdFuncionario());
     }
 
     private FolhaPagamento mapearFolha(ResultSet rs) throws SQLException {
@@ -149,7 +155,12 @@ public class FolhaPagamentoDAO extends BaseDAO implements GenericDAO<FolhaPagame
         folha.setDescontoInss(rs.getDouble("desconto_inss"));
         folha.setDescontoIR(rs.getDouble("desconto_ir"));
         folha.setSalarioLiquido(rs.getDouble("salario_liquido"));
-        folha.getFuncionario().setIdFuncionario(rs.getInt("id_funcionario")); // ! Possibilidade de ERROR
+        // folha.getFuncionario().setIdFuncionario(rs.getInt("id_funcionario"));
+        // Cria o objeto Funcionario com o ID vindo do banco para evitar
+        // NullPointerException
+        Funcionario funcionario = new Funcionario();
+        funcionario.setIdFuncionario(rs.getInt("id_funcionario"));
+        folha.setFuncionario(funcionario);
 
         return folha;
     }
