@@ -6,7 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import sistema.app.util.CustomLogger;
+import static sistema.app.util.CustomLogger.logDependenteError;
+import static sistema.app.util.CustomLogger.logError;
+import static sistema.app.util.CustomLogger.logSucess;
+import static sistema.app.util.CustomLogger.logWarning;
 import sistema.model.Dependente;
 import sistema.repository.connection.DatabaseConfig;
 
@@ -59,7 +62,7 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
       }
 
       default -> {
-        CustomLogger.logWarning("Opção inválida!");
+        logWarning("Opção inválida!");
         return;
       }
     }
@@ -68,11 +71,10 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
 
     try {
       executeUpdate(comandoSQL.toString(), parametro.toArray());
-      CustomLogger
-          .logSucess("Dependente ID " + id + " atualizado!");
+      logSucess("Dependente ID " + id + " atualizado!");
 
     } catch (Exception error) {
-      CustomLogger.logError("Erro ao Atualizar dependente: ");
+      logError("Erro ao Atualizar dependente: " + error.getMessage());
       throw new RuntimeException(error.getMessage(), error);
     }
 
@@ -82,13 +84,13 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
   public void excluir(int id) {
     String comandoSQL = "DELETE FROM dependente WHERE id_dependente = ?";
     executeUpdate(comandoSQL, id);
-    CustomLogger.logSucess("Dependente ID" + id + "excluído!");
+    logSucess("Dependente ID" + id + "excluído!");
   }
 
   @Override
   public List<Dependente> listarTodos(int opcao) {
     StringBuilder comandoSQL = new StringBuilder("SELECT * FROM dependente ORDER BY");
-
+    comandoSQL.append(" ");
     switch (opcao) {
       case 1 -> comandoSQL.append("id_dependente DESC;");
       case 2 -> comandoSQL.append("nome DESC;");
@@ -97,8 +99,8 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
       case 5 -> comandoSQL.append("parentesco::parentesco DESC;");
       case 6 -> comandoSQL.append("id_funcionario DESC;");
       default -> {
-        CustomLogger.logWarning("Opção inválida!");
-        return new ArrayList<>();
+        logWarning("Opção inválida!");
+        return new ArrayList<>(); // evita NullPointerException no chamador
       }
     }
 
@@ -114,7 +116,7 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
       }
 
     } catch (Exception error) {
-      CustomLogger.logDependenteError("Erro ao listar Dependentes");
+      logDependenteError("Erro ao listar Dependentes: " + error.getMessage());
       throw new RuntimeException(error.getMessage(), error);
     }
 
@@ -134,7 +136,7 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
         dependente.getParentesco().name(),
         dependente.getIdFuncionario());
 
-    CustomLogger.logSucess("Dependente '" + dependente.getNome() + "' salvo com sucesso!");
+    logSucess("Dependente '" + dependente.getNome() + "' salvo com sucesso!");
   }
 
   private Dependente mapearDependente(ResultSet rs) throws SQLException {
@@ -145,7 +147,7 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
     dependente.setNome(rs.getString("nome"));
     dependente.setCpf(rs.getString("cpf"));
     dependente.setDataNascimento(rs.getDate("data_nascimento").toLocalDate());
-    dependente.escolherParentesco(rs.getString("parentesco::parentesco"));
+    dependente.escolherParentesco(rs.getString("parentesco"));
     dependente.setIdFuncionario(rs.getInt("id_funcionario"));
 
     return dependente;
@@ -166,7 +168,7 @@ public class DependenteDAO extends BaseDAO implements GenericDAO<Dependente> {
       }
 
     } catch (Exception error) {
-      CustomLogger.logError("Erro ao buscar dependente por CPF: " + error.getMessage());
+      logError("Erro ao buscar dependente por CPF: " + error.getMessage());
     }
     return null;
   }

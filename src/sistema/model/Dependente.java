@@ -61,7 +61,7 @@ public class Dependente extends Pessoa {
       case "FILHO" -> setParentesco(Parentesco.FILHO);
       case "SOBRINHO" -> setParentesco(Parentesco.SOBRINHO);
       case "OUTROS" -> setParentesco(Parentesco.OUTROS);
-      default -> throw new IllegalArgumentException("Parentesco inválido: " + opcao);
+      default -> throw new IllegalArgumentException("Parentesco inválido -> " + opcao);
 
     }
   }
@@ -74,7 +74,7 @@ public class Dependente extends Pessoa {
       case 1 -> setParentesco(Parentesco.FILHO);
       case 2 -> setParentesco(Parentesco.SOBRINHO);
       case 3 -> setParentesco(Parentesco.OUTROS);
-      default -> throw new IllegalArgumentException("Parentesco inválido: " + opcao);
+      default -> throw new IllegalArgumentException("Parentesco inválido -> " + opcao);
 
     }
   }
@@ -83,7 +83,7 @@ public class Dependente extends Pessoa {
   public void validar() throws DependenteException {
     int idade = Period.between(getDataNascimento(), LocalDate.now()).getYears();
     if (idade > 18) {
-      throw new DependenteException("Dependente deve ter menos de 18 anos. Idade encontrada: " + idade);
+      throw new DependenteException("Dependente deve ter menos de 18 anos, Idade do DEPENDENTE -> " + idade + " anos");
     }
   }
 

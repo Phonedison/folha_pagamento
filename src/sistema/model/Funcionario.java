@@ -29,6 +29,7 @@ public class Funcionario extends Pessoa {
       Set<Dependente> dependentes) {
     super(nome, cpf, dataNascimento);
     this.salarioBruto = salarioBruto;
+    this.dependentes = dependentes;
   }
 
   /* GET */

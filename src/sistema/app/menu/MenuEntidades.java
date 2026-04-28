@@ -34,7 +34,7 @@ public class MenuEntidades {
             System.out.println("4 - Excluir");
             System.out.println("0 - Voltar ao Menu Principal");
 
-            opcao = lerInt("Opção:");
+            opcao = lerInt("Opção: ");
 
             switch (opcao) {
                 case 1 -> cadastrar(entidade);
@@ -51,16 +51,16 @@ public class MenuEntidades {
         switch (entidade) {
 
             case "FUNCIONARIO" -> {
-                Terminal.titulo("Cadastrar Funcionario");
+                Terminal.titulo("Cadastrar Funcionário");
 
                 FuncionarioDAO funDAO = new FuncionarioDAO(conexao); // estabelece conexao com o DB
-                Funcionario f = new Funcionario(); // Criação de um objeto do tipo funcionario
+                Funcionario f = new Funcionario(); // Criação de um objeto do tipo funcionário
 
                 /* Leitura dos dados */
-                f.setNome(lerTexto("Nome:"));
-                f.setCpf(lerTexto("CPF:"));
-                f.setDataNascimento(lerData("Data de Nascimento (dd/MM/yyyy):"));
-                f.setSalarioBruto(lerDouble("Salário Bruto: R$"));
+                f.setNome(lerTexto("Nome: "));
+                f.setCpf(lerTexto("CPF: "));
+                f.setDataNascimento(lerData("Data de Nascimento (dd/MM/yyyy): "));
+                f.setSalarioBruto(lerDouble("Salário Bruto (R$): "));
 
                 try {
                     funDAO.salvar(f);
@@ -77,15 +77,15 @@ public class MenuEntidades {
                 DependenteDAO depDAO = new DependenteDAO(conexao);
                 Dependente d = new Dependente();
 
-                d.setNome(lerTexto("Nome:"));
-                d.setCpf(lerTexto("CPF:"));
-                d.setDataNascimento(lerData("Data de Nascimento (dd/MM/yyyy):"));
-                d.setIdFuncionario(lerInt("ID do Funcionário responsável:"));
+                d.setNome(lerTexto("Nome: "));
+                d.setCpf(lerTexto("CPF: "));
+                d.setDataNascimento(lerData("Data de Nascimento (dd/MM/yyyy): "));
+                d.setIdFuncionario(lerInt("ID do Funcionário responsável: "));
                 System.out.println("Parentesco:");
                 System.out.println("1 - Filho(a)");
                 System.out.println("2 - Sobrinho(a)");
                 System.out.println("3 - Outros");
-                d.escolherParentesco(lerInt("Opção:"));
+                d.escolherParentesco(lerInt("Opção: "));
 
                 try {
                     d.validar(); // valida a regra de negócio (idade <= 18)
@@ -101,7 +101,7 @@ public class MenuEntidades {
                 FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
                 FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
 
-                int idFuncionario = lerInt("Digite o ID do Funcionário:");
+                int idFuncionario = lerInt("Digite o ID do Funcionário: ");
 
                 // Busca o funcionário completo (com dependentes para cálculo de IR)
                 Funcionario f = funDAO.buscarPorId(idFuncionario);
@@ -133,15 +133,15 @@ public class MenuEntidades {
             case "FUNCIONARIO" -> {
                 Terminal.titulo("Relatório de Funcionário");
 
-                System.out.println("Ordernar por:");
+                System.out.println("Ordenar por:");
                 System.out.println("1 - ID");
                 System.out.println("2 - Nome");
                 System.out.println("3 - CPF");
-                System.out.println("4 - Data Nascimento");
+                System.out.println("4 - Data de Nascimento");
                 System.out.println("5 - Salário");
                 System.out.println("0 - Voltar ao Menu anterior");
 
-                int opcao = lerInt("Opção:");
+                int opcao = lerInt("Opção: ");
 
                 FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
 
@@ -152,13 +152,13 @@ public class MenuEntidades {
             }
 
             case "DEPENDENTE" -> {
-                Terminal.titulo("Relatório de Depenendetes");
+                Terminal.titulo("Relatório de Dependentes");
 
-                System.out.println("Ordernar por:");
+                System.out.println("Ordenar por:");
                 System.out.println("1 - ID");
                 System.out.println("2 - Nome");
                 System.out.println("3 - CPF");
-                System.out.println("4 - Data Nascimento");
+                System.out.println("4 - Data de Nascimento");
                 System.out.println("5 - Parentesco");
                 System.out.println("0 - Voltar ao Menu anterior");
 
@@ -174,7 +174,6 @@ public class MenuEntidades {
                 Terminal.titulo("Relatório de Folha de Pagamento");
                 System.out.println("Ordenar por:");
 
-                System.out.println("Ordernar por:");
                 System.out.println("1 - Código da folha");
                 System.out.println("2 - Data do Pagamento");
                 System.out.println("3 - Por valor de Desconto IR");
@@ -183,7 +182,7 @@ public class MenuEntidades {
                 System.out.println("6 - Por ID Funcionário");
                 System.out.println("0 - Voltar ao Menu anterior");
 
-                int opcao = lerInt("Opção:");
+                int opcao = lerInt("Opção: ");
 
                 FolhaPagamentoDAO folhaDAO = new FolhaPagamentoDAO(conexao);
                 folhaDAO.listarTodos(opcao).forEach(folha -> System.out.println("Cód. " + folha.getCodigo()
@@ -205,7 +204,7 @@ public class MenuEntidades {
                 FuncionarioDAO funDAO = new FuncionarioDAO(conexao);
                 Funcionario f = new Funcionario();
 
-                int id = lerInt("ID do Funcionário a atualizar:");
+                int id = lerInt("ID do Funcionário a atualizar: ");
 
                 System.out.println("Campo a atualizar:");
                 System.out.println("1 - Nome");
@@ -213,13 +212,13 @@ public class MenuEntidades {
                 System.out.println("3 - Data de Nascimento");
                 System.out.println("4 - Salário Bruto");
 
-                int opcao = lerInt("Opção:");
+                int opcao = lerInt("Opção: ");
 
                 switch (opcao) {
-                    case 1 -> f.setNome(lerTexto("Novo nome:"));
-                    case 2 -> f.setCpf(lerTexto("Novo CPF:"));
-                    case 3 -> f.setDataNascimento(lerData("Nova data de nascimento (dd/MM/yyyy):"));
-                    case 4 -> f.setSalarioBruto(lerDouble("Novo salário: R$"));
+                    case 1 -> f.setNome(lerTexto("Novo nome: "));
+                    case 2 -> f.setCpf(lerTexto("Novo CPF: "));
+                    case 3 -> f.setDataNascimento(lerData("Nova data de nascimento (dd/MM/yyyy): "));
+                    case 4 -> f.setSalarioBruto(lerDouble("Novo salário (R$): "));
                     default -> {
                         logWarning("Opção inválida!");
                         return;
@@ -239,7 +238,7 @@ public class MenuEntidades {
                 DependenteDAO depDAO = new DependenteDAO(conexao);
                 Dependente d = new Dependente();
 
-                int id = lerInt("ID do Dependente a atualizar:");
+                int id = lerInt("ID do Dependente a atualizar: ");
 
                 System.out.println("Campo a atualizar:");
                 System.out.println("1 - Nome");
@@ -248,21 +247,21 @@ public class MenuEntidades {
                 System.out.println("4 - Parentesco");
                 System.out.println("5 - ID Funcionário");
 
-                int opcao = lerInt("Opção:");
+                int opcao = lerInt("Opção: ");
 
                 switch (opcao) {
-                    case 1 -> d.setNome(lerTexto("Novo nome:"));
-                    case 2 -> d.setCpf(lerTexto("Novo CPF:"));
-                    case 3 -> d.setDataNascimento(lerData("Nova data de nascimento (dd/MM/yyyy):"));
+                    case 1 -> d.setNome(lerTexto("Novo nome: "));
+                    case 2 -> d.setCpf(lerTexto("Novo CPF: "));
+                    case 3 -> d.setDataNascimento(lerData("Nova data de nascimento (dd/MM/yyyy): "));
 
                     case 4 -> {
                         System.out.println("Defina o Parentesco:");
                         System.out.println("1 - Filho(a)");
                         System.out.println("2 - Sobrinho(a)");
                         System.out.println("3 - Outros");
-                        d.escolherParentesco(lerInt("Opção:"));
+                        d.escolherParentesco(lerInt("Opção: "));
                     }
-                    case 5 -> d.setIdFuncionario(lerInt("Novo ID Funcionário:"));
+                    case 5 -> d.setIdFuncionario(lerInt("Novo ID Funcionário: "));
                     default -> {
                         logWarning("Opção inválida!");
                         return;
@@ -283,8 +282,8 @@ public class MenuEntidades {
 
     private void excluir(String entidade) {
 
-        int id = lerInt("ID do registro a excluir:");
-        if (!confirmar("Tem certeza?")) {
+        int id = lerInt("ID do registro a excluir: ");
+        if (!confirmar("Tem certeza? ")) {
             logWarning("Exclusão cancelada.");
             return;
         }

@@ -12,7 +12,6 @@ public class FolhaPagamento {
     private double salarioLiquido;
 
     /* CONSUTRUTOR */
-
     public FolhaPagamento() {
 
     }

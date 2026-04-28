@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import sistema.app.util.CustomLogger;
+import static sistema.app.util.CustomLogger.logError;
+import static sistema.app.util.CustomLogger.logSucess;
+import static sistema.app.util.CustomLogger.logWarning;
 import sistema.exception.CpfDuplicadoException;
 import sistema.model.Funcionario;
 import sistema.repository.connection.DatabaseConfig;
@@ -21,16 +24,37 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
   /* Método para adicionar um funcionário */
   public void salvar(Funcionario funcionario) {
 
-    String comandoSQL = "INSERT INTO funcionario (nome, cpf, data_nascimento, salario_bruto) VALUES (?, ?, ?, ?);";
+    String comandoSQL = "INSERT INTO funcionario (nome, cpf, data_nascimento, salario_bruto) VALUES (?, ?, ?, ?) RETURNING id_funcionario;";
+    try (
+        Connection con = db.conectarDB();
+        PreparedStatement stmt = con.prepareStatement(comandoSQL)) {
 
-    executeUpdate(
-        comandoSQL,
-        funcionario.getNome(),
-        funcionario.getCpf(),
-        funcionario.getDataNascimento(),
-        funcionario.getSalarioBruto());
+      stmt.setString(1, funcionario.getNome());
+      stmt.setString(2, funcionario.getCpf());
+      stmt.setObject(3, funcionario.getDataNascimento());
+      stmt.setDouble(4, funcionario.getSalarioBruto());
 
-    CustomLogger.logSucess("Funcionário '" + funcionario.getNome() + "' salvo com sucesso!");
+      try (ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+          funcionario.setIdFuncionario(rs.getInt("id_funcionario"));
+        }
+      }
+
+      CustomLogger.logSucess("Funcionário '" + funcionario.getNome() + "' salvo com sucesso!");
+
+    } catch (SQLException error) {
+      logError("Erro ao salvar funcionário: " + error.getMessage());
+      throw new RuntimeException(error.getMessage(), error);
+    }
+    /*
+     * executeUpdate(
+     * comandoSQL,
+     * funcionario.getNome(),
+     * funcionario.getCpf(),
+     * funcionario.getDataNascimento(),
+     * funcionario.getSalarioBruto());
+     */
   }
 
   @Override
@@ -45,7 +69,7 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
       case 4 -> comandoSQL.append("data_nascimento DESC;");
       case 5 -> comandoSQL.append("salario_bruto DESC;");
       default -> {
-        CustomLogger.logWarning("Opção inválida!");
+        logWarning("Opção inválida!");
         return new ArrayList<>();
       }
     }
@@ -65,7 +89,7 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
       CustomLogger.logFuncionarioError("Erro ao listar Funcionários" + error.getMessage());
       throw new RuntimeException(error.getMessage(), error);
     }
-    return lista;
+    return lista; // retorna lista vazia em vez de null (evita NullPointerException)
   }
 
   @Override
@@ -109,7 +133,7 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
 
     try {
       executeUpdate(sql.toString(), params.toArray());
-      CustomLogger.logSucess("Funcionário ID " + id + " atualizado!");
+      logSucess("Funcionário ID " + id + " atualizado!");
     } catch (RuntimeException e) {
       // Verifica se o erro é de CPF duplicado (violação de constraint UNIQUE)
       if (e.getMessage() != null && e.getMessage().contains("cpf")) {
@@ -125,7 +149,7 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
     String comandoSQL = "DELETE FROM funcionario WHERE id_funcionario = ?";
     executeUpdate(comandoSQL, id);
 
-    CustomLogger.logSucess("Funcionário de ID " + id + "excluído com sucesso!");
+    logSucess("Funcionário de ID " + id + "excluído com sucesso!");
   }
 
   /* Método para buscar funcionário por CPF */
@@ -144,7 +168,7 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
       }
 
     } catch (Exception error) {
-      CustomLogger.logError("Erro ao buscar funcionário por CPF: " + error.getMessage());
+      logError("Erro ao buscar funcionário por CPF: " + error.getMessage());
     }
     return null;
   }
@@ -163,7 +187,7 @@ public class FuncionarioDAO extends BaseDAO implements GenericDAO<Funcionario> {
           return mapearFuncionario(rs);
       }
     } catch (Exception error) {
-      CustomLogger.logError("Erro ao buscar funcionário por ID: " + error.getMessage());
+      logError("Erro ao buscar funcionário por ID: " + error.getMessage());
     }
     return null;
   }

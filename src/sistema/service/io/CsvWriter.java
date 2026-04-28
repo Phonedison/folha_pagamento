@@ -96,9 +96,7 @@ public class CsvWriter {
     String nomeArquivo = "Lista_de_dependente_" + LocalDate.now() + ".csv";
     String caminhoExportacao = caminho + File.separator + nomeArquivo;
 
-    String comandoSQL = """
-        SELECT * FROM dependente ORDER BY id_dependente DESC;
-        """;
+    String comandoSQL = "SELECT * FROM dependente ORDER BY id_dependente DESC;";
 
     try (Connection con = conexao.conectarDB();
         PreparedStatement stmt = con.prepareStatement(comandoSQL);

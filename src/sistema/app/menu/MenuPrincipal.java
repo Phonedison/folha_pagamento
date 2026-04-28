@@ -43,7 +43,7 @@ public class MenuPrincipal {
       System.out.println("5 - Folha de Pagamento");
       System.out.println("0 - Sair");
 
-      opcao = InputHelper.lerInt("Opção:");
+      opcao = InputHelper.lerInt("Opção: ");
 
       switch (opcao) {
 
@@ -78,7 +78,7 @@ public class MenuPrincipal {
         Terminal.titulo("Erro de Conexão");
         logConectionError("Falha: " + erro.getMessage());
 
-        if (!InputHelper.confirmar("Deseja tentar novamente?")) {
+        if (!InputHelper.confirmar("Deseja tentar novamente? ")) {
           conectado = true; // encerra o loop sem conexão
         }
 
@@ -96,7 +96,7 @@ public class MenuPrincipal {
   private void abrirMenuEntidade(String entidade) {
     if (conexao == null) {
       Terminal.titulo("Erro");
-      logError("Conexao com o Banco de Dados não estabelecida!");
+      logError("Conexão com o Banco de Dados não estabelecida!");
       logWarning("Escolha a opção 1 para conectar antes de continuar.");
       return;
     } else {
@@ -119,10 +119,10 @@ public class MenuPrincipal {
     System.out.println("2 - Exportar Folha de Pagamento");
     System.out.println("3 - Exportar Lista de Funcionários");
     System.out.println("4 - Exportar Lista de Dependentes");
-    System.out.println("5 - Exportar Qtd. de Dependentes por Funcionário");
+    System.out.println("5 - Exportar Quantidade de Dependentes por Funcionário");
 
-    int opcao = InputHelper.lerInt("Opção:");
-    String caminho = InputHelper.lerTexto("Informe o caminho do arquivo/pasta:");
+    int opcao = InputHelper.lerInt("Opção: ");
+    String caminho = InputHelper.lerTexto("Informe o caminho do arquivo/pasta: ");
 
     FuncionarioDAO funcionarioDAO = new FuncionarioDAO(conexao);
     DependenteDAO dependenteDAO = new DependenteDAO(conexao);

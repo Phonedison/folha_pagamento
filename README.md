@@ -1,9 +1,6 @@
-<img align= "left" src="https://media.tenor.com/R8L_lcmmYdQAAAAM/surfsup-tadandoonda.gif" />
-
 # 📑 Sistema de Folha de Pagamento - Desafio POO - GRUPO 06
 
 Este projeto é o trabalho final da disciplina de **Programação Orientada a Objetos** do Serratec. O objetivo é desenvolver um **sistema de gestão de folha de pagamento**, para o cálculo de salário líquido, aplicando conceitos e persistência de dados.
-
 
 ## 🚀 Sobre o projeto
 
@@ -80,7 +77,7 @@ O sistema também realiza integração com:
 
 ### 🛠️ Tecnologias e Conceitos Aplicados
 
-<img src="https://media.tenor.com/Jdm1hN5rbDwAAAAM/jo%C3%A3o-frango.gif" align="right"/>
+<img align= "right" src="https://media.tenor.com/R8L_lcmmYdQAAAAM/surfsup-tadandoonda.gif" />
 
 #### 💻 Linguagem
 
@@ -194,11 +191,30 @@ cd folha_pagamento
 # Execute pela IDE (recomendado)
 ```
 
-OU via Terminal
+OU via Terminal (Com suporte a UTF-8 e acentuação português)
+
+**Windows:**
 
 ```bash
-javac Main.java
-java Main
+# Use o script de compilação
+compile.bat
+```
+
+**Linux/Mac:**
+
+```bash
+# Use o script de compilação
+bash compile.sh
+```
+
+**Manual (qualquer plataforma):**
+
+```bash
+# Compile com encoding UTF-8 e compatibilidade Java 17
+javac -encoding UTF-8 -source 17 -target 17 -d bin -sourcepath src src/sistema/app/Main.java
+
+# Execute o programa
+java -cp bin sistema.app.Main
 ```
 
 ---
@@ -231,17 +247,25 @@ java Main
 
 ---
 
+<img align="left" src="https://i.makeagif.com/media/4-07-2021/tsQQAc.gif"/>
+
 # 👥 Grupo
 
-|                                  Integrantes                                   | GitHub                                                       |                                              |
-| :----------------------------------------------------------------------------: | :----------------------------------------------------------- | :------------------------------------------: |
-| <img src="https://avatars.githubusercontent.com/u/242983951?v=4" width="100"/> | [João Pedro Carneiro Motta](https://github.com/joaopedrobr3) | CONSTRUTOR DO CALCULO DA FOLHA DE PAGAMENTO, |
-| <img src="https://avatars.githubusercontent.com/u/266845673?v=4" width="100"/> | [Kenny](https://github.com/kennypavelka)                     |                                              |
-|  <img src="https://avatars.githubusercontent.com/u/7592603?v=4" width="100"/>  | [Lucas Leal da Silva](https://github.com/Phonedison)         |                E DANDO DICAS                 |
-| <img src="https://avatars.githubusercontent.com/u/267740773?v=4" width="100"/> | [Paulo Cesar Neto](https://github.com/paulocesar-neto)       |                                              |
-| <img src="https://avatars.githubusercontent.com/u/267657658?v=4" width="100"/> | [Vinicius de Souza Lamas](https://github.com/vLamass)        |                                              |
-| <img src="https://avatars.githubusercontent.com/u/267758048?v=4" width="100"/> | [Vitor Ribeiro](https://github.com/vitorribeiro77)           |                                              |
-
----
-
-<img align="left" src="https://i.makeagif.com/media/4-07-2021/tsQQAc.gif"/>
+<table style="align-item: center;text-align:center;">
+  <tr>
+		<td><a href="https://github.com/joaopedrobr3"><img style="border-radius:50%" src="https://avatars.githubusercontent.com/u/242983951?v=4" width="150"/></a></td>
+		<td><a href="https://github.com/kennypavelka"><img style="border-radius:50%"  src="https://avatars.githubusercontent.com/u/266845673?v=4"  width="150"/></a></td>
+		<td><a href="https://github.com/Phonedison"><img style="border-radius:50%"  src="https://avatars.githubusercontent.com/u/7592603?v=4"  width="150"/></a></td>
+		<td><a href="https://github.com/paulocesar-neto"><img  style="border-radius:50%" src="https://avatars.githubusercontent.com/u/267740773?v=4"  width="150"/></a></td>
+		<td><a href="https://github.com/vLamass"><img style="border-radius:50%"  src="https://avatars.githubusercontent.com/u/267657658?v=4"  width="150"/></a></td>
+		<td><a href="https://github.com/vitorribeiro77"><img  style="border-radius:50%" src="https://avatars.githubusercontent.com/u/267758048?v=4"  width="150"/></a></td>
+  </tr>
+  <tr>
+    <td><a href="https://github.com/joaopedrobr3">João Pedro Carneiro Motta</a></td>
+    <td><a href="https://github.com/kennypavelka">Kenny</a></td>
+    <td><a href="https://github.com/Phonedison">Lucas Leal da Silva</a></td>
+    <td><a href="https://github.com/paulocesar-neto">Paulo Cesar Neto</a></td>
+    <td><a href="https://github.com/vLamass">Vinicius de Souza Lamas</a></td>
+    <td><a href="https://github.com/vitorribeiro77">Vitor Ribeiro</a></td>
+  </tr>
+</table>

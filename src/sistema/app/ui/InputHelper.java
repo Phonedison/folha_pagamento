@@ -17,7 +17,7 @@ public class InputHelper {
     // leitura e validação do tipo Int
     public static int lerInt(String mensagem) {
         while (true) {
-            try (sc) {
+            try {
                 System.out.printf(mensagem + " ");
                 return Integer.parseInt(sc.nextLine().trim());
             } catch (NumberFormatException e) {
@@ -29,7 +29,7 @@ public class InputHelper {
     // leitura e validação do tipo Double
     public static double lerDouble(String mensagem) {
         while (true) {
-            try (sc) {
+            try {
                 System.out.println(mensagem + " ");
                 return Double.parseDouble((sc.nextLine().trim().replace(",", ".")));
             } catch (NumberFormatException e) {
@@ -48,7 +48,7 @@ public class InputHelper {
     public static LocalDate lerData(String mensagem) {
         while (true) {
 
-            try (sc) {
+            try {
                 System.out.print(mensagem + " ");
                 return LocalDate.parse(sc.nextLine().trim(), ftData);
 
@@ -62,7 +62,7 @@ public class InputHelper {
     public static boolean confirmar(String mensagem) {
         while (true) {
 
-            try (sc) {
+            try {
 
                 System.out.print(mensagem + " (S/N): ");
                 String resposta = sc.nextLine().trim().toUpperCase();
@@ -82,7 +82,7 @@ public class InputHelper {
     public static boolean confirmar() {
 
         while (true) {
-            try (sc) {
+            try {
                 String resposta = sc.nextLine().trim().toUpperCase();
                 return resposta.equals("S");
 
